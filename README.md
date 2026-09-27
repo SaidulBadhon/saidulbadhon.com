@@ -47,7 +47,9 @@ it to the list in `content/projects/index.ts`.
 
 **Add screenshots to a project:** put the files in the project's folder, import
 them in its `index.ts`, and add them to `images`. The first image is the cover;
-the rest appear in a "Screenshots" section on the project page.
+the rest appear in the gallery on the project page, and any of them opens full
+screen when clicked. To give an image a caption, list it as
+`{ image: screenshot, caption: "What it shows" }` instead of just `screenshot`.
 
 ## Scripts
 

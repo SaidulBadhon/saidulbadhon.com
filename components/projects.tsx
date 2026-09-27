@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 import SectionHeading from "./section-heading";
 import { useSectionInView } from "@/lib/hooks";
 import { projectIconMap } from "@/lib/projectIcons";
-import { projects } from "@/content/projects";
+import { projects, toImage } from "@/content/projects";
 import { FaArrowRight } from "react-icons/fa";
 
 const fadeInUp = {
@@ -54,7 +54,7 @@ export default function Projects() {
           {projects.map((project) => {
             const IconComponent = projectIconMap[project.icon];
             const { gradient } = project;
-            const cover = project.images[0];
+            const cover = project.images[0] && toImage(project.images[0]).image;
             return (
               <motion.div
                 key={project.slug}
