@@ -81,6 +81,8 @@
   --timeline-card-bg: #f3f4f6;
   --timeline-arrow-color: #9ca3af;
   --timeline-icon-bg: white;
+
+  --grid-line: rgb(0 0 0 / 0.045);
 }
 
 .dark {
@@ -120,6 +122,8 @@
   --timeline-card-bg: rgba(255, 255, 255, 0.05);
   --timeline-arrow-color: rgba(255, 255, 255, 0.5);
   --timeline-icon-bg: rgba(255, 255, 255, 0.15);
+
+  --grid-line: rgb(255 255 255 / 0.045);
 }
 
 @layer base {
@@ -143,4 +147,12 @@
 
 @utility borderBlack {
   @apply border border-black/10;
+}
+
+/* Faint square grid, used behind the project page hero. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
 }

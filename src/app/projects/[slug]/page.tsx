@@ -1,7 +1,12 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import ProjectDetailPage from "@/components/project-detail-page";
-import { getProject, projects } from "@/content/projects";
+import {
+  getNextProject,
+  getProject,
+  projects,
+  toImage,
+} from "@/content/projects";
 
 // Only the projects in content/projects exist; anything else is a 404.
 export const dynamicParams = false;
@@ -20,7 +25,9 @@ export default async function ProjectPage({
     notFound();
   }
 
-  return <ProjectDetailPage project={project} />;
+  return (
+    <ProjectDetailPage project={project} nextProject={getNextProject(slug)} />
+  );
 }
 
 export async function generateMetadata({
@@ -35,13 +42,15 @@ export async function generateMetadata({
     };
   }
 
+  const cover = project.images[0] && toImage(project.images[0]).image;
+
   return {
     title: `${project.title} | Projects`,
     description: project.longDescription || project.description,
     openGraph: {
       title: project.title,
       description: project.longDescription || project.description,
-      images: project.images[0] ? [{ url: project.images[0].src }] : undefined,
+      images: cover ? [{ url: cover.src }] : undefined,
     },
   };
 }

@@ -10,6 +10,12 @@ export type ProjectIconKey =
   | "globe"
   | "shield";
 
+/** An image imported from the project's folder, optionally with a caption
+ *  shown under it in the gallery and the full-screen viewer. */
+export type ProjectImage =
+  | StaticImageData
+  | { image: StaticImageData; caption: string };
+
 export type Project = {
   /** URL of the project page: /projects/<slug>. Keep it the same as the folder name. */
   slug: string;
@@ -30,5 +36,5 @@ export type Project = {
   features: string[];
   links: { live?: string; github?: string };
   /** Images imported from the project's folder. The first one is the cover. */
-  images: StaticImageData[];
+  images: ProjectImage[];
 };
