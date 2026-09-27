@@ -7,7 +7,8 @@ export type ProjectIconKey =
   | "brain"
   | "cubes"
   | "database"
-  | "globe";
+  | "globe"
+  | "shield";
 
 export type Project = {
   /** URL of the project page: /projects/<slug>. Keep it the same as the folder name. */

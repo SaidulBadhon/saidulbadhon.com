@@ -1,4 +1,5 @@
 import type { Project } from "./types";
+import jutsuAi from "./jutsu-ai";
 import jutsuWeb3Copilot from "./jutsu-web3-copilot";
 import jutsuIde from "./jutsu-ide";
 import posttAi from "./postt-ai";
@@ -11,6 +12,7 @@ export type { Project, ProjectIconKey } from "./types";
 
 /** Projects in the order they appear on the site. */
 export const projects: Project[] = [
+  jutsuAi,
   jutsuWeb3Copilot,
   jutsuIde,
   posttAi,
