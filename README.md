@@ -19,13 +19,13 @@ bun run dev      # http://localhost:3000
 ```
 
 The contact form emails messages through [Resend](https://resend.com). Set
-`RESEND_API_KEY` in `apps/web/.env.local` (see `apps/web/.env.local.example`).
+`RESEND_API_KEY` in `.env.local` (see `.env.local.example`).
 Without it the rest of the site works, and the form asks visitors to email
 directly.
 
 ## Editing content
 
-Everything lives in `apps/web/content`:
+Everything lives in `content`:
 
 ```
 content/
