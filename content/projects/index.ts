@@ -1,7 +1,6 @@
 import type { StaticImageData } from "next/image";
 import type { Project, ProjectImage } from "./types";
 import jutsuAi from "./jutsu-ai";
-import jutsuWeb3Copilot from "./jutsu-web3-copilot";
 import jutsuIde from "./jutsu-ide";
 import posttAi from "./postt-ai";
 import aiDeveloperWorkspace from "./ai-developer-workspace";
@@ -15,7 +14,6 @@ export type { Project, ProjectIconKey, ProjectImage } from "./types";
 /** Projects in the order they appear on the site. */
 export const projects: Project[] = [
   jutsuAi,
-  jutsuWeb3Copilot,
   jutsuIde,
   posttAi,
   aiDeveloperWorkspace,
