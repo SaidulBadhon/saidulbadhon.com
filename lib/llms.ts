@@ -1,7 +1,7 @@
 import { formatDate, getPostSource, getPosts, type Post } from "@/content/blogs";
 import { experiences } from "@/content/experience";
 import { projects, toImage, type Project } from "@/content/projects";
-import { skills } from "@/content/skills";
+import { skillGroups } from "@/content/skills";
 import { SITE_URL, absoluteUrl, site } from "./site";
 
 // The site as plain markdown for AI assistants, following https://llmstxt.org:
@@ -17,7 +17,11 @@ function header(): string {
 
 > ${site.description}
 
-${site.name} is currently ${currentRole.title} at ${currentRole.company} (${currentRole.date}). Skills: ${skills.join(", ")}.
+${site.name} is currently ${currentRole.title} at ${currentRole.company} (${currentRole.date}).
+
+Skills:
+
+${skillGroups.map((group) => `- ${group.name}: ${group.skills.map((skill) => skill.name).join(", ")}`).join("\n")}
 
 - Website: ${SITE_URL}
 - LinkedIn: ${site.linkedin}

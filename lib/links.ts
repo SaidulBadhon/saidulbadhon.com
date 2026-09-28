@@ -12,12 +12,12 @@ export const links = [
     href: "/#projects",
   },
   {
-    name: "Skills",
-    href: "/#skills",
-  },
-  {
     name: "Experience",
     href: "/#experience",
+  },
+  {
+    name: "Skills",
+    href: "/#skills",
   },
   {
     name: "Contact",
