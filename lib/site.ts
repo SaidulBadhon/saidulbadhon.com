@@ -6,16 +6,18 @@ export const SITE_URL = "https://saidulbadhon.com";
 
 export const site = {
   name: "Saidul Badhon",
-  jobTitle: "Full Stack Software Engineer",
+  jobTitle: "Senior Software Engineer",
   /** Title of the home page, and the default for pages without one. */
-  title: "Saidul Badhon | Full Stack Software Engineer",
+  title: "Saidul Badhon | Senior Software Engineer",
   /** Meta description of the home page. Keep it under about 160 characters. */
   description:
-    "Saidul Badhon is a full stack software engineer building AI products. Case studies of Jutsu, Postt.ai and Dokan.gg, plus writing on AI agents and security.",
+    "Saidul Badhon is a senior software engineer building AI products. Case studies of Jutsu, Postt.ai and Dokan.gg, plus writing on AI agents and security.",
   email: "Saidulbadhon@gmail.com",
   /** Profile photo, in public/. */
   image: "/profileImg.jpeg",
   worksFor: { name: "Jutsu", url: "https://jutsu.ai" },
+  /** Where Saidul is based. `countryCode` is ISO 3166-1 alpha-2. */
+  location: { city: "Dhaka", country: "Bangladesh", countryCode: "BD" },
   linkedin: "https://www.linkedin.com/in/saidulbadhon",
   github: "https://github.com/SaidulBadhon",
   blog: {

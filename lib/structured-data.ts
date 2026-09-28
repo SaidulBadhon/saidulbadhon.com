@@ -27,6 +27,15 @@ export function person(): Node {
     jobTitle: site.jobTitle,
     description: site.description,
     worksFor: { "@type": "Organization", ...site.worksFor },
+    homeLocation: {
+      "@type": "Place",
+      name: `${site.location.city}, ${site.location.country}`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: site.location.city,
+        addressCountry: site.location.countryCode,
+      },
+    },
     knowsAbout: skills,
     sameAs: [site.linkedin, site.github],
   };
