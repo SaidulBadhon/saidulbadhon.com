@@ -57,12 +57,20 @@ ${postLinks.join("\n")}
 
 /** /llms-full.txt: the whole site, with work history, case studies and posts. */
 export function llmsFullTxt(): string {
-  const work = experiences.map(
-    (job) => `### ${job.title}, ${job.company}
-
-${job.date} · ${job.location}
-
-${job.description}`
+  const work = experiences.map((job) =>
+    [
+      `### ${job.title}, ${job.company}`,
+      [job.date, job.location, job.url].filter(Boolean).join(" · "),
+      job.description,
+      job.highlights?.map((highlight) => `- ${highlight}`).join("\n"),
+      job.technologies && `Technologies: ${job.technologies.join(", ")}`,
+      job.projects &&
+        `Case studies: ${job.projects
+          .map((project) => `[${projectTitle(project)}](${absoluteUrl(`/projects/${project.slug}`)})`)
+          .join(", ")}`,
+    ]
+      .filter(Boolean)
+      .join("\n\n")
   );
 
   return `${header()}
