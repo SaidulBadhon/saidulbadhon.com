@@ -8,6 +8,7 @@ import aiDeveloperWorkspace from "./ai-developer-workspace";
 import nearconTicketing from "./nearcon-ticketing";
 import cystellarDashboard from "./cystellar-dashboard";
 import dokanGg from "./dokan-gg";
+import skillsynk from "./skillsynk";
 
 export type { Project, ProjectIconKey, ProjectImage } from "./types";
 
@@ -21,6 +22,7 @@ export const projects: Project[] = [
   nearconTicketing,
   cystellarDashboard,
   dokanGg,
+  skillsynk,
 ];
 
 export function getProject(slug: string): Project | undefined {

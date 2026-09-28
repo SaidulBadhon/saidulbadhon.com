@@ -10,7 +10,8 @@ export type ProjectIconKey =
   | "globe"
   | "shield"
   | "store"
-  | "pen";
+  | "pen"
+  | "video";
 
 /** An image imported from the project's folder, optionally with a caption
  *  shown under it in the gallery and the full-screen viewer. */
