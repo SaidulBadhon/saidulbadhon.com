@@ -135,12 +135,12 @@ export default function ProjectDetailPage({
 
           <motion.h1
             {...enter(2)}
-            className="mt-6 max-w-5xl text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl lg:text-6xl dark:text-white"
+            className="mt-6 max-w-5xl text-4xl leading-[1.15] font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl lg:text-6xl dark:text-white"
           >
             {name}
             {tagline && (
               <span
-                className={`block bg-linear-to-r ${gradient} bg-clip-text pb-2 text-transparent`}
+                className={`mt-2 block bg-linear-to-r ${gradient} bg-clip-text pb-2 text-transparent`}
               >
                 {tagline}
               </span>
