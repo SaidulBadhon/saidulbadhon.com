@@ -4,27 +4,30 @@ import React from "react";
 import { motion } from "motion/react";
 import { links } from "@/lib/links";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useActiveSectionContext } from "@/context/active-section-context";
 import { clsx } from "cn";
 
 export default function Header() {
-  const { activeSection, setActiveSection, setTimeOfLastClick } =
+  const { activeSection: section, setActiveSection, setTimeOfLastClick } =
     useActiveSectionContext();
+  // The blog is its own page rather than a section of the home page.
+  const activeSection = usePathname().startsWith("/blogs") ? "Blog" : section;
 
   return (
     <header className="z-999 relative">
       <motion.div
-        className="fixed top-0 left-1/2 h-18 w-full rounded-none border border-white/40 bg-white/80 shadow-lg shadow-black/3 backdrop-blur-[0.5rem] sm:top-6 sm:h-13 sm:w-xl sm:rounded-full dark:bg-gray-950/75 dark:border-black/40"
+        className="fixed top-0 left-1/2 h-18 w-full rounded-none border border-white/40 bg-white/80 shadow-lg shadow-black/3 backdrop-blur-[0.5rem] sm:top-6 sm:h-13 sm:w-xl sm:rounded-full md:w-164 dark:bg-gray-950/75 dark:border-black/40"
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
       ></motion.div>
 
       <nav className="flex fixed top-[0.15rem] left-1/2 h-12 -translate-x-1/2 py-2 sm:top-[1.7rem] sm:h-[initial] sm:py-0">
-        <ul className="flex w-88 flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-[initial] sm:flex-nowrap sm:gap-5">
+        <ul className="flex w-88 flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-[initial] sm:flex-nowrap sm:gap-1 md:gap-5">
           {links.map((link) => (
             <motion.li
               className="h-3/4 flex items-center justify-center relative"
-              key={link.hash}
+              key={link.href}
               initial={{ y: -100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
             >
@@ -36,7 +39,7 @@ export default function Header() {
                       activeSection === link.name,
                   }
                 )}
-                href={`/${link.hash}`}
+                href={link.href}
                 onClick={() => {
                   setActiveSection(link.name);
                   setTimeOfLastClick(Date.now());
