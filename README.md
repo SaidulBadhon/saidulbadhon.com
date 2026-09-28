@@ -75,7 +75,8 @@ live site; delete the `draft` line to publish. Code blocks are highlighted, and
 you can give them a file name and highlight lines, e.g. ` ```ts title="app.ts" {2-3} `.
 Because posts are MDX, you can import images and React components and use them
 as JSX (keep a post's images in a folder next to it). See
-`content/blogs/writing-a-post.mdx` for an example of everything. If a post's
+`content/blogs/env-file-on-github-for-three-years.mdx` for a post with an
+image and code blocks. If a post's
 frontmatter is missing or malformed, the build fails with a message naming the
 file and what to fix.
 
