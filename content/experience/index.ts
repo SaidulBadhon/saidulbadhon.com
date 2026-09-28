@@ -73,6 +73,7 @@ export const experiences: Experience[] = [
       "Helped move Jutsu from Web3 developer tools to AI products, shipping across the front end, back end and data infrastructure.",
     highlights: [
       "Led development of Jutsu IDE, a browser IDE for NEAR with a live preview, real-time co-editing, GitHub sync and JutsuGPT, an AI copilot on OpenAI and Anthropic models.",
+      "Built the official app for NEARCON 2023 in Lisbon, NEAR's flagship conference: ticketing and check-in, an NCON token wallet, and swag and food purchases for around 3,000 attendees.",
       "Led the React and TypeScript front end of Jutsu Workspace, one app for more than 25 AI models with shared chats, a versioned prompt library, knowledge bases and team billing.",
       "Implemented a vector database for knowledge-base search, grounding AI answers in a team's own documents.",
       "Built big data processing systems to support small language models (SLMs).",
@@ -87,7 +88,7 @@ export const experiences: Experience[] = [
       "pgvector",
       "NEAR Protocol",
     ],
-    projects: [jutsuIde, aiDeveloperWorkspace],
+    projects: [jutsuIde, nearconTicketing, aiDeveloperWorkspace],
   },
   {
     title: "Software Engineer Intern",
@@ -100,7 +101,6 @@ export const experiences: Experience[] = [
       "Joined as a front-end intern and quickly grew into a full-stack role.",
     highlights: [
       "Helped build Jutsu IDE, a Web3 IDE for building and publishing NEAR apps in the browser.",
-      "Contributed to the Web3 ticketing system for NEARCON 2023, with NFT tickets and QR check-in for thousands of attendees.",
       "Worked across React front ends and Node.js, Express and MongoDB services, shipping features end to end.",
     ],
     technologies: [
@@ -111,7 +111,7 @@ export const experiences: Experience[] = [
       "MongoDB",
       "NEAR Protocol",
     ],
-    projects: [jutsuIde, nearconTicketing],
+    projects: [jutsuIde],
   },
   {
     title: "Founder & CEO",

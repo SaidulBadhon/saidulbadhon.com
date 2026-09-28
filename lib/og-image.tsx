@@ -26,6 +26,7 @@ const colors: Record<string, string> = {
   "blue-600": "#2563eb",
   "cyan-400": "#22d3ee",
   "cyan-500": "#06b6d4",
+  "emerald-500": "#10b981",
   "fuchsia-400": "#e879f9",
   "indigo-400": "#818cf8",
   "indigo-500": "#6366f1",
@@ -33,6 +34,7 @@ const colors: Record<string, string> = {
   "pink-500": "#ec4899",
   "rose-500": "#f43f5e",
   "sky-500": "#0ea5e9",
+  "teal-400": "#2dd4bf",
   "violet-500": "#8b5cf6",
   "violet-600": "#7c3aed",
 };
