@@ -1,0 +1,106 @@
+---
+title: My .env file sat on GitHub for three years, and nothing warned me
+description: In 2023 I committed a .env file full of production credentials to a public repository, then "fixed" it with a .gitignore line that did nothing. No alert ever reached me. I found it by accident this week.
+date: 2026-09-28
+tags: [Security, Git, GitHub]
+---
+
+import Image from "next/image";
+import envFile from "./env-file-on-github-for-three-years/env-file.webp";
+
+This week I opened an old repository of mine, `dokan-gg-api`, the backend for the first version of [Dokan.gg](/projects/dokan-gg). Near the top of the file list was a file that should never have been there.
+
+<figure>
+  <Image
+    src={envFile}
+    alt="GitHub showing the .env file in the dokan-gg-api repository, last changed 3 years ago in a commit titled dfsggfds, with every credential blacked out"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>The file as GitHub shows it, with the credentials blacked out for this post.</figcaption>
+</figure>
+
+Every value in it was real:
+
+- The connection string for the **production** MongoDB database, password included
+- A JWT secret, which turned out to be the same string as the database password
+- A SendGrid API key that could send email as `no-reply@dokan.gg`
+- An AWS access key and secret for the account that serves `cdn.dokan.gg`
+- A Tinify API key
+- The Google OAuth client secret behind "Sign in with Google", parked in a comment
+
+The last commit to touch it is titled `dfsggfds`. GitHub says it was three years ago.
+
+## How it got there
+
+There's no dramatic story. The `.env` file went in with the repository's very first commit in March 2023, back when I was moving fast and writing commit messages like `asdf` and `xD`. Over the next four months I changed it ten times, and each change was committed along with whatever else I was working on.
+
+On July 21, 2023, I committed it for the last time. Four minutes later I pushed this:
+
+```diff title=".gitignore"
+ *.zip
++
++.serverless.yml
++.env
+```
+
+So I did notice. I just fixed it the wrong way.
+
+`.gitignore` only tells Git which **untracked** files to leave alone. It does nothing for a file Git is already tracking. The `.env` stayed in the repository, every earlier version of it stayed in the history, and because I thought the problem was solved, I never looked again. What I should have run is:
+
+```bash
+git rm --cached .env
+```
+
+Even that would only have stopped future commits. The secrets were already in the history of a public repository, so the only real fix was to rotate them.
+
+## Every safeguard failed quietly
+
+This is the part that bothers me most. It's not that I had no protection. I had several layers, and every one of them failed without making a sound:
+
+- **`.gitignore`** has `.env` in it. That's irrelevant for a file that's already tracked.
+- **GitHub secret scanning** looks through public repositories for credentials in known formats, like AWS keys, SendGrid keys and Google OAuth secrets, and is supposed to raise an alert. It's switched on for this repository. When I opened the list of secret scanning alerts this week, it was empty. Not dismissed, not resolved. Empty.
+- **Push protection**, which is meant to block pushes that contain secrets, is switched on too.
+- **The providers themselves.** Several of them work with GitHub to be told when their keys show up in public code, so they can warn the owner or revoke the key. If a warning like that was ever sent to me, I never saw it.
+
+A file literally named `.env`, full of keys in some of the most recognizable formats there are, sat in public for three years, and not one alert made it to me.
+
+And I have no way of knowing whether someone else found it first. GitHub doesn't keep a log of who viewed a public file or cloned a public repository. I have to assume that someone did.
+
+## An alert nobody sees is the same as no alert
+
+"Don't commit your `.env` file" isn't the lesson. Everyone knows that, and I knew it in 2023. I committed it anyway, and I'll make some other mistake next year. Mistakes are guaranteed. What isn't guaranteed is that someone notices.
+
+Even when a tool does its job, the warning is scattered. An email in an inbox you've learned to skim. A badge on a Security tab you never open. A notice in the console of a cloud account you haven't logged into for months. For a solo developer or a small team, watching all of those isn't anyone's job, so in practice nobody does it.
+
+To catch this, I needed three things I didn't have:
+
+1. **One place** where signals from GitHub, AWS, Google and the rest of the stack end up together, instead of in a dozen inboxes and dashboards.
+2. **Detection that doesn't depend on me remembering to look**, like an alert when a key that's been quiet for months is suddenly used from somewhere it's never been seen.
+3. **Follow-through.** An alert that stays open, owned and escalated until someone deals with it, rather than a notification that scrolls out of sight.
+
+## Why this is the problem we're solving at Jutsu
+
+Full disclosure: I'm the lead engineer at [Jutsu](https://jutsu.ai), so weigh this section accordingly. But this incident is exactly the problem we're building it for.
+
+Jutsu is an all-in-one SOC platform. It connects to GitHub, AWS, Google Workspace and the rest of your stack, brings their events into one place, and runs detections across all of them. When something fires, AI agents do the first round of triage: they score the risk, explain their reasoning, group related alerts into an incident, and recommend a response. Some responses, like deactivating a leaked key, can run automatically when your policy allows it. Incidents are tracked against an SLA, so they don't quietly disappear.
+
+It wouldn't have stopped me from committing that file. That part was on me. What it's built to do is make sure the signals that follow a mistake like that get seen, instead of sitting unread for three years. You can read more about how it works on the [project page](/projects/jutsu-ai).
+
+## If you've done this too
+
+Chances are you have, or someone on your team has. Here's what to do, in order:
+
+1. **Rotate every credential in the file, first.** Deleting the file doesn't un-leak anything. Assume it's already been copied.
+2. **Check whether the keys were used.** Look at CloudTrail for AWS keys, the database's access logs, and email activity for mail API keys, going back as far as the leak does.
+3. **Stop tracking the file** with `git rm --cached .env`, commit that, and then keep `.env` in `.gitignore`.
+4. **Rewrite the history if you like**, with a tool like [git filter-repo](https://github.com/newren/git-filter-repo). But it isn't what keeps you safe: forks and clones keep the old commits. Rotation is what counts.
+5. **Search the rest of your repositories.** This lists every file named `.env` in your public repositories:
+
+   ```bash
+   gh search code --owner <your-username> --filename .env
+   ```
+
+6. **Make sure your alerts go somewhere a person actually looks.**
+
+It took three years and a lucky late-night look at an old repository to find this one. Finding the next one shouldn't come down to luck.
