@@ -2,6 +2,8 @@
 
 import React from "react";
 import Image, { type StaticImageData } from "next/image";
+import Link from "next/link";
+import { FiArrowRight } from "react-icons/fi";
 import SectionHeading from "./section-heading";
 import {
   VerticalTimeline,
@@ -70,7 +72,18 @@ export default function Experience() {
               </h3>
 
               <p className="mt-1! text-sm! font-semibold text-gray-800 dark:text-gray-300">
-                <span>{item.company}</span>
+                {item.url ? (
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-offset-2 hover:underline"
+                  >
+                    {item.company}
+                  </a>
+                ) : (
+                  <span>{item.company}</span>
+                )}
 
                 <span className="px-2">•</span>
 
@@ -78,9 +91,48 @@ export default function Experience() {
                   {item.location}
                 </span>
               </p>
-              <p className="mt-2! text-xs leading-relaxed text-gray-700 dark:text-white/75">
+              <p className="mt-3! text-sm! leading-relaxed text-gray-700 dark:text-white/75">
                 {item.description}
               </p>
+
+              {item.highlights && (
+                <ul className="mt-3 list-disc space-y-1.5 pl-4 text-sm leading-relaxed text-gray-700 marker:text-gray-400 dark:text-white/75 dark:marker:text-white/40">
+                  {item.highlights.map((highlight) => (
+                    <li key={highlight}>{highlight}</li>
+                  ))}
+                </ul>
+              )}
+
+              {item.technologies && (
+                <ul className="mt-4 flex flex-wrap gap-1.5">
+                  {item.technologies.map((technology) => (
+                    <li
+                      key={technology}
+                      className="rounded-full border border-gray-200 bg-white/70 px-2.5 py-0.5 text-xs text-gray-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300"
+                    >
+                      {technology}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {item.projects && (
+                <p className="mt-4! flex flex-wrap items-center gap-x-4 gap-y-1 text-sm!">
+                  <span className="text-gray-500 dark:text-gray-400">
+                    Case studies:
+                  </span>
+                  {item.projects.map((project) => (
+                    <Link
+                      key={project.slug}
+                      href={`/projects/${project.slug}`}
+                      className="group inline-flex items-center gap-1 font-semibold text-gray-900 dark:text-white"
+                    >
+                      {project.title.split(" | ")[0]}
+                      <FiArrowRight className="transition group-hover:translate-x-0.5" />
+                    </Link>
+                  ))}
+                </p>
+              )}
             </VerticalTimelineElement>
           </React.Fragment>
         ))}
