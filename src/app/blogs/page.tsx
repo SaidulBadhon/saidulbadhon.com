@@ -1,14 +1,19 @@
-import type { Metadata } from "next";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import JsonLd from "@/components/json-ld";
 import { PostMeta } from "@/components/post-meta";
 import { getCover, getPosts, type Post } from "@/content/blogs";
+import { absoluteUrl, pageMetadata, site } from "@/lib/site";
+import { BLOG_ID, WEBSITE_ID, author, breadcrumbs, graph } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
-  title: "Blog | Saidul Badhon",
-  description: "Writing by Saidul Badhon on software engineering and building products.",
-};
+export const metadata = pageMetadata({
+  path: "/blogs",
+  title: "Blog",
+  description: site.blog.description,
+  // Shared links show only this title, so it names whose blog it is.
+  openGraph: { title: site.blog.name },
+});
 
 /** Fade and rise into place on load; pair with an animation delay to stagger. */
 const rise =
@@ -19,8 +24,35 @@ export default async function BlogPage() {
   const covers = await Promise.all(posts.map(getCover));
   const [lead, ...rest] = posts.map((post, index) => ({ post, cover: covers[index] }));
 
+  const structuredData = graph(
+    {
+      "@type": "Blog",
+      "@id": BLOG_ID,
+      url: absoluteUrl("/blogs"),
+      name: site.blog.name,
+      description: site.blog.description,
+      inLanguage: "en",
+      isPartOf: { "@id": WEBSITE_ID },
+      author: author(),
+      blogPost: posts.map((post) => ({
+        "@type": "BlogPosting",
+        "@id": `${absoluteUrl(`/blogs/${post.slug}`)}#article`,
+        url: absoluteUrl(`/blogs/${post.slug}`),
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        author: author(),
+      })),
+    },
+    breadcrumbs([
+      { name: "Home", path: "/" },
+      { name: "Blog", path: "/blogs" },
+    ])
+  );
+
   return (
     <main className="mx-auto max-w-6xl px-4 pb-28 sm:px-6 lg:px-8">
+      <JsonLd data={structuredData} />
       <header
         className={`${rise} flex flex-col gap-6 border-b border-gray-200 pb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-16 dark:border-white/10`}
       >

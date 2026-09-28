@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import JsonLd from "@/components/json-ld";
 import { PostMeta, PostTags } from "@/components/post-meta";
-import { getAdjacentPosts, getPost, getPosts, type Post } from "@/content/blogs";
+import { getAdjacentPosts, getCover, getPost, getPosts, type Post } from "@/content/blogs";
+import { SITE_URL, absoluteUrl, pageMetadata } from "@/lib/site";
+import { BLOG_ID, author, breadcrumbs, graph } from "@/lib/structured-data";
 
 // Only the posts in content/blogs exist; anything else is a 404.
 export const dynamicParams = false;
@@ -22,9 +25,37 @@ export default async function BlogPostPage({ params }: PageProps<"/blogs/[slug]"
 
   const { default: Content } = await import(`@/content/blogs/${slug}.mdx`);
   const { newer, older } = getAdjacentPosts(slug);
+  const cover = await getCover(post);
+  const url = absoluteUrl(`/blogs/${slug}`);
+
+  const structuredData = graph(
+    {
+      "@type": "BlogPosting",
+      "@id": `${url}#article`,
+      url,
+      mainEntityOfPage: url,
+      headline: post.title,
+      description: post.description,
+      image: [`${url}/opengraph-image`, ...(cover ? [absoluteUrl(cover.src)] : [])],
+      datePublished: post.date,
+      dateModified: post.date,
+      author: author(),
+      publisher: author(),
+      keywords: post.tags,
+      timeRequired: `PT${post.readingTime}M`,
+      inLanguage: "en",
+      isPartOf: { "@id": BLOG_ID },
+    },
+    breadcrumbs([
+      { name: "Home", path: "/" },
+      { name: "Blog", path: "/blogs" },
+      { name: post.title, path: `/blogs/${slug}` },
+    ])
+  );
 
   return (
     <main className="px-4 pb-28 sm:px-6">
+      <JsonLd data={structuredData} />
       <article className="mx-auto max-w-3xl">
         <Link
           href="/blogs"
@@ -35,7 +66,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blogs/[slug]"
         </Link>
 
         <header className="mt-10 border-b border-gray-200 pb-10 dark:border-white/10">
-          <PostMeta post={post} />
+          <PostMeta post={post} byline />
           <h1 className="mt-4 text-4xl leading-[1.15] font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl dark:text-white">
             {post.title}
           </h1>
@@ -88,15 +119,15 @@ export async function generateMetadata({ params }: PageProps<"/blogs/[slug]">): 
     };
   }
 
-  return {
-    title: `${post.title} | Blog`,
+  return pageMetadata({
+    path: `/blogs/${slug}`,
+    title: post.title,
     description: post.description,
     openGraph: {
       type: "article",
-      title: post.title,
-      description: post.description,
       publishedTime: post.date,
+      authors: [SITE_URL],
       tags: post.tags,
     },
-  };
+  });
 }

@@ -8,12 +8,39 @@ import ActiveSectionContextProvider from "@/context/active-section-context";
 import ThemeContextProvider from "@/context/theme-context";
 import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { SITE_URL, site } from "@/lib/site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
+// Defaults for every page. Pages set their own title, description, canonical
+// URL and Open Graph tags with pageMetadata() from lib/site.ts.
 export const metadata: Metadata = {
-  title: "Saidul Badhon | Personal Portfolio",
-  description: "Saidul is a Full-stack Software Engineer with 4 years of experience.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: site.title, template: `%s | ${site.name}` },
+  description: site.description,
+  applicationName: site.name,
+  authors: [{ name: site.name, url: SITE_URL }],
+  creator: site.name,
+  publisher: site.name,
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    locale: "en_US",
+  },
+  // Pages' Open Graph titles, descriptions and images fill in the rest.
+  twitter: { card: "summary_large_image" },
+  robots: {
+    index: true,
+    follow: true,
+    // Allow large image previews and full-length snippets in search results.
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 // Applies the saved theme (or the system preference) before first paint, so
