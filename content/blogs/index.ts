@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import type { StaticImageData } from "next/image";
 import { parse } from "yaml";
 
 /** A blog post, read from the frontmatter of content/blogs/<slug>.mdx. */
@@ -11,6 +12,8 @@ export type Post = {
   date: string;
   tags: string[];
   draft: boolean;
+  /** File name of the cover image, in content/blogs/<slug>/. */
+  cover?: string;
   /** Estimated minutes to read. */
   readingTime: number;
 };
@@ -18,6 +21,7 @@ export type Post = {
 const POSTS_DIR = path.join(process.cwd(), "content", "blogs");
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
+const IMAGE_FILE = /^[\w.-]+\.(?:png|jpe?g|webp|avif|gif)$/i;
 const WORDS_PER_MINUTE = 225;
 
 // Drafts show on the dev server and on Vercel preview deployments, never on
@@ -50,6 +54,13 @@ export function getAdjacentPosts(slug: string): {
   return { newer: posts[index - 1], older: posts[index + 1] };
 }
 
+/** The post's cover image, if it has one. */
+export async function getCover(post: Post): Promise<StaticImageData | undefined> {
+  if (!post.cover) return undefined;
+  const { default: image } = await import(`./${post.slug}/${post.cover}`);
+  return image;
+}
+
 const dateFormat = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
   month: "long",
@@ -76,7 +87,7 @@ function readPost(file: string): Post {
     throw invalid("add frontmatter (title, description, date) between --- lines at the top");
   }
 
-  const { title, description, date, tags = [], draft = false } = (parse(match[1]) ??
+  const { title, description, date, tags = [], draft = false, cover } = (parse(match[1]) ??
     {}) as Record<string, unknown>;
 
   if (typeof title !== "string" || !title.trim()) {
@@ -94,6 +105,14 @@ function readPost(file: string): Post {
   if (typeof draft !== "boolean") {
     throw invalid("draft should be true or false");
   }
+  if (
+    cover !== undefined &&
+    (typeof cover !== "string" ||
+      !IMAGE_FILE.test(cover) ||
+      !fs.existsSync(path.join(POSTS_DIR, slug, cover)))
+  ) {
+    throw invalid(`cover should name an image in content/blogs/${slug}/, e.g. cover: screenshot.webp`);
+  }
 
   const words = source.slice(match[0].length).split(/\s+/).filter(Boolean).length;
 
@@ -104,6 +123,7 @@ function readPost(file: string): Post {
     date,
     tags,
     draft,
+    cover,
     readingTime: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
   };
 }
