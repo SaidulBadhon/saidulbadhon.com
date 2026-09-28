@@ -64,6 +64,7 @@ title: My first post
 description: One or two sentences, shown under the title and on /blogs.
 date: 2026-09-28
 tags: [Next.js, React] # optional
+cover: screenshot.webp # optional: an image in content/blogs/my-first-post/, shown on /blogs
 draft: true # optional: keeps the post off the live site
 ---
 
