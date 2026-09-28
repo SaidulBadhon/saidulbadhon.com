@@ -82,8 +82,9 @@ export async function projectCover(project: Project) {
 }
 
 type OgCard = {
-  /** Small caps label above the title, e.g. "Blog". */
-  eyebrow: string;
+  /** Small caps label above the title, e.g. "Blog". Without one, the text is
+   *  centred in the space above the footer. */
+  eyebrow?: string;
   title: string;
   /** Second line of the title, in the accent colours. */
   subtitle?: string;
@@ -165,14 +166,16 @@ export async function ogImage({
           </div>
         )}
 
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 44, height: 5, borderRadius: 3, backgroundImage: accent }} />
-          <div style={{ fontSize: 22, fontWeight: 600, letterSpacing: 4, color: "#6b7280", textTransform: "uppercase" }}>
-            {eyebrow}
+        {eyebrow && (
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ width: 44, height: 5, borderRadius: 3, backgroundImage: accent }} />
+            <div style={{ fontSize: 22, fontWeight: 600, letterSpacing: 4, color: "#6b7280", textTransform: "uppercase" }}>
+              {eyebrow}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div style={{ display: "flex", flexDirection: "column", width: textWidth, marginTop: 40 }}>
+        <div style={{ display: "flex", flexDirection: "column", width: textWidth, marginTop: eyebrow ? 40 : "auto" }}>
           <div style={{ fontSize: titleSize, fontWeight: 600, lineHeight: 1.12, letterSpacing: -1.5 }}>
             {clip(title, 100)}
           </div>

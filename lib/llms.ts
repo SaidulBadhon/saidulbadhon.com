@@ -1,3 +1,4 @@
+import { about } from "@/content/about";
 import { formatDate, getPostSource, getPosts, type Post } from "@/content/blogs";
 import { experiences } from "@/content/experience";
 import { projects, toImage, type Project } from "@/content/projects";
@@ -16,6 +17,8 @@ function header(): string {
   return `# ${site.name}
 
 > ${site.description}
+
+${about.map((paragraph) => paragraph.replace(/\]\(\//g, `](${SITE_URL}/`)).join("\n\n")}
 
 ${site.name} is currently ${currentRole.title} at ${currentRole.company} (${currentRole.date}).
 

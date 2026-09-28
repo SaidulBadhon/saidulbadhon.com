@@ -29,6 +29,7 @@ Everything lives in `content`:
 
 ```
 content/
+├── about.ts                  # the "About me" text, also used in llms.txt
 ├── projects/
 │   ├── index.ts              # which projects are shown, in order
 │   ├── types.ts              # the Project shape

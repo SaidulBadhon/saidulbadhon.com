@@ -7,7 +7,6 @@ export const contentType = "image/png";
 
 export default function Image() {
   return ogImage({
-    eyebrow: "Portfolio",
     title: site.name,
     subtitle: site.jobTitle,
     description:
