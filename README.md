@@ -35,6 +35,9 @@ content/
 │   └── <project-slug>/
 │       ├── index.ts          # title, description, tags, links, ...
 │       └── cover.png         # images for this project
+├── blogs/
+│   ├── index.ts              # reads the posts and their frontmatter
+│   └── <post-slug>.mdx       # one file per blog post
 ├── experience/
 │   ├── index.ts              # work history timeline
 │   └── logos/
@@ -50,6 +53,31 @@ them in its `index.ts`, and add them to `images`. The first image is the cover;
 the rest appear in the gallery on the project page, and any of them opens full
 screen when clicked. To give an image a caption, list it as
 `{ image: screenshot, caption: "What it shows" }` instead of just `screenshot`.
+
+**Write a blog post:** add an `.mdx` file to `content/blogs`. The file name
+becomes the URL (`my-first-post.mdx` is served at `/blogs/my-first-post`), and
+the post appears on `/blogs`, newest first. Start the file with frontmatter:
+
+```mdx
+---
+title: My first post
+description: One or two sentences, shown under the title and on /blogs.
+date: 2026-09-28
+tags: [Next.js, React] # optional
+draft: true # optional: keeps the post off the live site
+---
+
+Write the post in markdown here.
+```
+
+Drafts show on the dev server and on Vercel preview deployments, never on the
+live site; delete the `draft` line to publish. Code blocks are highlighted, and
+you can give them a file name and highlight lines, e.g. ` ```ts title="app.ts" {2-3} `.
+Because posts are MDX, you can import images and React components and use them
+as JSX (keep a post's images in a folder next to it). See
+`content/blogs/writing-a-post.mdx` for an example of everything. If a post's
+frontmatter is missing or malformed, the build fails with a message naming the
+file and what to fix.
 
 ## Scripts
 

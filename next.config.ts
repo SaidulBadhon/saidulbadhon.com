@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   images: {
@@ -7,4 +8,23 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Compiles the blog posts in content/blogs. Turbopack can only pass plugins
+// by name, with options that serialize to JSON.
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-frontmatter", "remark-gfm"],
+    rehypePlugins: [
+      "rehype-slug",
+      [
+        "rehype-pretty-code",
+        {
+          theme: { light: "github-light", dark: "github-dark-dimmed" },
+          keepBackground: false,
+          defaultLang: { block: "plaintext" },
+        },
+      ],
+    ],
+  },
+});
+
+export default withMDX(nextConfig);

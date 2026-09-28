@@ -1,0 +1,52 @@
+---
+title: How to write a post
+description: A template showing the frontmatter and formatting this blog supports. It's a draft, so it only appears on the dev server and on preview deployments.
+date: 2026-09-28
+tags: [Guide]
+draft: true
+---
+
+Every post is an `.mdx` file in `content/blogs`. The file name becomes the URL, so this file, `writing-a-post.mdx`, is served at [/blogs/writing-a-post](/blogs/writing-a-post). Copy it to start a new post.
+
+## Frontmatter
+
+The block between the `---` lines at the top of the file describes the post:
+
+| Field         | Required | What it does                                        |
+| ------------- | -------- | --------------------------------------------------- |
+| `title`       | Yes      | The heading, and the page title in search results   |
+| `description` | Yes      | The summary under the title and on the blog page    |
+| `date`        | Yes      | Publish date as `YYYY-MM-DD`; newest posts come first |
+| `tags`        | No       | A list, like `[Next.js, React]`                     |
+| `draft`       | No       | `true` keeps the post off the live site             |
+
+## Formatting
+
+Write regular markdown: **bold**, _italics_, ~~strikethrough~~, [links to other sites](https://mdxjs.com) and [links to pages here](/#projects).
+
+> Blockquotes look like this.
+
+1. Numbered lists
+2. and bulleted ones
+   - can be nested
+
+### Code
+
+Fenced code blocks are highlighted. After the language you can add a file name and the lines to highlight:
+
+```ts title="lib/greet.ts" {2}
+export function greet(name: string) {
+  return `Hello, ${name}!`;
+}
+```
+
+### Images and components
+
+Since posts are MDX, you can import images and React components and use them as JSX. Keep a post's images in a folder next to it:
+
+```mdx
+import Image from "next/image";
+import diagram from "./images/diagram.png";
+
+<Image src={diagram} alt="How the pieces fit together" />
+```
