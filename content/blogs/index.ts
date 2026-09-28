@@ -54,6 +54,11 @@ export function getAdjacentPosts(slug: string): {
   return { newer: posts[index - 1], older: posts[index + 1] };
 }
 
+/** The post's MDX source, without the frontmatter. */
+export function getPostSource(post: Post): string {
+  return fs.readFileSync(path.join(POSTS_DIR, `${post.slug}.mdx`), "utf8").replace(FRONTMATTER, "");
+}
+
 /** The post's cover image, if it has one. */
 export async function getCover(post: Post): Promise<StaticImageData | undefined> {
   if (!post.cover) return undefined;

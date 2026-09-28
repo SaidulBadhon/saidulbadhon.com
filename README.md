@@ -81,6 +81,22 @@ image and code blocks. If a post's
 frontmatter is missing or malformed, the build fails with a message naming the
 file and what to fix.
 
+## SEO and AI search
+
+Site-wide details (name, job title, home page description, social links) live
+in `lib/site.ts`. Everything below is generated from the content at build
+time, so adding a project or post needs no extra steps:
+
+- A title, description, canonical URL and Open Graph tags on every page
+- A share image for every page (`opengraph-image.tsx`, drawn by `lib/og-image.tsx`);
+  project cards include the cover screenshot and the project's gradient
+- Structured data (JSON-LD) describing Saidul, the blog, each post and each case study
+- `/sitemap.xml`, `/robots.txt` and an RSS feed at `/feed.xml`
+- `/llms.txt` and `/llms-full.txt`, the site as markdown for AI assistants
+
+The `description` of each post and project becomes its snippet in search
+results, so keep it to a sentence or two.
+
 ## Scripts
 
 | Command             | Description                  |
