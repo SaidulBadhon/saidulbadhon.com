@@ -8,6 +8,7 @@ import {
   FaDatabase,
   FaGlobe,
   FaShieldAlt,
+  FaStore,
 } from "react-icons/fa";
 import type { ProjectIconKey } from "@/content/projects";
 
@@ -23,4 +24,5 @@ export const projectIconMap: Record<
   database: FaDatabase,
   globe: FaGlobe,
   shield: FaShieldAlt,
+  store: FaStore,
 };
