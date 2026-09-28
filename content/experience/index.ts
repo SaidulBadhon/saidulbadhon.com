@@ -148,13 +148,20 @@ export const experiences: Experience[] = [
     location: "London, United Kingdom • Remote",
     date: "Jul 2022 - Dec 2022",
     description:
-      "Front-end intern on CyStellar's satellite-driven risk intelligence platform for insurers and risk analysts.",
+      "Front-end intern at CyStellar, a space-tech company whose platform turns satellite data into risk insights for insurers and public agencies.",
     highlights: [
-      "Built data-driven dashboards that turn complex geospatial and environmental data into clear, interactive visual insights.",
-      "Built interactive maps and charts with Mapbox GL and D3.js, layering risk data over satellite imagery alongside historical trends.",
-      "Integrated the dashboards with the platform's APIs and kept them responsive and fast.",
+      "Built data-driven dashboards for CyStellar's internal risk platform, turning geospatial and environmental data into interactive maps and charts with Mapbox GL and D3.js.",
+      "Worked on CyStellar's project for Bilbao City Council, through the EU's REACH incubator: a dashboard forecasting emergencies 15 days ahead to help size and deploy the city's firefighter teams.",
+      "Trained machine learning models to classify the roof materials of houses across Europe from satellite imagery.",
     ],
-    technologies: ["JavaScript", "React", "D3.js", "Mapbox GL", "REST APIs"],
+    technologies: [
+      "JavaScript",
+      "React",
+      "D3.js",
+      "Mapbox GL",
+      "Python",
+      "Machine learning",
+    ],
     projects: [cystellarDashboard],
   },
   {
