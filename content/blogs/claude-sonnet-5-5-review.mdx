@@ -4,9 +4,12 @@ description: Claude Sonnet 5.5 keeps Sonnet 5's $2/$10 pricing, costs far less t
 date: 2026-09-29
 tags: [AI, Claude, LLMs]
 draft: false
+cover: sonnet-5-5-vs-opus-price.webp
 ---
 
+import Image from "next/image";
 import Callout from "@/components/callout";
+import cover from "./claude-sonnet-5-5-review/sonnet-5-5-vs-opus-price.webp";
 import {
   AtAGlance,
   CacheBreakdownChart,
@@ -21,6 +24,16 @@ import {
   TerminalBenchChart,
   TokensPerTaskChart,
 } from "@/content/charts/claude-sonnet-5-5-review";
+
+<figure>
+  <Image
+    src={cover}
+    alt="The words Far cheaper than Opus. Still pretty good. beside a bar chart of API prices per million tokens: Opus 5.5 at $4 input and $20 output, Sonnet 5.5 at $2 input and $10 output"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>Per token, Sonnet 5.5 costs half as much as Opus 5.5.</figcaption>
+</figure>
 
 When Sonnet 5 launched in June, [I wrote](/blogs/fable-5-is-back-sonnet-5-is-here-and-ai-agents-still-need-real-guardrails) that it looked cheap at the token level but wasn't always cheap at the task level. I called it the junior engineer problem: a lower hourly rate doesn't help much if the work takes ten times longer.
 
