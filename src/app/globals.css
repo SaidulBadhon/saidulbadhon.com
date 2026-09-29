@@ -209,6 +209,10 @@
   --viz-opus-5-5: #eb6834;
   --viz-gpt-6-sol: #1baf7a;
   --viz-gpt-6-astra: #eda100;
+  /* The companies, when a chart compares plans rather than models. Defined
+     once here, so they follow the dark-mode model colours too. */
+  --viz-openai: var(--viz-gpt-6-sol);
+  --viz-anthropic: var(--viz-opus-5-5);
   /* The previous generation, and other models when one is the point. */
   --viz-previous: #b6bcc6;
   --viz-context: #4b5563;
