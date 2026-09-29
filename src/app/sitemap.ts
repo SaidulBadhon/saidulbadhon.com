@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getCover, getPosts } from "@/content/blogs";
+import { fiverrProjects } from "@/content/fiverr";
 import { projects, toImage } from "@/content/projects";
 import { absoluteUrl } from "@/lib/site";
 
@@ -21,5 +22,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: absoluteUrl(`/projects/${project.slug}`),
       images: project.images.map((entry) => absoluteUrl(toImage(entry).image.src)),
     })),
+    {
+      url: absoluteUrl("/fiverr"),
+      images: fiverrProjects.map((project) => absoluteUrl(project.images[0].image.src)),
+    },
   ];
 }

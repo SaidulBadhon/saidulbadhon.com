@@ -1,6 +1,14 @@
 import { about } from "@/content/about";
 import { formatDate, getPostSource, getPosts, type Post } from "@/content/blogs";
 import { experiences } from "@/content/experience";
+import {
+  fiverrProfile,
+  fiverrProjects,
+  formatMonth,
+  formatSpan,
+  getClients,
+  getStats,
+} from "@/content/fiverr";
 import { projects, toImage, type Project } from "@/content/projects";
 import { skillGroups } from "@/content/skills";
 import { SITE_URL, absoluteUrl, site } from "./site";
@@ -51,6 +59,10 @@ Case studies of products ${site.name} built or helped ship.
 
 ${projectLinks.join("\n")}
 
+## Freelance work
+
+- [Fiverr work history](${absoluteUrl("/fiverr")}): ${fiverrSummary()}
+
 ## Blog
 
 ${postLinks.join("\n")}
@@ -75,6 +87,7 @@ export function llmsFullTxt(): string {
         `Case studies: ${job.projects
           .map((project) => `[${projectTitle(project)}](${absoluteUrl(`/projects/${project.slug}`)})`)
           .join(", ")}`,
+      job.page && `More: [${job.page.label}](${absoluteUrl(job.page.href)})`,
     ]
       .filter(Boolean)
       .join("\n\n")
@@ -89,6 +102,8 @@ ${work.join("\n\n")}
 ## Projects
 
 ${projects.map(projectMarkdown).join("\n\n")}
+
+${fiverrMarkdown()}
 
 ## Blog posts
 
@@ -115,6 +130,44 @@ function projectMarkdown(project: Project): string {
   ]
     .filter(Boolean)
     .join("\n\n");
+}
+
+function fiverrSummary(): string {
+  const stats = getStats();
+  return `${stats.orders} orders ${site.name} completed for ${stats.clients} clients on Fiverr from ${formatMonth(stats.first)} to ${formatMonth(stats.last)}, rated ${stats.rating} from ${stats.reviews} reviews, with screenshots of selected projects and every review.`;
+}
+
+/** Every Fiverr project, client and order, with the clients' reviews. */
+function fiverrMarkdown(): string {
+  const showcase = fiverrProjects.map(
+    (project) =>
+      `- ${project.title} (${project.kind}, for ${project.client}): ${project.summary} Technologies: ${project.technologies.join(", ")}.`
+  );
+  const clients = getClients().map((client) => {
+    const span = formatSpan(client.orders[client.orders.length - 1].placed, client.orders[0].delivered);
+    const orders = client.orders.map((order) =>
+      [
+        `- ${formatMonth(order.delivered)}: ${order.summary}`,
+        order.rating !== undefined && ` Rated ${order.rating} out of 5.`,
+        order.review && ` Review: "${order.review}"`,
+      ]
+        .filter(Boolean)
+        .join("")
+    );
+    return `### ${client.username}\n\n${client.orders.length} ${client.orders.length === 1 ? "order" : "orders"}, ${span}\n\n${orders.join("\n")}`;
+  });
+
+  return `## Fiverr work history
+
+${absoluteUrl("/fiverr")} · Profile: ${fiverrProfile}
+
+${fiverrSummary()}
+
+Selected projects:
+
+${showcase.join("\n")}
+
+${clients.join("\n\n")}`;
 }
 
 function postMarkdown(post: Post): string {
