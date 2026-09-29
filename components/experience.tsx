@@ -133,6 +133,18 @@ export default function Experience() {
                   ))}
                 </p>
               )}
+
+              {item.page && (
+                <p className="mt-2! text-sm!">
+                  <Link
+                    href={item.page.href}
+                    className="group inline-flex items-center gap-1 font-semibold text-gray-900 dark:text-white"
+                  >
+                    {item.page.label}
+                    <FiArrowRight className="transition group-hover:translate-x-0.5" />
+                  </Link>
+                </p>
+              )}
             </VerticalTimelineElement>
           </React.Fragment>
         ))}

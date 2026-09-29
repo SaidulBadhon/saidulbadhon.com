@@ -1,4 +1,5 @@
 import type { StaticImageData } from "next/image";
+import { getStats } from "@/content/fiverr";
 import type { Project } from "@/content/projects";
 import agentrel from "@/content/projects/agentrel";
 import aiDeveloperWorkspace from "@/content/projects/ai-developer-workspace";
@@ -9,6 +10,7 @@ import jutsuIde from "@/content/projects/jutsu-ide";
 import nearconTicketing from "@/content/projects/nearcon-ticketing";
 import posttAi from "@/content/projects/postt-ai";
 import stella from "@/content/projects/stella";
+import zodiWorld from "@/content/projects/zodi-world";
 import cryptosynkLogo from "./logos/cryptosynk.png";
 import cystellarLogo from "./logos/cystellar.png";
 import dokanLogo from "./logos/dokan.png";
@@ -33,7 +35,11 @@ export type Experience = {
   technologies?: string[];
   /** Case studies of work done in the role, linked from the card. */
   projects?: Project[];
+  /** A page on this site with more about the role, linked from the card. */
+  page?: { href: string; label: string };
 };
+
+const fiverr = getStats();
 
 /** Work history, shown top to bottom on the timeline. */
 export const experiences: Experience[] = [
@@ -172,22 +178,28 @@ export const experiences: Experience[] = [
     company: "Fiverr",
     logo: fiverrLogo,
     location: "Remote",
-    date: "Oct 2020 - Nov 2022",
+    date: "Oct 2020 - Apr 2024",
     description:
       "Freelance web developer for clients on Fiverr, starting with front-end work and growing into full-stack projects.",
     highlights: [
+      `Completed ${fiverr.orders} orders for ${fiverr.clients} clients, ${fiverr.repeatClients} of whom came back for more, rated ${fiverr.rating} from ${fiverr.reviews} reviews.`,
       "Built modern, responsive websites, landing pages and portfolios for small businesses.",
       "Delivered full-stack web apps with React, Node.js and MongoDB, owning both the client and the server.",
+      "Built cross-platform mobile apps in React Native and Expo, including Zodi World, an astrology app.",
       "Ran each project end to end, from scoping requirements with the client through delivery and revisions.",
     ],
     technologies: [
       "JavaScript",
       "React",
+      "Next.js",
+      "React Native",
       "Node.js",
       "MongoDB",
       "HTML",
       "CSS",
     ],
+    projects: [zodiWorld],
+    page: { href: "/fiverr", label: "Fiverr work history" },
   },
   {
     title: "Frontend Developer",

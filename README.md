@@ -42,8 +42,18 @@ content/
 ├── experience/
 │   ├── index.ts              # work history timeline
 │   └── logos/
+├── fiverr/
+│   ├── orders.ts             # every Fiverr order, with the client's review
+│   ├── index.ts              # projects shown with screenshots, and helpers
+│   └── images/               # screenshots from the deliveries
 └── skills.ts
 ```
+
+**Fiverr work history:** `/fiverr` is built from `content/fiverr`. Add an
+order to the top of `orders.ts` (newest first) and the stats, reviews and
+client list update on their own. To show a project with screenshots, add it to
+`fiverrProjects` in `index.ts` and set `project` on its orders to its slug.
+Prices are deliberately left out.
 
 **Add a project:** copy an existing project folder, rename it (the folder name
 becomes the URL, `/projects/<slug>`), update its `index.ts` and images, then add
