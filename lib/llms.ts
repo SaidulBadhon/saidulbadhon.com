@@ -181,16 +181,29 @@ ${toMarkdown(getPostSource(post))}`;
 }
 
 /**
- * Turns a post's MDX into plain markdown: drops the imports, replaces figures
- * with their alt text and caption, makes links to this site absolute, and
- * demotes headings to sit under the post's title. Code blocks are left alone.
+ * Turns a post's MDX into plain markdown: drops the imports and charts,
+ * replaces figures with their alt text and caption, turns callouts into a
+ * bold heading and their text, makes links to this site absolute, and demotes
+ * headings to sit under the post's title. Code blocks are left alone.
  */
 function toMarkdown(mdx: string): string {
-  const withoutFigures = mdx.replace(/<figure>([\s\S]*?)<\/figure>/g, (_, figure: string) => {
-    const alt = figure.match(/alt="([^"]*)"/)?.[1];
-    const caption = figure.match(/<figcaption>([\s\S]*?)<\/figcaption>/)?.[1]?.trim();
-    return `*[Image: ${[alt, caption].filter(Boolean).join(". ")}]*`;
-  });
+  const withoutFigures = mdx
+    // Imports can run over several lines.
+    .replace(/^import\s[\s\S]*?\sfrom\s+"[^"]+";?$/gm, "")
+    .replace(/<figure>([\s\S]*?)<\/figure>/g, (_, figure: string) => {
+      const alt = figure.match(/alt="([^"]*)"/)?.[1];
+      const caption = figure.match(/<figcaption>([\s\S]*?)<\/figcaption>/)?.[1]?.trim();
+      return `*[Image: ${[alt, caption].filter(Boolean).join(". ")}]*`;
+    })
+    // Draft notes are for the author, not readers.
+    .replace(/<Callout variant="draft"[\s\S]*?<\/Callout>/g, "")
+    .replace(
+      /<Callout title="([^"]*)">([\s\S]*?)<\/Callout>/g,
+      (_, title: string, body: string) => `**${title}**\n\n${body.replace(/^ {2}/gm, "").trim()}`
+    )
+    // Charts (a component on a line of its own) have no text form. The posts
+    // say in words what each one shows, and the numbers behind them.
+    .replace(/^<[A-Z]\w*[^>]*\/>$/gm, "");
 
   let inCode = false;
   const lines = withoutFigures.split(/\r?\n/).flatMap((line) => {
