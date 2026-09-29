@@ -1,0 +1,229 @@
+---
+title: "Claude Sonnet 5.5 Review: Same Price, Far Less Waste"
+description: Claude Sonnet 5.5 keeps Sonnet 5's $2/$10 pricing but does far more per dollar. My take on the pricing, the cache-pricing gap, how it compares with GPT-6 Sol, and why it isn't my first pick for hard coding.
+date: 2026-09-29
+tags: [AI, Claude, LLMs]
+draft: true
+---
+
+import Callout from "@/components/callout";
+import {
+  AtAGlance,
+  CacheBreakdownChart,
+  CacheReadChart,
+  CodingBenchmarksChart,
+  CostPerTaskChart,
+  IntelligenceCostChart,
+  KnowledgeWorkChart,
+  SolLadderChart,
+  SpeedChart,
+  TerminalBenchChart,
+  TokensPerTaskChart,
+} from "@/content/charts/claude-sonnet-5-5-review";
+
+When Sonnet 5 launched in June, [I wrote](/blogs/fable-5-is-back-sonnet-5-is-here-and-ai-agents-still-need-real-guardrails) that it looked cheap at the token level but wasn't always cheap at the task level. I called it the junior engineer problem: a lower hourly rate doesn't help much if the work takes ten times longer.
+
+Claude Sonnet 5.5, released on September 28, is Anthropic's answer to that problem. Mostly.
+
+Most headlines skip this part: **Sonnet 5.5 costs exactly the same per token as Sonnet 5.** It's $2 per million input tokens and $10 per million output tokens. The tokenizer, cache prices and batch discount are all the same. If you were hoping for a smaller number on the pricing page, it isn't there.
+
+What changed is how many tokens it burns to get the job done. That turns out to matter much more than the sticker price.
+
+I've used it, gone through the benchmarks, and read the most useful outside review I could find. My verdict: Sonnet 5.5 is a very good model for the money and an excellent general-purpose workhorse. It isn't the model I'd reach for first when the coding gets hard. And Anthropic's pricing structure still has one gap I really wanted them to close.
+
+<AtAGlance />
+
+## What Anthropic actually shipped
+
+Sonnet 5.5 is the second model in the Claude 5.5 family, after Opus 5.5. [Anthropic pitches it](https://www.anthropic.com/claude-sonnet-5-5) as the faster, cheaper complement to Opus. They say it's strongest at well-scoped everyday tasks, fixing bugs, and producing polished documents, slides and spreadsheets. It's available on Anthropic's API, AWS, Google Cloud and Microsoft's cloud.
+
+Two things in the launch stood out to me.
+
+First, Anthropic is unusually direct that **Opus 5.5 is still clearly stronger at complex, open-ended work.** Remember that line. It matters later.
+
+Second, this is the first Sonnet to launch with Anthropic's cyber safeguards. Some higher-risk security requests will visibly fall back to Sonnet 5. If you're building security tooling, test your real workflows before you switch.
+
+## The pricing: what changed and what didn't
+
+| Per million tokens         | Sonnet 5      | Sonnet 5.5    |
+| -------------------------- | ------------- | ------------- |
+| Input                      | $2.00         | $2.00         |
+| Output                     | $10.00        | $10.00        |
+| Cache write (5 min / 1 hr) | $2.50 / $4.00 | $2.50 / $4.00 |
+| Cache read                 | $0.20         | $0.20         |
+| Batch input / output       | $1.00 / $5.00 | $1.00 / $5.00 |
+| Tokenizer                  | Same          | Same          |
+
+There's some backstory. Sonnet 5 launched at $2/$10 as _introductory_ pricing through August 31, with an increase to $3/$15 scheduled for September 1. In August, Anthropic cancelled that increase and made $2/$10 [the standard price](https://platform.claude.com/docs/en/about-claude/pricing). So if your budget still assumes $3/$15, the Sonnet line is a third cheaper than planned. But that happened to Sonnet 5 before 5.5 existed. Sonnet 5.5 didn't move the price again.
+
+### So where does "cheaper" come from?
+
+Anthropic says Sonnet 5.5 costs up to 30% less per task because it uses fewer tokens and fewer tool calls. Vendors always say things like that, so I looked at independent numbers.
+
+[Artificial Analysis](https://artificialanalysis.ai/articles/claude-sonnet-5-5) runs every model through the same set of evaluations and reports what one task costs at each effort level:
+
+<CostPerTaskChart />
+
+This is the clearest example I can give. **Sonnet 5.5 at medium effort scores 41 for $0.59 per task. Sonnet 5 at max effort scores 38 for $5.09.** You get a better result for about 12% of the cost.
+
+At high effort, 1,000 of these tasks cost about $1,790 on Sonnet 5 and $1,080 on Sonnet 5.5, while the score rises from 32 to 47. Same price list, a completely different bill.
+
+Anthropic's launch customers report the same direction. Balyasny Asset Management said Sonnet 5.5 used about 121K tokens per answer where Sonnet 5 used 497K. Lovable reported a third fewer tool calls. CodeRabbit said Sonnet 5's "high token use" is gone. Anthropic picked these testimonials, so I weigh them less than independent data, but they agree with it.
+
+The exception is **max effort**. Sonnet 5.5 at max costs 49% _more_ per task than Sonnet 5 at max. It's far smarter (56 vs 38), but it isn't cheaper. Hold that thought.
+
+### My criticism: the cache pricing didn't move
+
+In agentic work, a large share of what you pay for is **cache reads**: the model re-reading the same codebase, documents and conversation history on every turn.
+
+With the 5.5 generation, Anthropic made cache reads much cheaper on its other models:
+
+<CacheReadChart />
+
+So reading a cached token now costs **exactly the same on Sonnet 5.5 as on Opus 5.5**, even though Opus charges twice as much for input and output.
+
+Here's what that does to an illustrative agent task that reads 2M cached tokens across its loop, sends 100K fresh input tokens and writes 50K output tokens:
+
+<CacheBreakdownChart />
+
+On paper Sonnet is half the price of Opus. In this example, Opus costs only 1.6 times as much. If Sonnet needs more output tokens than Opus for the same job, which the benchmarks suggest can happen, the gap shrinks further.
+
+That's the change I wanted to see. I didn't need a headline cut to input pricing. I wanted a cache structure that fits how people actually use a Sonnet-class model: long agent loops, sub-agents, and huge cached contexts. Sonnet is the model you'd run inside those loops, and it's the one that didn't get the cache discount.
+
+### The awkward comparison: Opus 5.5
+
+Opus 5.5 also got cheaper, dropping from $5/$25 on Opus 5 to $4/$20. On Artificial Analysis's index, that creates an uncomfortable picture for Sonnet:
+
+- Opus 5.5 at **low** effort (42, $0.55) slightly beats Sonnet 5.5 at **medium** (41, $0.59).
+- Opus 5.5 at **high** (54, $1.82) beats Sonnet 5.5 at **xhigh** (52, $2.74).
+- Opus 5.5 at **xhigh** matches Sonnet 5.5 at **max** (56) for less than half the cost ($3.46 vs $7.60).
+
+<IntelligenceCostChart />
+
+So when people say Sonnet 5.5 is great for the price, the honest version is: it's great for the price compared with Sonnet 5 and much of the market. Compared with its own bigger sibling, on this benchmark, the value case is thinner than the price tags suggest.
+
+Sonnet's real advantages over Opus are elsewhere. It has a lower floor ($0.41 per task at low effort), it does very well on narrower, well-scoped work, and it's faster:
+
+<SpeedChart />
+
+One caveat on all of this: one benchmark suite has its own mix of tasks, and your workload won't match it exactly.
+
+## My take: a genuinely good general-purpose model
+
+I like Sonnet 5.5. For everyday work it's the most useful Sonnet Anthropic has shipped. That covers writing, research, analysis, working through long documents, and answering questions about a codebase.
+
+The numbers back that up. On the knowledge-work results in Anthropic's launch post, it's essentially level with Opus 5.5, and on computer use it's close behind (80.1% to 81.8% on OSWorld 2.1):
+
+<KnowledgeWorkChart />
+
+Anthropic also says it writes more clearly than the previous generation. That's one of the few launch claims the outside review I read agreed with.
+
+It isn't perfect. On Artificial Analysis's factual-knowledge test (AA-Omniscience), Sonnet 5.5 scored 54% to Opus 5.5's 66%. For knowledge-heavy questions I can't easily check, I'd still verify the answer or use Opus.
+
+<Callout variant="draft" title="Add your own example">
+  One or two sentences about a real everyday task where Sonnet 5.5 impressed you: what you asked, and what it did better than you expected.
+</Callout>
+
+## Coding: very good, but not my first pick
+
+I don't think Sonnet 5.5 is the best model for coding. It's a good coding model, and a big step up from Sonnet 5. But when a task is hard, ambiguous or involves design, I'd still reach for Opus 5.5 or Fable 5.1. That's my opinion. Here's the evidence on both sides.
+
+<CodingBenchmarksChart />
+
+**Where it's strong**
+
+- **Terminal-style agentic work.** On Terminal-Bench 4.0, Anthropic reports 70.6%, up from Sonnet 5's 10.3% and ahead of Opus 5.5's 66.4%. Artificial Analysis's own run agrees on the ranking (below).
+- **Bug fixes and well-scoped tasks.** This is exactly the area Anthropic says it's best at.
+- **Efficiency compared with Sonnet 5.** It uses fewer tool calls, fewer shell runs and fewer wasted steps.
+
+<TerminalBenchChart />
+
+**Where it falls short**
+
+- **Harder coding benchmarks.** It trails Opus 5.5 on CursorBench 4.0 and FrontierCode 1.1, and GPT-6 Sol on FrontierCode at max effort. Those are Anthropic's own published numbers.
+- **More thinking isn't always better.** In the same table, Sonnet scores _higher_ on FrontierCode at xhigh (52.1%) than at max (46.2%).
+- **Token appetite.** Artificial Analysis measured about 193K output tokens per task at max effort, the highest it had seen. GPT-6 Sol used about 31K.
+- **Frontend and design.** Anthropic says it has a sharp eye for design. The outside review I read found its layouts clearly worse than Opus 5.5 and Fable 5.1.
+- **Checking its own work at low effort.** Anthropic's [migration guide](https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide) says that at low effort, Sonnet 5.5 sometimes reports a code change as done without running a check that exercises it. The guide includes a system-prompt paragraph to fix this. I appreciate the honesty, but it's the kind of thing you want to know before running it unattended.
+
+General intelligence and coding performance are different things. GDPval-style benchmarks reward knowledge work. Hard coding rewards sustained judgment across many files and many decisions, and that's where Opus's advantage shows up.
+
+<Callout variant="draft" title="Data to add later">
+  Artificial Analysis hasn't published its Coding Agent Index score for Sonnet 5.5 yet. When it does, add it here: it's the fairest independent coding comparison.
+</Callout>
+
+## The outside review worth watching: "delegate, don't select"
+
+The most useful outside take I've found is [Theo Browne's review](https://www.youtube.com/watch?v=8WbW_n95wc4) on the T3 (t3.gg) channel, published the day after launch. It's useful partly because it doesn't simply accept Anthropic's framing.
+
+Theo's central argument is that Sonnet 5.5 is a poor model to _select_ as your main model and a great one to _delegate to_. In Theo's words: **"Sonnet is the one you delegate to, not the one you prompt."**
+
+The findings that stood out to me:
+
+- **Theo's own benchmark:** a deep pull-request audit of a large real-world codebase. Sonnet 5.5 cost about half as much as Opus, scored slightly better on the automated judging, and finished in about five minutes. Opus took roughly twice as long and GPT-6 Astra roughly three times as long.
+- **Everyday coding cost.** For like-for-like real coding work, Theo found Sonnet often costs as much as Opus, or more. That matches the Artificial Analysis data above.
+- **Max effort.** Token usage jumps dramatically from xhigh to max for very little gain. Theo's advice is to pretend max doesn't exist.
+- **Cache pricing.** Theo made the same criticism I did.
+- **Design.** Theo found it worse than Opus and Fable 5.1, though ahead of OpenAI's and xAI's models.
+
+Where I land compared with Theo: I agree on cache pricing, on max effort, and on Sonnet's value as a sub-agent. I'm more positive about picking it directly as a general-purpose model. Theo's review focuses on coding workflows, which is exactly where Opus's lead is biggest. Theo is also much harsher on GPT-6 Sol than I am.
+
+<Callout variant="draft" title="Check before publishing">
+  Watch the video and confirm the quote above and the pull-request audit numbers against it. They come from summaries of the video, which say the audit ran on T3 Code's own codebase. If you pull exact cost and time figures, they'd make a good chart here.
+</Callout>
+
+## Sonnet 5.5 vs GPT-6 Sol: same price, opposite approaches
+
+OpenAI released [GPT-6 Sol](https://community.openai.com/t/announcing-gpt-6-sol-and-gpt-6-luna-in-the-api-codex-and-chatgpt/1399925) on September 22 as its mid-tier "workhorse" model, below the flagship GPT-6 Astra. Its [API price](https://developers.openai.com/api/docs/pricing) is **$2 input, $0.20 cached input, $10 output**, identical to Sonnet 5.5 at standard context length.
+
+That's why I find this matchup so interesting. Price is off the table, so the question becomes how each model spends your money. OpenAI also took the opposite pricing approach to Anthropic: Sol's price is half of what GPT-5.6 Sol cost ($4/$20).
+
+|                                            | Claude Sonnet 5.5                | GPT-6 Sol                          |
+| ------------------------------------------ | -------------------------------- | ---------------------------------- |
+| Input / cached / output (per MTok)         | $2 / $0.20 / $10                 | $2 / $0.20 / $10                   |
+| Long-context pricing                       | Full 1M window at standard rates | Separate higher rate: $4 / $0.40 / $15 |
+| AA Intelligence Index (max effort)         | 56                               | 48                                 |
+| AA cost per task (max effort)              | $7.60                            | ~$1.05                             |
+| Output tokens per task (max)               | ~193K                            | ~31K                               |
+| Terminal-Bench 4.0 (AA)                    | 63.6%                            | 43%                                |
+| FrontierCode 1.1, max (Anthropic-reported) | 46.2%                            | 49.3%                              |
+| GDPval-AA v2.1 (Anthropic-reported)        | 1844                             | 1487                               |
+
+Sol is frugal. Sonnet 5.5 spends more to reach a higher ceiling:
+
+<SolLadderChart />
+
+<TokensPerTaskChart />
+
+For the cheapest acceptable answer at scale, Sol is a serious option. For a model that can go further when I let it, and especially for knowledge work, where Sonnet's lead is large, I'd pick Sonnet 5.5.
+
+## How I'd actually use Sonnet 5.5
+
+- **Default for everyday work**, at low or medium effort.
+- **As a sub-agent** for codebase exploration, research, audits and scoped fixes, with Opus 5.5 or Fable 5.1 orchestrating.
+- **Skip max effort.** Xhigh is the highest I'd go.
+- **Hard coding and frontend work:** Opus 5.5 or Fable 5.1.
+- **Cache-heavy agent loops:** measure Sonnet against Opus on your own workload. The gap is smaller than the list prices suggest.
+- **Coding agents at low effort:** add Anthropic's verification paragraph to the system prompt.
+
+<Callout variant="draft" title="Optional: add your own example">
+  How you've changed your own setup since Sonnet 5.5 came out.
+</Callout>
+
+<Callout title="Read my previous AI model review">
+  If you enjoyed this analysis, check out my review of the Fable 5 release (and the Sonnet 5 launch that came with it). I break down the models' capabilities, pricing and real-world performance, and it's where I first wrote about the junior engineer problem this release finally addresses.
+
+[Fable 5 is Back, Sonnet 5 is Here, and AI Agents Still Need Real Guardrails →](/blogs/fable-5-is-back-sonnet-5-is-here-and-ai-agents-still-need-real-guardrails)
+</Callout>
+
+## The verdict
+
+Sonnet 5.5 is the most cost-effective Sonnet Anthropic has shipped. That isn't because the price went down. It didn't. It's because the model wastes much less. That mostly fixes the junior engineer problem I wrote about with Sonnet 5.
+
+Three things stop it from being an automatic choice. Anthropic left Sonnet's cache pricing alone while cutting it everywhere else. Opus 5.5 is surprisingly good value at a similar tier. And for coding, Sonnet 5.5 is good, but not the best.
+
+It's a strong release, just not one that's right for every job.
+
+---
+
+_A note on sources: benchmark numbers labelled "Anthropic-reported" come from [Anthropic's launch post](https://www.anthropic.com/claude-sonnet-5-5). Index scores, cost per task, speed and token counts come from [Artificial Analysis](https://artificialanalysis.ai/articles/claude-sonnet-5-5)'s independent testing. Prices come from [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) and [OpenAI](https://developers.openai.com/api/docs/pricing). Theo's findings are from [the T3 review](https://www.youtube.com/watch?v=8WbW_n95wc4). Everything written as "I think" is my own opinion._
