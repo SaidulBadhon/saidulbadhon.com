@@ -1,5 +1,6 @@
 import type { StaticImageData } from "next/image";
 import type { Project } from "@/content/projects";
+import agentrel from "@/content/projects/agentrel";
 import aiDeveloperWorkspace from "@/content/projects/ai-developer-workspace";
 import cystellarDashboard from "@/content/projects/cystellar-dashboard";
 import dokanGg from "@/content/projects/dokan-gg";
@@ -7,6 +8,7 @@ import jutsuAi from "@/content/projects/jutsu-ai";
 import jutsuIde from "@/content/projects/jutsu-ide";
 import nearconTicketing from "@/content/projects/nearcon-ticketing";
 import posttAi from "@/content/projects/postt-ai";
+import stella from "@/content/projects/stella";
 import cryptosynkLogo from "./logos/cryptosynk.png";
 import cystellarLogo from "./logos/cystellar.png";
 import dokanLogo from "./logos/dokan.png";
@@ -47,7 +49,7 @@ export const experiences: Experience[] = [
     highlights: [
       "Lead engineer on Jutsu's AI security operations platform, working across the OCSF ingest pipeline into ClickHouse, the multi-tenant API, Sigma detections and the AI agents that triage alerts and write investigations.",
       "Lead engineering and product for Postt.ai, an AI content platform that drafts and schedules LinkedIn and X posts in each founder's voice, and wrote most of its API and AI agent service.",
-      "Built AI-powered developer relations services.",
+      "Led the rebuild of Stella, the Stellar Development Foundation's AI assistant for developers on Discord, Telegram and developers.stellar.org, and built most of AgentRel, a platform for AI assistants grounded in a product's docs.",
       "Plan sprints, scope features and review code for the team, turning product strategy into shipped releases.",
     ],
     technologies: [
@@ -58,9 +60,10 @@ export const experiences: Experience[] = [
       "ClickHouse",
       "MongoDB",
       "Vercel AI SDK",
+      "Qdrant",
       "Kubernetes",
     ],
-    projects: [jutsuAi, posttAi],
+    projects: [jutsuAi, posttAi, stella, agentrel],
   },
   {
     title: "Full Stack Engineer",

@@ -11,7 +11,9 @@ export type ProjectIconKey =
   | "shield"
   | "store"
   | "pen"
-  | "video";
+  | "video"
+  | "robot"
+  | "moon";
 
 /** An image imported from the project's folder, optionally with a caption
  *  shown under it in the gallery and the full-screen viewer. */

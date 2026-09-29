@@ -32,11 +32,13 @@ const colors: Record<string, string> = {
   "indigo-500": "#6366f1",
   "orange-500": "#f97316",
   "pink-500": "#ec4899",
+  "purple-500": "#a855f7",
   "rose-500": "#f43f5e",
   "sky-500": "#0ea5e9",
   "teal-400": "#2dd4bf",
   "violet-500": "#8b5cf6",
   "violet-600": "#7c3aed",
+  "yellow-400": "#facc15",
 };
 
 /** A Tailwind gradient like "from-sky-500 to-cyan-400" as a CSS gradient, or

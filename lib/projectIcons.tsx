@@ -11,6 +11,8 @@ import {
   FaStore,
   FaPenNib,
   FaVideo,
+  FaRobot,
+  FaMoon,
 } from "react-icons/fa";
 import type { ProjectIconKey } from "@/content/projects";
 
@@ -29,4 +31,6 @@ export const projectIconMap: Record<
   store: FaStore,
   pen: FaPenNib,
   video: FaVideo,
+  robot: FaRobot,
+  moon: FaMoon,
 };

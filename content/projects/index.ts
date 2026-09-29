@@ -3,10 +3,13 @@ import type { Project, ProjectImage } from "./types";
 import jutsuAi from "./jutsu-ai";
 import jutsuIde from "./jutsu-ide";
 import posttAi from "./postt-ai";
+import stella from "./stella";
+import agentrel from "./agentrel";
 import aiDeveloperWorkspace from "./ai-developer-workspace";
 import nearconTicketing from "./nearcon-ticketing";
 import cystellarDashboard from "./cystellar-dashboard";
 import dokanGg from "./dokan-gg";
+import zodiWorld from "./zodi-world";
 import skillsynk from "./skillsynk";
 
 export type { Project, ProjectIconKey, ProjectImage } from "./types";
@@ -16,10 +19,13 @@ export const projects: Project[] = [
   jutsuAi,
   jutsuIde,
   posttAi,
+  stella,
+  agentrel,
   aiDeveloperWorkspace,
   nearconTicketing,
   cystellarDashboard,
   dokanGg,
+  zodiWorld,
   skillsynk,
 ];
 
