@@ -91,7 +91,7 @@ export function AtAGlance() {
         {
           label: "Cost per task, medium effort",
           value: "$0.59",
-          detail: "41% less than Sonnet 5 at the same effort",
+          detail: "Under half of Opus 5.5's $1.34, and 41% less than Sonnet 5",
           trend: "down",
           good: true,
         },
@@ -112,26 +112,36 @@ export function AtAGlance() {
   );
 }
 
-export function CostPerTaskChart() {
-  const series = [sonnet5, sonnet55];
+/** Cost per task of Sonnet 5.5 against another model at each effort level,
+ *  with Sonnet 5.5's bars noting how much cheaper (or dearer) it is. */
+function EffortCostChart({
+  other,
+  title,
+  description,
+}: {
+  other: Series;
+  title: string;
+  description: string;
+}) {
+  const series = [other, sonnet55];
   return (
     <ChartFigure
-      title="Same price per token, a very different bill"
-      description="What one task on Artificial Analysis's Intelligence Index costs at each effort level. Sonnet 5.5 is cheaper at every level except max, and scores higher at all of them."
+      title={title}
+      description={description}
       legend={{ series, mark: "bar" }}
       source={`${aaSource} Hover or tap a bar for its Intelligence Index score.`}
       table={{
-        columns: ["Effort", "Sonnet 5 cost", "Sonnet 5 score", "Sonnet 5.5 cost", "Sonnet 5.5 score", "Change in cost"],
+        columns: [
+          "Effort",
+          `${other.label} cost`,
+          `${other.label} score`,
+          "Sonnet 5.5 cost",
+          "Sonnet 5.5 score",
+          `Sonnet 5.5 against ${other.label}`,
+        ],
         rows: efforts.map((effort, level) => {
-          const [before, after] = [index["sonnet-5"][level], index["sonnet-5-5"][level]];
-          return [
-            effort,
-            usd(before.cost),
-            before.score,
-            usd(after.cost),
-            after.score,
-            change(before.cost, after.cost),
-          ];
+          const [theirs, ours] = [index[other.key][level], index["sonnet-5-5"][level]];
+          return [effort, usd(theirs.cost), theirs.score, usd(ours.cost), ours.score, change(theirs.cost, ours.cost)];
         }),
       }}
     >
@@ -148,7 +158,7 @@ export function CostPerTaskChart() {
             return {
               series: item.key,
               value: cost,
-              note: item === sonnet55 ? change(index["sonnet-5"][level].cost, cost) : undefined,
+              note: item === sonnet55 ? change(index[other.key][level].cost, cost) : undefined,
               tip: {
                 title: `${item.label}, ${effort.toLowerCase()} effort`,
                 rows: [
@@ -161,6 +171,26 @@ export function CostPerTaskChart() {
         }))}
       />
     </ChartFigure>
+  );
+}
+
+export function CostPerTaskChart() {
+  return (
+    <EffortCostChart
+      other={sonnet5}
+      title="Same price per token, a very different bill"
+      description="What one task on Artificial Analysis's Intelligence Index costs at each effort level. Sonnet 5.5 is cheaper at every level except max, and scores higher at all of them."
+    />
+  );
+}
+
+export function OpusCostChart() {
+  return (
+    <EffortCostChart
+      other={opus55}
+      title="At the same effort level, Sonnet 5.5 costs far less than Opus 5.5"
+      description="What one task on Artificial Analysis's Intelligence Index costs on each model at each effort level. Sonnet 5.5 is cheaper at every level except max; Opus 5.5 scores higher at all of them."
+    />
   );
 }
 
