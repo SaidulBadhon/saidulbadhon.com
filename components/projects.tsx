@@ -4,10 +4,12 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, type HTMLMotionProps } from "motion/react";
-import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
+import { FaStar } from "react-icons/fa";
+import { FiArrowRight, FiArrowUpRight, FiBriefcase } from "react-icons/fi";
 import BrowserFrame from "./browser-frame";
 import { useSectionInView } from "@/lib/hooks";
 import { projectIconMap } from "@/lib/projectIcons";
+import { fiverrProjects, getStats } from "@/content/fiverr";
 import { projects, toImage, type Project } from "@/content/projects";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -135,8 +137,112 @@ export default function Projects() {
             />
           ))}
         </div>
+
+        <FiverrCard />
       </div>
     </section>
+  );
+}
+
+/** Where each screenshot sits in the Fiverr card's stack, back to front. */
+const FIVERR_STACK = [
+  "top-0 left-0 -rotate-6 group-hover:-translate-x-2 group-hover:-rotate-8",
+  "top-[12%] right-0 rotate-3 group-hover:translate-x-2 group-hover:rotate-5",
+  "bottom-0 left-[11%] group-hover:-translate-y-2",
+];
+
+/** The freelance work on Fiverr, linking to /fiverr, below the case studies. */
+function FiverrCard() {
+  const stats = getStats();
+  // The first three browser screenshots, with the first on top.
+  const previews = fiverrProjects
+    .filter((project) => project.frame === "browser")
+    .slice(0, 3)
+    .reverse();
+  const gradient = "from-emerald-500 to-teal-400";
+
+  return (
+    <motion.div {...reveal()} className="mt-6">
+      <Link
+        href="/fiverr"
+        className="group relative isolate grid items-center gap-10 overflow-hidden rounded-3xl border border-gray-200 bg-white/70 p-6 shadow-xl shadow-gray-900/5 backdrop-blur transition-colors duration-500 hover:border-gray-300 sm:p-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-12 lg:p-12 dark:border-white/10 dark:bg-white/3 dark:shadow-black/20 dark:hover:border-white/20"
+      >
+        <div
+          aria-hidden
+          className="bg-grid absolute inset-0 -z-10 mask-[radial-gradient(ellipse_at_bottom_right,black,transparent_70%)]"
+        />
+        <div
+          aria-hidden
+          className={`absolute -right-32 -bottom-32 -z-10 h-112 w-md rounded-full bg-linear-to-br ${gradient} opacity-25 blur-3xl transition-opacity duration-700 group-hover:opacity-40`}
+        />
+
+        <div>
+          <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 py-1 pr-3 pl-1 text-xs font-semibold tracking-[0.15em] text-gray-600 uppercase dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
+            <span
+              className={`flex h-6 w-6 items-center justify-center rounded-full bg-linear-to-br ${gradient}`}
+            >
+              <FiBriefcase size={11} className="text-white" />
+            </span>
+            Freelance on Fiverr
+          </span>
+
+          <h3 className="mt-6 text-3xl font-semibold tracking-tight text-balance text-gray-950 sm:text-4xl dark:text-white">
+            Fiverr work history
+            <span className={`block bg-linear-to-r ${gradient} bg-clip-text pb-1 text-transparent`}>
+              {stats.orders} orders for {stats.clients} clients
+            </span>
+          </h3>
+          <p className="mt-4 text-lg leading-relaxed text-pretty text-gray-600 dark:text-slate-400">
+            Web apps, React Native apps and fixes I built for clients on Fiverr, with screenshots
+            from the deliveries and every review they left.
+          </p>
+
+          <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+            {[
+              ["Rating", `${stats.rating} from ${stats.reviews} reviews`],
+              ["Returning clients", String(stats.repeatClients)],
+              [
+                "Timeline",
+                `${new Date(stats.first).getUTCFullYear()} – ${new Date(stats.last).getUTCFullYear()}`,
+              ],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <dt className="text-xs tracking-[0.15em] text-gray-400 uppercase dark:text-slate-500">
+                  {label}
+                </dt>
+                <dd className="mt-1 flex items-center gap-1.5 font-medium text-gray-900 dark:text-white">
+                  {label === "Rating" && <FaStar size={12} className="text-amber-400" />}
+                  {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <span className="mt-8 inline-flex items-center gap-2 rounded-full bg-gray-950 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-black/10 transition group-hover:shadow-xl dark:bg-white dark:text-gray-950">
+            See the work history
+            <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+          </span>
+        </div>
+
+        {/* Delivery screenshots, fanned out a little more on hover. */}
+        <div aria-hidden className="relative mx-auto aspect-16/10 w-full max-w-xl">
+          {previews.map((project, index) => (
+            <div
+              key={project.slug}
+              className={`absolute w-[78%] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl shadow-gray-900/15 transition-transform duration-700 ease-out dark:border-white/10 dark:bg-gray-950 dark:shadow-black/40 ${FIVERR_STACK[index]}`}
+            >
+              <Image
+                src={project.images[0].image}
+                alt=""
+                sizes="(min-width: 1152px) 440px, (min-width: 1024px) 38vw, 78vw"
+                placeholder="blur"
+                className="aspect-2/1 h-auto w-full object-cover object-top"
+              />
+            </div>
+          ))}
+        </div>
+      </Link>
+    </motion.div>
   );
 }
 
