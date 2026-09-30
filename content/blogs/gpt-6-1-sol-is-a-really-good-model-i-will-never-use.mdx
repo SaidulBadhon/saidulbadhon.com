@@ -1,0 +1,225 @@
+---
+title: "GPT-6.1 Sol Is a Really Good Model That I'll Never Use"
+description: GPT-6.1 Sol gets close to Astra and trades blows with Claude Opus 5.5 for a fifth of Astra's price. On paper it's one of the best deals in AI. But OpenAI halved Pro $200 the same day it launched, and Codex has been "at capacity" for a month. Cheap per token isn't the same as cheap to use.
+date: 2026-10-01
+tags: [AI, OpenAI, Claude]
+draft: false
+---
+
+import Callout from "@/components/callout";
+import {
+  AgentTurnChart,
+  AtAGlance,
+  CostPerTaskChart,
+  PlanMessagesChart,
+  PriceVsCapacityDiagram,
+  ThroughputChart,
+  TurnsPerBudgetChart,
+} from "@/content/charts/gpt-6-1-sol-is-a-really-good-model-i-will-never-use";
+
+Let me get this out of the way first: **GPT-6.1 Sol is a really good model.** Probably one of the best models you can buy for the money right now.
+
+It gets close to GPT-6 Astra, OpenAI's flagship, on agentic coding and computer use. On some of OpenAI's own benchmarks it edges out Claude Opus 5.5. And it costs **$2 per million input tokens and $10 per million output**, a fifth of Astra's price. Cached input is ten cents.
+
+If you'd shown me that spec sheet a year ago, I'd have cancelled my weekend plans to rebuild my whole workflow around it.
+
+I'm not going to. And the reason has nothing to do with the model.
+
+It launched at DevDay on September 29. On the same stage, OpenAI [halved the usage on its $200 Pro plan](/blogs/chatgpt-pro-200-is-back-with-half-the-usage). And for about a month now, Codex users have been staring at the same error message, whatever plan they're on:
+
+```
+Selected model is at capacity. Please try a different model.
+```
+
+So here's where I've landed, and it's the whole post in one line:
+
+> **This might be one of the best AI models for the money right now. And I still might not use it.**
+
+<AtAGlance />
+
+## What GPT-6.1 Sol actually is
+
+A quick bit of naming first, because OpenAI's lineup reads like an astronomy syllabus. **Astra** is the big, expensive flagship. **Sol** is the mid-tier workhorse. **Luna** is the small, cheap one. GPT-6 Sol came out on September 22. [GPT-6.1 Sol](https://thenextweb.com/news/openai-gpt-6-1-sol-price-astra-devday) came out one week later, which is roughly how often I update my npm packages, so fair enough.
+
+It also arrived under slightly odd circumstances. The day before DevDay, the Wall Street Journal reported that OpenAI had [shelved GPT-6.1 Astra](https://www.malaymail.com/news/tech-gadgets/2026/09/30/openai-drops-cheaper-gpt-61-sol-after-scrapping-troubled-astra-upgrade/237045) after internal safety tests found it was more likely to misreport what it had done and to act beyond its scope without asking. So the headline launch became the mid-tier model instead. It turned out to be a very good consolation prize.
+
+Here's what you get, from [OpenAI's model page](https://developers.openai.com/api/docs/models/gpt-6.1-sol):
+
+|                          | GPT-6.1 Sol                                               |
+| ------------------------ | --------------------------------------------------------- |
+| Model ID                 | `gpt-6.1-sol`                                             |
+| Input / cached / output  | $2 / $0.10 / $10 per million tokens                       |
+| Cache writes             | $2.50 per million tokens                                  |
+| Context window           | 1,050,000 tokens, up to 128,000 out                       |
+| Long-prompt surcharge    | Over 272K input: 2x input and cache, 1.5x output          |
+| Reasoning effort         | `low` to `max`. No `none` or `minimal`                    |
+| Where                    | API, Codex, ChatGPT Work. Not regular ChatGPT yet         |
+| Knowledge cutoff         | April 30, 2026                                            |
+
+Two things on that table are worth a second look. Cached input at **$0.10** is half what GPT-6 Sol charged, and half what Anthropic charges for a cache read on Sonnet 5.5 or Opus 5.5. For agent work, where the model re-reads the same codebase every turn, that's the price that matters most. I spent a good chunk of [my Sonnet 5.5 review](/blogs/claude-sonnet-5-5-review) complaining that Anthropic didn't cut Sonnet's cache price. OpenAI went and did it.
+
+The other is the asterisk on that 1M context window. Go over 272K input tokens and the _whole request_ bills at double input and 1.5x output. A 500K-token prompt with a 20K answer costs $2.30, not the $1.20 the headline price suggests. A million tokens of context, some assembly required.
+
+## Why people are excited: the price-to-quality ratio is absurd
+
+All the benchmark numbers below are OpenAI's own, from the launch post, so take them with the usual grain of salt. Nobody has published a thorough independent comparison yet. But even discounted a bit, they're strong:
+
+| Benchmark                       | What it tests                         | GPT-6.1 Sol, per OpenAI                                                                                   |
+| ------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **DeepSWE v1.1**                | Long-horizon software engineering     | Matches Astra at about a fifth of the cost; 6.4 points above GPT-6 Sol                                   |
+| **AutomationBench 1.0.6**       | Multi-step workflows across 47 tools  | 2.2 points above **Opus 5.5** at medium effort, for about a third of the cost. Opus wins at max effort    |
+| **GDP.pdf**                     | Professional documents                | Beats **Opus 5.5** at under half the cost per task                                                        |
+| **OSWorld 2.0**                 | Computer use                          | Within 2.1 points of Astra at about a seventh of the cost per task                                        |
+| **Terminal-Bench Science 0.1**  | Long-running scientific research      | More than double GPT-6 Sol's score. Astra still leads at 68.1%                                            |
+
+So is it "as good as Opus 5.5"? Not quite. It's in the same conversation, which is the remarkable part. It wins some medium-effort comparisons. Opus comes out ahead when both are allowed to think as hard as they like. My honest read: **Sol is Opus-adjacent, at roughly half Opus's list price and a quarter of its cost on some tasks.**
+
+That last part is the one that made me sit up:
+
+<CostPerTaskChart />
+
+$5.47 against $23.21 for Opus and $23.80 for Astra. Even if the real-world gap turns out to be half that, it's still a big number.
+
+## On paper, it's the best deal in AI
+
+Let's make it concrete. Here's one ordinary agent turn: the model reads 200K tokens of your codebase and conversation and writes 20K tokens of code and reasoning. That's a normal turn in Codex or Claude Code once a session gets going.
+
+<AgentTurnChart />
+
+Without caching, Sol and Sonnet 5.5 tie at $0.60. With caching, which is how agents actually run, Sol's ten-cent cache reads pull it ahead of everything: **$0.26 a turn, against $0.52 for Opus 5.5 and $1.38 for Astra.**
+
+Flip that around and ask what a $200 budget buys:
+
+<TurnsPerBudgetChart />
+
+About 775 agent turns on Sol. Roughly 390 on Opus. 145 on Astra. If you judge models by the price sheet, the analysis stops here, and Sol wins by a mile.
+
+> **The price sheet tells you what a token costs. It doesn't tell you whether you'll get any.**
+
+## "Cheap per token" and "cheap to use" are different things
+
+Here's the thing the price sheet can't tell you: whether you can actually spend that $200.
+
+For a heavy user, a model's real cost is a chain, and the price is only the first link:
+
+<PriceVsCapacityDiagram />
+
+Every launch post, every pricing page and nearly every benchmark describes the first box. People like me live in the other three. If the second or third box goes to zero, it doesn't matter how small the first one is. **Zero tokens at $2 a million is still zero tokens.**
+
+So let's look at the other boxes.
+
+### Box two: how much you're allowed to use
+
+Most developers I know don't use Codex through the API. They use it through a ChatGPT subscription, because a flat monthly fee is the only sane way to run an agent all day without watching a meter.
+
+And on the subscription side, OpenAI just made things tighter.
+
+- **Pro $200 went from 20x Plus usage to 10x**, announced at the same DevDay that launched Sol. New subscribers get the smaller quota now. Everyone else moves to it on October 30. I wrote [a whole post about that](/blogs/chatgpt-pro-200-is-back-with-half-the-usage), so I won't repeat it all here. The short version: the $200 plan used to be the only ChatGPT plan with a bulk discount, and now it has none.
+- **OpenAI's justification was literally "the models got cheaper."** Tibo, who leads Codex, said the new allowance nets out at half the dollar value in API spend, and that cheaper models like Sol make up for it. For Sol-only users, that's roughly true. It's also a neat trick: the price cut becomes the reason you get less.
+- **On Plus, even the cheap model is rationed.** [OpenAI's Codex pricing page](https://chatgpt.com/codex/pricing/) gives Plus users 15 to 160 GPT-6.1 Sol messages per five hours, plus a weekly cap on top.
+
+<PlanMessagesChart />
+
+That chart is the contradiction in one picture. Sol costs a fifth of what Astra does per token. On Plus, it gets you about three times as many messages. The discount is real on the API price sheet. It's much smaller where most people actually use it.
+
+### Box three: whether the model is actually there
+
+This is the part that really bothers me, because no plan fixes it.
+
+Since the GPT-6 Astra launch, the Codex GitHub repo has collected a string of issues with the same error. [One from September 8](https://github.com/openai/codex/issues/43738) describes Codex as effectively unusable for hours, with one user reporting about 4 hours 45 minutes blocked, on repeat, across multiple days. [Another, open since around September 22](https://github.com/openai/codex/issues/47237), reports the error coming and going across Astra and GPT-5.6 Sol "despite available quota." There are [several](https://github.com/openai/codex/issues/45832) [more](https://github.com/openai/codex/issues/46194) like them.
+
+Note the "despite available quota." That's not a rate limit. You haven't used up your allowance. The model simply has no room for you at that moment. As one [Codex limits guide](https://www.developersdigest.tech/blog/codex-usage-limits-pricing-2026) put it:
+
+> **"Do not upgrade your plan to fix it. A bigger allowance does not buy serving capacity."**
+
+And OpenAI hasn't exactly hidden that it's short on compute. It [paused Pro $200 sign-ups on September 10](https://techcrunch.com/2026/09/10/openai-puts-pro-subscriptions-on-hold-due-to-astra-demand/) because, in Tibo's words, "demand for Astra is really unprecedented." Then it halved the plan and launched a $500 tier where the headline perk is speed.
+
+To be fair to Sol specifically: it's two days old, and the capacity issues I've seen reported are about Astra and older Sol models, not 6.1 Sol. Maybe Sol, being cheaper to serve, is exactly how OpenAI gets out of this hole. That's a genuinely plausible outcome, and if it happens I'll happily eat part of this headline. But I'm not moving my daily workflow onto a company's infrastructure on the hope that the next month goes better than the last one.
+
+Here's the timeline, because it tells the story better than I can:
+
+| Date         | What happened                                                                                      |
+| ------------ | -------------------------------------------------------------------------------------------------- |
+| September 3  | GPT-6 Astra launches at $10 / $50                                                                  |
+| September 8  | Codex "at capacity" reports pile up; some users blocked for hours                                  |
+| September 10 | OpenAI pauses Pro $200 sign-ups over Astra demand                                                  |
+| September 22 | GPT-6 Sol and Luna launch at half price; new capacity issue opened "despite available quota"       |
+| September 28 | WSJ reports GPT-6.1 Astra shelved over safety regressions                                          |
+| September 29 | **GPT-6.1 Sol launches at a fifth of Astra's price. Pro $200 is cut from 20x to 10x Plus**         |
+| October 30   | Existing Pro $200 subscribers move to the smaller quota                                            |
+
+A cheaper model and a smaller allowance, announced on the same day. That's not a coincidence. That's what running out of GPUs looks like from the outside.
+
+## "Just use the API, then"
+
+This is the obvious reply, and it's partly right. The API is where Sol's price is real. But the API has its own version of box two, and it's called rate-limit tiers:
+
+<ThroughputChart />
+
+A brand-new API account on Tier 1 gets 500K tokens a minute. That's about **two and a half** 200K-token agent turns a minute, for your whole account. Run three agents in parallel, or have three developers share a key, and you're queueing. Tier 5 gets 40 million tokens a minute: about 200 turns. Same model, same price, **80 times** the usable throughput.
+
+Tiers go up with your spending history, not with how good your product idea is. So the developers who get the most out of a cheap model are the ones who were already spending a lot on the old expensive ones. Which is a funny way to run a discount.
+
+## Who this actually affects
+
+It isn't the same story for everyone, so here's how I'd break it down:
+
+| Who you are                                   | How you'd use Sol          | What limits you                            | My take                                                                                    |
+| --------------------------------------------- | -------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Occasional user                               | ChatGPT Plus, Codex        | Not much                                   | Great. You'll rarely notice the limits                                                     |
+| **Heavy individual developer**                | Pro $200 subscription      | Halved allowance, "at capacity" errors     | **The group this post is about.** Cheapest model, least reliable access                    |
+| Startup building on the API                   | API, Tier 1–3              | Tokens a minute                            | Great per task, but plan for rate limits before your launch day, not during it             |
+| Company already at Tier 5                     | API, Batch and Flex        | Mostly nothing                             | Honestly, probably the best deal on the market. Try it                                     |
+
+If you're in that last row, ignore my headline. Sol at Tier 5 with Batch pricing (50% off) is extremely hard to beat, and you should be running evals on it this week.
+
+But I'm in the second row, and so are most of the developers I talk to.
+
+## Why I'll probably never switch to it
+
+I use Claude Code on Claude Max 20x all day. It's $200 a month, it's still 20x the $20 plan, and Anthropic has raised its limits twice this year instead of cutting them. On that plan I almost never think about limits. That's worth more to me than any per-token price, because **the most expensive thing in my workflow isn't tokens. It's me, waiting.**
+
+When an agent stops mid-task because the model is at capacity, I don't just lose the turn. I lose the context in my head. I switch models, and the new one has to re-read everything and doesn't make the same choices. Or I wait, and an hour of flow becomes an afternoon of "let me just try again."
+
+I made a version of this argument when Sonnet 5 came out, and called it [the junior engineer problem](/blogs/fable-5-is-back-sonnet-5-is-here-and-ai-agents-still-need-real-guardrails): a cheap model isn't cheap if it burns ten times the tokens to finish the job. Sol mostly solved that one. It's efficient. This is the same problem wearing a different hat: **a cheap model isn't cheap if you can't get enough of it to finish the job.**
+
+<Callout title="One more reason for caution">
+  OpenAI's own safety numbers show GPT-6.1 Sol misrepresented its coding work in 1.50% of test cases, against
+  0.51% for Astra, and failed to respect user warnings in 23.5% of cases, against 17.4%. That's better than GPT-6 Sol,
+  and it isn't a deal-breaker. But when you're running a cheap model at high volume, small error rates become a lot of
+  errors. Put real guardrails around it, the same way you would with any agent.
+</Callout>
+
+## Availability is part of the product
+
+This is the bigger lesson, and it goes well beyond OpenAI.
+
+We talk about AI models as if they were software you download. You compare the features and the price, and you pick one. But you don't download a frontier model. You rent a slice of someone's data center, in real time, every time you press enter. **The model is only as good as the infrastructure behind it on a Tuesday afternoon when everyone else is using it too.**
+
+That's why Anthropic's big announcement in May wasn't a model. It was a deal for [all of SpaceX's Colossus 1 data center](https://www.anthropic.com/news/higher-limits-spacex), which it used to double Claude Code's limits. It's also why OpenAI's big announcement this week was, when you strip it down, a way to serve more people with the GPUs it already has. Both companies are telling you the same thing: capacity is now the product.
+
+I see this at work too. I'm the lead engineer at [Jutsu](https://jutsu.ai), an AI-native security operations platform, so weigh this accordingly. Our AI agents do first-round triage on security alerts: they score the risk, explain their reasoning and group related alerts into incidents. When an alert fires at 3am because someone's access key just leaked, the kind of thing [I wrote about happening to me](/blogs/env-file-on-github-for-three-years), "the model is at capacity, please try again later" isn't a minor inconvenience. It's an incident sitting unread. For that kind of workload, you pick models on availability first, and price second. And you always keep a fallback.
+
+That's true for anything you build on top of these models. If your product breaks when your provider has a bad week, your provider's capacity problems are now your capacity problems.
+
+## What I'd actually do
+
+- **If you're on the API at a high tier:** test GPT-6.1 Sol now. On price-per-result, it's probably the best option available. Use Batch and Flex for anything that isn't interactive.
+- **If you're building a product on it:** check your tier's tokens-a-minute limit against your real traffic, and set up a fallback model before you need one.
+- **If you're a heavy Codex user on Pro $200:** Sol makes the halved plan hurt less, but it doesn't fix "at capacity." Make the most of your old quota before October 30 (the $2,500 credit lasts until the end of the year), and try Claude Max 20x for a month while you decide.
+- **If you're on Plus:** enjoy it. Sol is a big upgrade for $20, and you're not the user OpenAI is short of GPUs for.
+- **Keep watching.** If OpenAI's capacity catches up with its pricing, this whole post expires. I'd genuinely like that.
+
+## The verdict
+
+GPT-6.1 Sol is an excellent model. It's close to Astra, competitive with Opus 5.5 in places, and a fifth of Astra's price. Its cache pricing is better than anything Anthropic offers right now. If I only read the launch post, I'd call it the best value in AI.
+
+But I don't use models on a price sheet. I use them for eight hours a day, in agents that re-read my codebase hundreds of times. For that, what matters is how many tokens I can actually get, and whether the model is there when I ask. OpenAI launched its cheapest great model on the same day it halved the plan heavy users rely on, a month into a capacity crunch that plans can't fix.
+
+A great model at an incredible price isn't much use if the infrastructure won't let you use it. **Cheap per token is a feature. Cheap to actually use is the product.** OpenAI has the first one. Right now, it doesn't have the second.
+
+So yes: GPT-6.1 Sol is a really good model. I'll probably never use it.
+
+---
+
+_A note on sources: GPT-6.1 Sol's prices, context window, rate limits and reasoning settings come from [OpenAI's model page](https://developers.openai.com/api/docs/models/gpt-6.1-sol). Benchmarks and safety numbers are OpenAI's own, from its launch post, as reported by [The Next Web](https://thenextweb.com/news/openai-gpt-6-1-sol-price-astra-devday), [Developers Digest](https://www.developersdigest.tech/blog/gpt-6-1-sol-release-guide-2026), [DataCamp](https://www.datacamp.com/blog/gpt-6-1-sol) and [Fello AI](https://felloai.com/gpt-6-1-sol/). The GPT-6.1 Astra report is from the Wall Street Journal, via [Malay Mail](https://www.malaymail.com/news/tech-gadgets/2026/09/30/openai-drops-cheaper-gpt-61-sol-after-scrapping-troubled-astra-upgrade/237045). Codex limits are from [OpenAI's Codex pricing page](https://chatgpt.com/codex/pricing/), as summarised by [Developers Digest](https://www.developersdigest.tech/blog/codex-usage-limits-pricing-2026). The Pro $200 change is from [Engadget](https://www.engadget.com/2272106/openai-adds-dollar500-pro-subscription-nerfs-its-existing-dollar200-tier/) and my [earlier post](/blogs/chatgpt-pro-200-is-back-with-half-the-usage); the sign-up pause is from [TechCrunch](https://techcrunch.com/2026/09/10/openai-puts-pro-subscriptions-on-hold-due-to-astra-demand/). Capacity reports are from issues [#43738](https://github.com/openai/codex/issues/43738) and [#47237](https://github.com/openai/codex/issues/47237) on the Codex repository, which are user reports, not official incident reports. Agent-turn costs, $200 budgets and turns per minute are my own arithmetic from list prices and published rate limits. Everything written as "I think" or "my take" is my opinion._
