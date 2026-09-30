@@ -17,7 +17,7 @@ export const site = {
   image: "/profileImg.jpeg",
   worksFor: { name: "Jutsu", url: "https://jutsu.ai" },
   /** Where Saidul is based. `countryCode` is ISO 3166-1 alpha-2. */
-  location: { city: "Dhaka", country: "Bangladesh", countryCode: "BD" },
+  location: { city: "Madrid", country: "Spain", countryCode: "ES" },
   linkedin: "https://www.linkedin.com/in/saidulbadhon",
   github: "https://github.com/SaidulBadhon",
   blog: {

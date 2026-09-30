@@ -66,7 +66,7 @@ export default function Intro() {
       >
         <span className="font-bold">Hi, I'm Saidul Badhon.</span> I'm a{" "}
         <span className="font-bold">senior software engineer</span> who builds{" "}
-        <span className="underline">AI products</span> end to end, from the
+        AI products end to end, from the
         interface to the infrastructure.
       </motion.h1>
 
