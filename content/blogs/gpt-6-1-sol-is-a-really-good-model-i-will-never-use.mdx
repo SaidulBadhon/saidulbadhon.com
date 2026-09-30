@@ -4,9 +4,12 @@ description: GPT-6.1 Sol gets close to Astra and trades blows with Claude Opus 5
 date: 2026-10-01
 tags: [AI, OpenAI, Claude]
 draft: false
+cover: gpt-6-1-sol-cover.webp
 ---
 
+import Image from "next/image";
 import Callout from "@/components/callout";
+import cover from "./gpt-6-1-sol-is-a-really-good-model-i-will-never-use/gpt-6-1-sol-cover.webp";
 import {
   AgentTurnChart,
   AtAGlance,
@@ -16,6 +19,16 @@ import {
   ThroughputChart,
   TurnsPerBudgetChart,
 } from "@/content/charts/gpt-6-1-sol-is-a-really-good-model-i-will-never-use";
+
+<figure>
+  <Image
+    src={cover}
+    alt="The words Cheap per token. Hard to actually use. beside a bar chart of what one cached 200K-token agent turn costs at list API prices: GPT-6.1 Sol $0.26, Opus 5.5 $0.52, GPT-6 Astra $1.38, with a red Model is at capacity label pointing at the Sol bar"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>On the price sheet, GPT-6.1 Sol is half the cost of Opus 5.5 per agent turn. Getting the capacity to use it is another matter.</figcaption>
+</figure>
 
 Let me get this out of the way first: **GPT-6.1 Sol is a really good model.** Probably one of the best models you can buy for the money right now.
 
