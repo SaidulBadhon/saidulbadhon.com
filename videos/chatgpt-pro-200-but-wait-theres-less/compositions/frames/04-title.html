@@ -1,0 +1,315 @@
+<template>
+  <div id="root" data-composition-id="04-title" data-width="1920" data-height="1080" data-duration="2.276">
+    <style>
+      @font-face {
+        font-family: "Inter";
+        font-weight: 800;
+        font-style: normal;
+        font-display: block;
+        src: url("assets/fonts/inter-800.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Inter";
+        font-weight: 900;
+        font-style: normal;
+        font-display: block;
+        src: url("assets/fonts/inter-900.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Space Grotesk";
+        font-weight: 700;
+        font-style: normal;
+        font-display: block;
+        src: url("assets/fonts/space-grotesk-700.woff2") format("woff2");
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+
+      /* ---------- layers (full-frame clips; each is its own size container) ---------- */
+      #f04-ground,
+      #f04-stage,
+      #f04-osd-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        container-type: size;
+        overflow: hidden;
+      }
+
+      /* ---------- background: pink ground + dot-grid + stripe-blocks ---------- */
+      #f04-ground {
+        background: #fe90e8;
+      }
+      .f04-dots {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 34cqw;
+        height: 40cqh;
+        background-image: radial-gradient(circle at center, #000000 2px, transparent 2.6px);
+        background-size: 1.6cqw 1.6cqw;
+        opacity: 0.24;
+      }
+      .f04-stripe {
+        position: absolute;
+        border: 0.3cqw solid #000000;
+        box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      }
+      #f04-stripe-tr {
+        left: 82cqw;
+        top: -4.5cqw;
+        width: 30cqw;
+        height: 10cqw;
+        background-image: repeating-linear-gradient(45deg, #000000 0 0.9cqw, #c0f7fe 0.9cqw 2.2cqw);
+        transform: rotate(8deg);
+      }
+      #f04-stripe-bl {
+        left: -6cqw;
+        top: 65cqh;
+        width: 28cqw;
+        height: 9cqw;
+        background-image: repeating-linear-gradient(45deg, #000000 0 0.9cqw, #99e885 0.9cqw 2.2cqw);
+        transform: rotate(-7deg);
+      }
+
+      /* ---------- stage: star-burst + title type ---------- */
+      #f04-star {
+        position: absolute;
+        left: 30cqw; /* 40cqw wide, centered on x = 50cqw */
+        top: 7.96cqh; /* center y = 470px */
+        width: 40cqw;
+        height: 40cqw;
+        z-index: 1;
+      }
+      #f04-star svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      .f04-wait-row {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 21.6cqh; /* center y ~ 270px */
+        height: 7cqh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+      #f04-wait {
+        display: inline-block;
+        font-family: "Inter", sans-serif;
+        font-weight: 800;
+        font-size: 3.3cqw;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: #000000;
+        white-space: nowrap;
+      }
+      .f04-dot {
+        display: inline-block;
+        letter-spacing: -0.04em;
+      }
+
+      .f04-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 37.04cqh; /* center y = 470px */
+        height: 12.96cqh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.3cqw;
+        z-index: 3;
+      }
+      #f04-theres,
+      #f04-less {
+        font-family: "Inter", sans-serif;
+        font-weight: 900;
+        font-size: 5cqw;
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        color: #000000;
+        white-space: nowrap;
+      }
+      #f04-theres {
+        display: inline-block;
+      }
+      #f04-less-card {
+        display: inline-block;
+        background: #ffffff;
+        border: 0.4cqw solid #000000;
+        box-shadow: 0.8cqw 0.8cqw 0 #000000;
+        padding: 0.45cqw 1.1cqw 0.55cqw;
+      }
+
+      /* ---------- VHS "PLAY" OSD (tape resuming) ---------- */
+      .f04-osd {
+        position: absolute;
+        left: 3.1cqw;
+        top: 3.1cqw;
+        display: flex;
+        align-items: center;
+        gap: 0.8cqw;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 1.7cqw;
+        line-height: 1;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #ffffff;
+        text-shadow:
+          3px 0 0 #000000,
+          -3px 0 0 #000000,
+          0 3px 0 #000000,
+          0 -3px 0 #000000,
+          2px 2px 0 #000000,
+          -2px -2px 0 #000000,
+          2px -2px 0 #000000,
+          -2px 2px 0 #000000;
+      }
+      .f04-osd svg {
+        display: block;
+        width: 1.35cqw;
+        height: 1.5cqw;
+        overflow: visible;
+      }
+    </style>
+
+    <!-- Track 0 — background: pink ground, corner dot-grid, two stripe-blocks bleeding off corners -->
+    <div id="f04-ground" class="clip" data-start="0" data-duration="2.276" data-track-index="0" data-layout-allow-overflow>
+      <div class="f04-dots"></div>
+      <div id="f04-stripe-tr" class="f04-stripe"></div>
+      <div id="f04-stripe-bl" class="f04-stripe"></div>
+    </div>
+
+    <!-- Track 1 — stage: yellow 10-point star-burst behind center, "BUT WAIT…" + "THERE'S LESS!" -->
+    <div id="f04-stage" class="clip" data-start="0" data-duration="2.276" data-track-index="1">
+      <div id="f04-star">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <!-- hard offset shadow (0.4cqw) -->
+          <polygon
+            transform="translate(1 1)"
+            fill="#000000"
+            stroke="#000000"
+            stroke-width="0.75"
+            stroke-linejoin="miter"
+            stroke-miterlimit="6"
+            points="50.00,4.00 60.20,18.62 77.04,12.79 76.70,30.60 93.75,35.79 83.00,50.00 93.75,64.21 76.70,69.40 77.04,87.21 60.20,81.38 50.00,96.00 39.80,81.38 22.96,87.21 23.30,69.40 6.25,64.21 17.00,50.00 6.25,35.79 23.30,30.60 22.96,12.79 39.80,18.62"
+          />
+          <!-- yellow body with 0.3cqw black border -->
+          <polygon
+            fill="#f7cb46"
+            stroke="#000000"
+            stroke-width="0.75"
+            stroke-linejoin="miter"
+            stroke-miterlimit="6"
+            points="50.00,4.00 60.20,18.62 77.04,12.79 76.70,30.60 93.75,35.79 83.00,50.00 93.75,64.21 76.70,69.40 77.04,87.21 60.20,81.38 50.00,96.00 39.80,81.38 22.96,87.21 23.30,69.40 6.25,64.21 17.00,50.00 6.25,35.79 23.30,30.60 22.96,12.79 39.80,18.62"
+          />
+        </svg>
+      </div>
+
+      <div class="f04-wait-row">
+        <span id="f04-wait"
+          >BUT WAIT<span id="f04-dot-1" class="f04-dot">.</span><span id="f04-dot-2" class="f04-dot">.</span
+          ><span id="f04-dot-3" class="f04-dot">.</span></span
+        >
+      </div>
+
+      <div class="f04-line">
+        <span id="f04-theres">THERE&rsquo;S</span>
+        <div id="f04-less-card"><span id="f04-less">LESS!</span></div>
+      </div>
+    </div>
+
+    <!-- Track 2 — VHS OSD readout, hard-cut off at 0.5s by its clip window -->
+    <div id="f04-osd-layer" class="clip" data-start="0" data-duration="0.5" data-track-index="2">
+      <div class="f04-osd">
+        <svg viewBox="0 0 20 22" aria-hidden="true">
+          <polygon points="2,1.5 18.5,11 2,20.5" fill="#ffffff" stroke="#000000" stroke-width="2.6" stroke-linejoin="miter" />
+        </svg>
+        <span>PLAY</span>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+
+        // One onset array — measured word onsets from the voice track (seconds from frame start).
+        // "But" 0.27 · ellipsis ticks fill the pause · "there's" 1.05 · "LESS!" 1.28
+        const BEATS = {
+          but: 0.27,
+          dots: [0.52, 0.67, 0.82],
+          theres: 1.05,
+          less: 1.28,
+          card: 1.34,
+        };
+
+        // Scene 1 — "BUT WAIT…" hard-cut flash-in at upper-center, tilted −3°.
+        // Opacity snaps on in ~half a frame (no fade); a short scale punch settles it on power3.
+        tl.fromTo("#f04-wait", { opacity: 0 }, { opacity: 1, duration: 0.02, ease: "none" }, BEATS.but);
+        tl.fromTo(
+          "#f04-wait",
+          { scale: 1.28, rotation: -3, transformOrigin: "50% 55%" },
+          { scale: 1, rotation: -3, duration: 0.24, ease: "power3.out" },
+          BEATS.but,
+        );
+        // The ellipsis ticks in dot by dot across the spoken pause (hard cuts).
+        BEATS.dots.forEach(function (t, i) {
+          tl.fromTo("#f04-dot-" + (i + 1), { opacity: 0 }, { opacity: 1, duration: 0.02, ease: "none" }, t);
+        });
+
+        // Scene 2a — on "there's": the yellow 10-point star-burst explodes behind center
+        // (scale 0 → 1, playful overshoot — HOST register allows spring-pop on star-bursts).
+        tl.fromTo(
+          "#f04-star",
+          { scale: 0, rotation: -40, transformOrigin: "50% 50%" },
+          { scale: 1, rotation: 0, duration: 0.42, ease: "back.out(1.8)" },
+          BEATS.theres,
+        );
+        // Subtle, finite star jitter into the cut (no repeat / yoyo).
+        tl.fromTo(
+          "#f04-star",
+          { rotation: 0 },
+          { rotation: 3, duration: 0.29, ease: "sine.in", immediateRender: false },
+          BEATS.theres + 0.42,
+        );
+
+        // Scene 2b — on "LESS!": kinetic-beat-slam, a distinct entrance per phrase.
+        // "THERE'S" — scale + blur slam (power4.out hard slam).
+        tl.fromTo(
+          "#f04-theres",
+          { opacity: 0, scale: 2.3, filter: "blur(8px)", transformOrigin: "50% 50%" },
+          { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.3, ease: "power4.out" },
+          BEATS.less,
+        );
+        // "LESS!" card — slaps down from above, rotating into its +4° tilt (expo.out snap).
+        tl.fromTo("#f04-less-card", { opacity: 0 }, { opacity: 1, duration: 0.04, ease: "none" }, BEATS.card);
+        tl.fromTo(
+          "#f04-less-card",
+          { y: -170, scale: 1.55, rotation: -10, transformOrigin: "50% 50%" },
+          { y: 0, scale: 1, rotation: 4, duration: 0.34, ease: "expo.out" },
+          BEATS.card,
+        );
+        // Hold to the cut — no exit (the root transition is the exit).
+
+        window.__timelines["04-title"] = tl;
+      })();
+    </script>
+  </div>
+</template>

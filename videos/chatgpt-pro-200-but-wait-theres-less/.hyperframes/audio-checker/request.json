@@ -1,0 +1,51 @@
+{
+  "provider": "heygen",
+  "voice": "aa9746e325ff46d482a54fe5bc87890f",
+  "speed": 1,
+  "lang": "en",
+  "lines": [
+    {
+      "id": "03",
+      "text": "He's not kidding. OpenAI just reopened its two-hundred-dollar Pro plan… and it now buys half as much. Codex usage: twenty times Plus — now ten. GPT-6 Pro messages: two hundred a week — now one hundred."
+    },
+    {
+      "id": "05",
+      "text": "August thirtieth: OpenAI's Codex lead says twenty-x \"does exactly what it says on the tin.\" September tenth: sign-ups paused — demand for its new model, Astra, is \"unprecedented.\" Then DevDay. And the tin… now says ten-x."
+    },
+    {
+      "id": "07",
+      "text": "Fair's fair: no five-hour cap is genuinely nice. The credit is real — but only for existing subscribers, and the old quota ends October twenty-ninth. The \"extras\"? Never named. From October thirtieth, everyone gets ten-x."
+    },
+    {
+      "id": "08",
+      "text": "Now read it like a supermarket shelf tag. Plus: twenty dollars for one-x of usage — twenty a unit. The old Pro: two hundred for twenty-x. Ten a unit. Half price. That was the whole point."
+    },
+    {
+      "id": "10",
+      "text": "Every ChatGPT plan now costs twenty dollars a unit. Plus. Pro one hundred. Pro two hundred. Even the brand-new five-hundred-dollar plan. No bulk discount. Anywhere."
+    },
+    {
+      "id": "11",
+      "text": "Meanwhile, one shelf over: Claude Max twenty-x. Same two hundred dollars. Still twenty-x. Still ten a unit. Different base plans, sure — but Anthropic raised its limits twice this year."
+    },
+    {
+      "id": "13",
+      "text": "Partly. GPT-6 Sol is half price, so Sol users roughly break even. Luna users even get about twenty percent more output. But Astra didn't get cheaper. Astra users get half. And Astra is why most people bought Pro two hundred."
+    },
+    {
+      "id": "15",
+      "text": "Also twenty dollars a unit. You're buying speed, not value. So why do this? Capacity. Astra demand was \"unprecedented,\" and halving the allowance reopens sign-ups without buying twice the GPUs."
+    },
+    {
+      "id": "16",
+      "text": "So what do you do? Mostly on GPT-6 Sol? Relax. Rely on Astra or GPT-6 Pro? You're losing half — use up the old quota and the credit, then decide. Heavy Codex user? Try Claude Max twenty-x for a month."
+    },
+    {
+      "id": "17",
+      "text": "OpenAI brought back the name and the price. Just not the plan. The best subscription in AI coding used to have OpenAI's name on it. Today… it doesn't."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  }
+}

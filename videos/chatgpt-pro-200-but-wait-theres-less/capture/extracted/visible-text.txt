@@ -1,0 +1,476 @@
+---
+title: "ChatGPT Pro $200 Is Back, With Half the Usage"
+description: OpenAI reopened its $200 ChatGPT Pro plan today, but it now buys half as much Codex and ChatGPT Work usage. It went from the best-value AI subscription to one with no bulk discount at all, while Claude Max 20x still gives you 20x for the same $200.
+date: 2026-09-30
+tags: [AI, OpenAI, Claude]
+draft: false
+cover: chatgpt-pro-200-half-usage.webp
+---
+
+import Image from "next/image";
+import Callout from "@/components/callout";
+import cover from "./chatgpt-pro-200-is-back-with-half-the-usage/chatgpt-pro-200-half-usage.webp";
+import timeline from "./chatgpt-pro-200-is-back-with-half-the-usage/pro-200-timeline.webp";
+import quote from "./chatgpt-pro-200-is-back-with-half-the-usage/half-the-dollar-quote.webp";
+import plans from "./chatgpt-pro-200-is-back-with-half-the-usage/two-200-dollar-plans.webp";
+import {
+  AtAGlance,
+  ModelAllowanceChart,
+  PlanLadderChart,
+  PricePerUsageChart,
+  TwoHundredDollarsChart,
+} from "@/content/charts/chatgpt-pro-200-is-back-with-half-the-usage";
+
+<figure>
+  <Image
+    src={cover}
+    alt="The words Same $200. Half the usage. beside a bar chart: the old ChatGPT Pro $200 plan at 20 times Plus usage, the new one at 10 times, a 50% cut"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>From October 30, ChatGPT Pro $200 gives you 10 times Plus usage instead of 20.</figcaption>
+</figure>
+
+The $200 ChatGPT Pro plan is back. After three weeks of paused sign-ups, OpenAI reopened it today, September 30.
+
+On the surface that's good news. The plan everyone was locked out of is available again, it has no five-hour limit, and it comes with some shiny new extras from DevDay.
+
+Look at what it actually buys, though, and it's a different plan. **It now gives you half the usage it did before, at the same $200.** The Codex and ChatGPT Work allowance drops from 20 times what Plus gets to 10 times. GPT-6 Pro messages in ChatGPT drop from 200 a week to 100.
+
+That turns the $200 tier from the best-value AI subscription on the market into one with no volume discount at all. And it happens at the worst possible moment for OpenAI, because for the same $200, [Claude Max 20x](https://support.claude.com/en/articles/11049741-what-is-the-max-plan) still gives you 20 times its $20 plan, and Anthropic has been _raising_ its limits this year, not cutting them.
+
+<AtAGlance />
+
+## Six weeks, from "exactly 20x" to half of that
+
+To understand why people are annoyed, you need the timeline. It moved fast.
+
+<figure>
+  <Image
+    src={timeline}
+    alt="A timeline from August 30 to October 30, 2026: OpenAI says 20x does exactly what it says on the tin; GPT-6 Astra launches; Pro $200 sign-ups are paused; GPT-6 Sol and Luna launch at half price and Claude Opus 5.5 ships; DevDay cuts Pro $200 to 10x Plus and launches Pro $500; sign-ups reopen; existing subscribers move to the lower quota"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>How the Pro $200 plan changed between August 30 and October 30, 2026.</figcaption>
+</figure>
+
+- **August 30.** Thibault Sottiaux ("Tibo"), who leads engineering for Codex and ChatGPT Work at OpenAI, confirmed that Pro $200's 20x figure "does exactly what it says on the tin," [according to Kingy AI's timeline](https://kingy.ai/news/chatgpt-pro-200-usage-cut/).
+- **September 3.** GPT-6 Astra launched at $10 per million input tokens and $50 per million output tokens.
+- **September 10.** OpenAI [paused new Pro $200 sign-ups](https://techcrunch.com/2026/09/10/openai-puts-pro-subscriptions-on-hold-due-to-astra-demand/). "Demand for Astra is really unprecedented," Tibo told TechCrunch. "I've not seen anything like it until now." Pro subscriptions, OpenAI said, put the most strain on its systems. [Fortune](https://fortune.com/2026/09/11/openai-astra-chatgpt-pro-pause/) reported the same the next day.
+- **September 22.** OpenAI launched GPT-6 Sol and GPT-6 Luna at half the price of the previous generation. The same day, Anthropic shipped Claude Opus 5.5 and [raised the five-hour limits](https://www.anthropic.com/news/claude-opus-5-5) on Pro, Max and Team.
+- **September 28–29.** Tibo announced on X that Pro $200 would come back with a new usage calculation, and at [DevDay](https://thenextweb.com/news/openai-devday-pro-200-usage-cut-pro-500-plan) OpenAI confirmed the numbers: 10x Plus instead of 20x, and a new $500 plan on top.
+- **September 30 (today).** Sign-ups reopen at the new rate.
+- **October 30.** Existing subscribers move to the lower quota. Until October 29 they keep the old one, plus a one-time $2,500 usage credit that expires at the end of the year.
+
+A month ago the 20x plan did "exactly what it says on the tin." Now the tin says 10x.
+
+## What OpenAI actually said
+
+To OpenAI's credit, it didn't hide the cut. Tibo put it plainly:
+
+<figure>
+  <Image
+    src={quote}
+    alt="A quote from Thibault Sottiaux of OpenAI: …will net out at half the dollar in API spend compared to the old Pro $200 plan."
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>
+    From Tibo&rsquo;s post on X, as quoted by{" "}
+    <a href="https://www.unite.ai/openai-reopens-chatgpt-pro-200-sign-ups-with-new-usage-calculation/">Unite.AI</a>.
+  </figcaption>
+</figure>
+
+The argument OpenAI is making is that this is fine because models got cheaper. [Engadget](https://www.engadget.com/2272106/openai-adds-dollar500-pro-subscription-nerfs-its-existing-dollar200-tier/) and [Android Headlines](https://www.androidheadlines.com/2026/09/openai-launches-500-pro-plan-reduces-200-tier.html) both carry the same line from Tibo: cheaper API prices for models like GPT-6 Sol mean you can still get plenty of work done with a smaller allowance. He also said subscribers will "get more work done" than on the old plan.
+
+Tibo made four promises alongside the change: no five-hour cap, future API price cuts passed through to subscriptions, no inflated list prices behind the subscription discount, and some "unmetered extras" he didn't name. OpenAI still hasn't said what the allowance is in dollars, only that it's half of what it was.
+
+Some of that is true. I'll come back to it. But look at what the change does to the plan's value first.
+
+## The best-value plan now has no discount at all
+
+Here's the thing that bothers me most.
+
+Before today, the $200 plan was the only ChatGPT plan where paying more got you more per dollar. Plus is $20 for 1x. Pro $100 is $100 for 5x, so $20 per 1x, no better than Plus. Pro $200 was $200 for 20x: **$10 per 1x, half price.** That was the whole reason heavy Codex users bought it.
+
+After the change, it's $200 for 10x. That's $20 per 1x, exactly the same as Plus. The new $500 plan is 25x, also [$20 per 1x](https://www.bgr.com/2272332/openai-devday-2026-announcements/).
+
+<PricePerUsageChart />
+
+So OpenAI went from having the best subscription deal in AI coding to having no bulk discount anywhere in its lineup. Every plan now charges the same rate. The more expensive plans just let you buy more of it at once.
+
+Put the plans on one chart and it's even clearer. ChatGPT's plans now sit on a perfectly straight line. Claude's $200 plan still bends upward:
+
+<PlanLadderChart />
+
+If you're a heavy user, that bend is the only part of the chart that matters.
+
+## Meanwhile, $200 still buys 20x at Anthropic
+
+This is why the change makes so little sense right now. OpenAI isn't cutting in a vacuum. The obvious alternative costs the same and didn't get cut.
+
+<figure>
+  <Image
+    src={plans}
+    alt="Two cards side by side. ChatGPT Pro $200: usage 20x to 10x, price per 1x of Plus $10 to $20, GPT-6 Pro messages 200 to 100 a week, no 5-hour limit, sign-ups paused September 10 to 30, halved from October 30. Claude Max 20x: 20x usage, $10 per 1x of Pro, 5-hour limits raised May 6 and September 22, a weekly limit across all models, a banked limit reset until October 22, raised twice this year."
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>The two $200 plans, as of October 2026.</figcaption>
+</figure>
+
+Claude Max 20x is $200 a month for 20 times the usage of Claude Pro. And Anthropic has been moving in the other direction all year:
+
+- **May 6.** Anthropic [doubled Claude Code's five-hour limits](https://www.anthropic.com/news/higher-limits-spacex) on Pro, Max, Team and seat-based Enterprise, and removed the peak-hours reduction for Pro and Max. The capacity came from a deal for all of SpaceX's Colossus 1 data center: more than 300 megawatts and over 220,000 NVIDIA GPUs.
+- **September 22.** With Opus 5.5, Anthropic [raised the five-hour limits again](https://www.anthropic.com/news/claude-opus-5-5) and gave every subscriber a rate-limit reset they can bank and use whenever they want, until October 22.
+
+<TwoHundredDollarsChart />
+
+I want to be fair here: Claude Max isn't literally unlimited. It has a five-hour window and a weekly cap across all models, and Anthropic doesn't publish exact token numbers. The two "20x" figures also aren't the same amount of work, because each is measured against a different $20 plan. But in practice, on Max 20x I rarely think about limits at all. It's the closest thing to "unlimited" you can buy for $200.
+
+A big reason is cache reads. In a long Claude Code session, most of what the model processes is the same codebase and conversation being re-read turn after turn. On the API, that's metered. On Max, it's part of the flat rate. I wrote about how much cache pricing matters in [my Sonnet 5.5 review](/blogs/claude-sonnet-5-5-review), and it's exactly why a flat subscription is worth so much more than its sticker price for agent work.
+
+Anthropic also cut Opus 5.5's API price to $4 / $20, down from $5 / $25 on Opus 5, and cached reads to $0.20. So Claude got cheaper per token _and_ more generous per subscription in the same month OpenAI halved its plan. Tibo himself agreed with a critic on X that OpenAI should "simply beat Opus 5.5 on value per dollar," [Kingy AI reported](https://kingy.ai/news/chatgpt-pro-200-usage-cut/). This change does the opposite.
+
+## Does "the models got cheaper" hold up?
+
+Partly, and only for some models.
+
+The new allowance is worth half as many API dollars. So how many _tokens_ you get depends on whether the model you use also got cheaper. I did the arithmetic for each one:
+
+<ModelAllowanceChart />
+
+- **GPT-6 Sol** costs half what GPT-5.6 Sol did ($2 / $10 instead of $4 / $20), so half the dollars buys about the same number of Sol tokens. For Sol-only users, the cut roughly cancels out.
+- **GPT-6 Luna** got cheaper by more than half on output, so Luna users actually get about 20% more output tokens.
+- **GPT-6 Astra** didn't get cheaper. It's still $10 / $50. **Astra users get half as much.** And Astra is the model whose demand caused the pause in the first place. It's the reason most people wanted Pro $200.
+- **GPT-5.6 Sol** is still on sale at the old price, so anyone who stayed on it also gets half.
+
+So OpenAI's defence works if you move your work down to the cheaper model. If you paid $200 for the frontier model, which is the point of a $200 plan, you're getting half.
+
+One thing that's genuinely better: there's no five-hour limit on Pro $200, and Tibo promised it won't come back. If your usage comes in bursts, that's worth something. Existing subscribers also get a $2,500 credit to soften the switch. Neither of those changes what the plan buys from October 30 onwards.
+
+## Why I think OpenAI did it
+
+This isn't a mystery. OpenAI ran out of capacity. Astra demand was "unprecedented," and heavy Pro users were costing the most to serve, so OpenAI closed sign-ups. Cutting the allowance in half and adding a $500 tier with exclusive Ultrafast speed (up to 300 tokens per second in Codex, according to OpenAI) is how you reopen sign-ups without buying twice as many GPUs.
+
+That's a reasonable business decision. It's just a bad deal for the people who were paying $200, and badly timed. Two weeks ago, a heavy Codex user had one good reason to stay: Pro $200 was the best value. Now that reason is gone, and Claude Max 20x is sitting right there at the same price.
+
+It also connects to something I wrote in the summer. In [my post on Fable 5 and Sonnet 5](/blogs/fable-5-is-back-sonnet-5-is-here-and-ai-agents-still-need-real-guardrails), I called it the junior engineer problem: a cheap model isn't cheap if it burns ten times as many tokens getting the job done. The same logic applies here in reverse. A $200 plan isn't a deal because it costs $200. It's a deal because of how much work it gets through before you hit the wall. OpenAI just moved the wall.
+
+<Callout title="More on AI pricing">
+  In my review of Claude Sonnet 5.5, I break down per-token prices against per-task costs, how Sonnet compares with
+  GPT-6 Sol at the same $2 / $10 price, and why cache pricing matters so much for agent work.
+
+[Claude Sonnet 5.5 Review: Same Price, Far Less Waste →](/blogs/claude-sonnet-5-5-review)
+</Callout>
+
+## What I'd do if you're on Pro $200
+
+- **If you mainly use GPT-6 Sol:** you probably won't notice much. The price cut covers the allowance cut.
+- **If you rely on GPT-6 Astra or GPT-6 Pro:** you're losing half. Use the old quota and the $2,500 credit until October 29, and use that time to decide.
+- **If you mostly use Codex for heavy agentic coding:** try Claude Max 20x with Claude Code for a month. It's the same $200, still 20x, and the limits have only gone up this year.
+- **Don't upgrade to Pro $500 just for the usage.** It costs $20 per 1x of Plus, the same rate as every other plan. The extra $300 buys Ultrafast speed, not better value.
+
+## The verdict
+
+"Pro $200 is back" sounds like good news. It isn't, really. OpenAI brought back the name and the price, but not the plan. Pro $200 used to be the one ChatGPT plan with a volume discount: half price per unit of usage. From October 30, it has none.
+
+I understand why OpenAI did it. Capacity is finite and Astra is expensive to run. But the timing couldn't be worse. Anthropic cut Opus prices, raised its limits twice this year, and still sells 20x for $200. OpenAI now sells 10x for the same money and asks you to believe that cheaper models make up for it. For Sol, they do. For Astra, the model you actually paid $200 for, they don't.
+
+The best subscription in AI coding used to have OpenAI's name on it. Today, it doesn't.
+
+---
+
+_A note on sources: plan changes, dates and the $2,500 credit come from OpenAI's DevDay 2026 announcements and the OpenAI Help Center article on [ChatGPT Pro tiers](https://help.openai.com/en/articles/9793128), as reported by [The Next Web](https://thenextweb.com/news/openai-devday-pro-200-usage-cut-pro-500-plan), [Engadget](https://www.engadget.com/2272106/openai-adds-dollar500-pro-subscription-nerfs-its-existing-dollar200-tier/), [BGR](https://www.bgr.com/2272332/openai-devday-2026-announcements/) and [Unite.AI](https://www.unite.ai/openai-reopens-chatgpt-pro-200-sign-ups-with-new-usage-calculation/). The pause is from [TechCrunch](https://techcrunch.com/2026/09/10/openai-puts-pro-subscriptions-on-hold-due-to-astra-demand/) and [Fortune](https://fortune.com/2026/09/11/openai-astra-chatgpt-pro-pause/). Model prices and Tibo's August 30 remark are from [Kingy AI](https://kingy.ai/news/chatgpt-pro-200-usage-cut/). Claude's plans and limits come from [Anthropic's Max plan article](https://support.claude.com/en/articles/11049741-what-is-the-max-plan), its [May 6 announcement](https://www.anthropic.com/news/higher-limits-spacex) and the [Opus 5.5 launch](https://www.anthropic.com/news/claude-opus-5-5). The per-model token chart is my own arithmetic from OpenAI's stated rule and its API prices. Everything written as "I think" is my opinion._
+
+
+===== CHART DATA (content/charts/chatgpt-pro-200-is-back-with-half-the-usage.tsx) =====
+
+// Charts for content/blogs/chatgpt-pro-200-is-back-with-half-the-usage.mdx.
+// Every number is from a source named under its chart, as of September 30, 2026.
+import BarChart from "@/components/charts/bar-chart";
+import ChartFigure from "@/components/charts/chart-figure";
+import LineChart from "@/components/charts/line-chart";
+import StatTiles from "@/components/charts/stat-tiles";
+import type { Series } from "@/components/charts/utils";
+
+const before: Series = { key: "before", label: "Until October 29", color: "var(--viz-previous)" };
+const after: Series = { key: "after", label: "From October 30", color: "var(--viz-openai)" };
+const claude: Series = { key: "claude", label: "Claude (Anthropic)", color: "var(--viz-anthropic)" };
+
+/** OpenAI's consumer plans: monthly price, and usage as a multiple of Plus.
+ *  Pro $500 didn't exist before DevDay, so it has no "before". */
+const openai = [
+  { plan: "Plus", price: 20, before: 1, after: 1 },
+  { plan: "Pro $100", price: 100, before: 5, after: 5 },
+  { plan: "Pro $200", price: 200, before: 20, after: 10 },
+  { plan: "Pro $500", price: 500, before: null, after: 25 },
+];
+
+/** Anthropic's plans: monthly price, and usage as a multiple of Pro. */
+const anthropic = [
+  { plan: "Pro", price: 20, multiple: 1 },
+  { plan: "Max 5x", price: 100, multiple: 5 },
+  { plan: "Max 20x", price: 200, multiple: 20 },
+];
+
+const usd = (value: number) => `$${value}`;
+const times = (value: number) => `${value}x`;
+const percentage = (value: number) => `${Math.round(value * 100)}%`;
+
+const openaiSource = (
+  <>
+    Sources: OpenAI&rsquo;s DevDay 2026 announcements and the OpenAI Help Center article on ChatGPT Pro tiers, as
+    reported by The Next Web, Engadget and BGR.
+  </>
+);
+
+export function AtAGlance() {
+  return (
+    <StatTiles
+      title="ChatGPT Pro $200, before and after"
+      tiles={[
+        {
+          label: "Codex and Work usage, vs. Plus",
+          value: "20x → 10x",
+          detail: "Halved for new subscribers now, everyone else on October 30",
+          trend: "down",
+        },
+        {
+          label: "What 1x of Plus usage costs",
+          value: "$10 → $20",
+          detail: "The same as on Plus itself: no bulk discount left",
+          trend: "caution",
+        },
+        {
+          label: "GPT-6 Pro messages a week",
+          value: "200 → 100",
+          detail: "In ChatGPT, on the same $200 plan",
+          trend: "down",
+        },
+        {
+          label: "Claude Max 20x, for comparison",
+          value: "$10",
+          detail: "Per 1x of Claude Pro, with limits raised twice this year",
+          trend: "up",
+          good: true,
+        },
+      ]}
+      footer={
+        <>
+          Sign-ups for Pro $200 were paused from September 10 and reopen today, September 30, at the new rate.
+          Existing subscribers keep the old quota until October 29 and get a one-time $2,500 usage credit that
+          expires at the end of 2026. Sources: OpenAI, Anthropic.
+        </>
+      }
+    />
+  );
+}
+
+export function PricePerUsageChart() {
+  const series = [before, after];
+  return (
+    <ChartFigure
+      title="Every ChatGPT plan now costs the same per unit of usage"
+      description="What each plan charges for one Plus-worth of Codex and ChatGPT Work usage: the monthly price divided by its multiple of Plus. Lower is better value."
+      legend={{ series, mark: "bar" }}
+      source={openaiSource}
+      table={{
+        columns: ["Plan", "Price a month", "Usage before", "Usage after", "Per 1x before", "Per 1x after"],
+        rows: openai.map(({ plan, price, before, after }) => [
+          plan,
+          usd(price),
+          before === null ? "didn't exist" : times(before),
+          times(after),
+          before === null ? "–" : usd(price / before),
+          usd(price / after),
+        ]),
+      }}
+    >
+      <BarChart
+        series={series}
+        max={25}
+        format={usd}
+        labelWidth="6rem"
+        labelRoom="9rem"
+        groups={openai.map(({ plan, price, before: old, after: now }) => ({
+          label: plan,
+          bars: [
+            // Pro $500 is new, so it only has an "after" bar.
+            ...(old === null
+              ? []
+              : [
+                  {
+                    series: "before",
+                    value: price / old,
+                    tip: {
+                      title: `${plan}, until October 29`,
+                      rows: [
+                        { value: usd(price / old), label: "per 1x of Plus", color: before.color },
+                        { value: times(old), label: "Plus usage" },
+                      ],
+                    },
+                  },
+                ]),
+            {
+              series: "after",
+              value: price / now,
+              note: old !== null && price / now > price / old ? "doubled" : undefined,
+              tip: {
+                title: `${plan}, from October 30`,
+                rows: [
+                  { value: usd(price / now), label: "per 1x of Plus", color: after.color },
+                  { value: times(now), label: "Plus usage" },
+                ],
+              },
+            },
+          ],
+        }))}
+      />
+    </ChartFigure>
+  );
+}
+
+export function PlanLadderChart() {
+  // Until October 29, ChatGPT's plans sat exactly on Claude's line, so only
+  // the new lineup is drawn; the old one is in the description and table.
+  const openaiAfter: Series = { key: "openai-after", label: "ChatGPT, from October 30", color: after.color };
+  const series = [openaiAfter, claude];
+  const points = {
+    "openai-after": openai.map((row) => ({ x: row.price, y: row.after, name: row.plan })),
+    claude: anthropic.map((row) => ({ x: row.price, y: row.multiple, name: row.plan })),
+  };
+
+  return (
+    <ChartFigure
+      title="A straight line means no discount for paying more"
+      description="Monthly price against usage, as a multiple of each company's $20 plan. ChatGPT's plans now sit on one straight line: $500 buys exactly 25 times what $20 does. Claude's $200 plan still bends upward, exactly as ChatGPT's did until October 29."
+      legend={{ series, mark: "line" }}
+      source={
+        <>
+          {openaiSource} Anthropic&rsquo;s tiers are from its Max plan help article. Each company measures against
+          its own $20 plan, so a multiple on one isn&rsquo;t the same amount of work as on the other.
+        </>
+      }
+      table={{
+        columns: ["Plans", "Plan", "Price a month", "Usage vs. the $20 plan"],
+        rows: [
+          ...openai
+            .filter((row) => row.before !== null)
+            .map((row) => ["ChatGPT, until October 29", row.plan, usd(row.price), times(row.before as number)]),
+          ...series.flatMap((item) =>
+            points[item.key as keyof typeof points].map((point) => [item.label, point.name, usd(point.x), times(point.y)])
+          ),
+        ],
+      }}
+    >
+      <LineChart
+        series={series}
+        points={points}
+        x={{ domain: [0, 520], ticks: [0, 100, 200, 300, 400, 500], format: usd, title: "Price a month" }}
+        y={{ domain: [0, 26], ticks: [0, 5, 10, 15, 20, 25], format: times, title: "Usage, as a multiple of the $20 plan" }}
+        endLabels={{ "openai-after": "left", claude: "right" }}
+        describe={(item, point) => ({
+          title: `${point.name}, ${item.label}`,
+          rows: [
+            { value: times(point.y), label: "the $20 plan's usage" },
+            { value: usd(point.x / point.y), label: "per 1x" },
+          ],
+        })}
+      />
+    </ChartFigure>
+  );
+}
+
+export function TwoHundredDollarsChart() {
+  const series = [before, after, claude];
+  const rows = [
+    { label: "ChatGPT Pro $200", sublabel: "until October 29", series: "before", value: 20 },
+    { label: "ChatGPT Pro $200", sublabel: "from October 30", series: "after", value: 10 },
+    { label: "Claude Max 20x", sublabel: "today", series: "claude", value: 20 },
+  ];
+  return (
+    <ChartFigure
+      title="What $200 a month buys"
+      description="Usage as a multiple of each company's own $20 plan."
+      legend={{ series, mark: "bar" }}
+      source={
+        <>
+          {openaiSource} Claude: Anthropic&rsquo;s Max plan help article. The two companies&rsquo; $20 plans
+          aren&rsquo;t the same size, so compare the direction of travel, not the exact amounts.
+        </>
+      }
+      table={{
+        columns: ["Plan", "When", "Usage vs. the $20 plan"],
+        rows: rows.map((row) => [row.label, row.sublabel, times(row.value)]),
+      }}
+    >
+      <BarChart
+        series={series}
+        max={20}
+        format={times}
+        labelWidth="9rem"
+        labelRoom="5rem"
+        groups={rows.map((row) => ({
+          label: `${row.label}, ${row.sublabel}`,
+          bars: [{ series: row.series, value: row.value, note: row.series === "after" ? "−50%" : undefined }],
+        }))}
+      />
+    </ChartFigure>
+  );
+}
+
+export function ModelAllowanceChart() {
+  const series = [{ key: "tokens", label: "Tokens you get", color: "var(--viz-openai)" }];
+  // The allowance is worth half as many API dollars. Tokens you can buy with
+  // it = half the budget ÷ (new price ÷ old price).
+  const models = [
+    { model: "GPT-6 Sol", detail: "$2 / $10, down from GPT-5.6 Sol's $4 / $20", share: 1 },
+    { model: "GPT-6 Luna, output", detail: "$0.50, down from $1.20", share: 0.5 * (1.2 / 0.5) },
+    { model: "GPT-6 Luna, input", detail: "$0.10, down from $0.20", share: 1 },
+    { model: "GPT-6 Astra", detail: "$10 / $50, unchanged", share: 0.5 },
+    { model: "GPT-5.6 Sol", detail: "$4 / $20, still on sale", share: 0.5 },
+  ];
+  return (
+    <ChartFigure
+      title="The cut only hides where OpenAI also cut the API price"
+      description="How many tokens the new Pro $200 allowance buys, compared with the old one, for each model. 100% means no change. The model most people paid $200 for, GPT-6 Astra, gets half."
+      source={
+        <>
+          My arithmetic from OpenAI&rsquo;s stated rule (half the API-dollar value of the old plan) and its API
+          prices per million tokens, before and after the September 22 price cuts. OpenAI hasn&rsquo;t published the
+          dollar amount itself, only the ratio.
+        </>
+      }
+      table={{
+        columns: ["Model", "API price per 1M tokens", "Tokens vs. the old Pro $200"],
+        rows: models.map(({ model, detail, share }) => [model, detail, percentage(share)]),
+      }}
+    >
+      <BarChart
+        series={series}
+        max={1.3}
+        format={percentage}
+        labelWidth="9rem"
+        labelRoom="4rem"
+        groups={models.map(({ model, detail, share }) => ({
+          label: model,
+          bars: [
+            {
+              series: "tokens",
+              value: share,
+              tip: {
+                title: model,
+                rows: [
+                  { value: percentage(share), label: "of the old allowance's tokens", color: series[0].color },
+                  { value: detail, label: "per 1M tokens" },
+                ],
+              },
+            },
+          ],
+        }))}
+      />
+    </ChartFigure>
+  );
+}

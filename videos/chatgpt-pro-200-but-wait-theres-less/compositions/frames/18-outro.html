@@ -1,0 +1,558 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Inter";
+      src: url("assets/fonts/inter-800.woff2") format("woff2");
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Inter";
+      src: url("assets/fonts/inter-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-600.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Inter", sans-serif;
+      color: #000000;
+    }
+    #root * {
+      box-sizing: border-box;
+    }
+
+    /* ---------- ground (full-bleed clip) ---------- */
+    #f18-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: #f7cb46;
+    }
+    .f18-dots {
+      position: absolute;
+      left: 60%;
+      top: 0;
+      width: 40%;
+      height: 43.5%;
+      background-image: radial-gradient(circle, #000000 1.3px, transparent 1.7px);
+      background-size: 24px 24px;
+      opacity: 0.3;
+    }
+    .f18-stripe {
+      position: absolute;
+      border: 0.3cqw solid #000000;
+    }
+    #f18-stripe-a {
+      left: -4%;
+      top: 63%;
+      width: 19cqw;
+      height: 6cqw;
+      transform: rotate(-7deg);
+      background: repeating-linear-gradient(45deg, #000000 0 0.55cqw, #fe90e8 0.55cqw 1.45cqw);
+    }
+    #f18-stripe-b {
+      left: 88%;
+      top: 72%;
+      width: 14cqw;
+      height: 4.4cqw;
+      transform: rotate(7deg);
+      background: repeating-linear-gradient(45deg, #000000 0 0.55cqw, #c0f7fe 0.55cqw 1.45cqw);
+    }
+
+    /* ---------- VHS OSD (clip, 0.0–0.5s) ---------- */
+    #f18-osd-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      pointer-events: none;
+    }
+    .f18-osd {
+      position: absolute;
+      left: 3.1cqw;
+      top: 2.8cqw;
+      display: flex;
+      align-items: center;
+      gap: 0.7cqw;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 1.7cqw;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow:
+        3px 0 0 #000000,
+        -3px 0 0 #000000,
+        0 3px 0 #000000,
+        0 -3px 0 #000000,
+        2.1px 2.1px 0 #000000,
+        -2.1px 2.1px 0 #000000,
+        2.1px -2.1px 0 #000000,
+        -2.1px -2.1px 0 #000000;
+    }
+    .f18-osd-tri {
+      width: 1.45cqw;
+      height: 1.45cqw;
+      overflow: visible;
+      flex: none;
+    }
+
+    /* ---------- the PRO box (supporting) ---------- */
+    #f18-box {
+      position: absolute;
+      left: 14%;
+      top: 12%;
+      width: 26cqw;
+      height: 33cqw;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border: 0.4cqw solid #000000;
+      box-shadow: 0.8cqw 0.8cqw 0 #000000;
+      will-change: transform;
+    }
+    .f18-box-band {
+      flex: none;
+      height: 5.2cqw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fe90e8;
+      border-bottom: 0.4cqw solid #000000;
+      font-weight: 900;
+      font-size: 2.4cqw;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .f18-box-front {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      padding: 1.4cqw 1.2cqw 1.4cqw 1.4cqw;
+    }
+    .f18-box-facecol {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.3cqw;
+    }
+    .f18-face {
+      width: 16.5cqw;
+      height: 12.1cqw;
+      overflow: visible;
+    }
+    .f18-box-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.3cqw;
+      font-weight: 900;
+      font-size: 2.6cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .f18-box-price span {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 1.1cqw;
+      letter-spacing: 0.08em;
+    }
+    .f18-gauge {
+      flex: none;
+      width: 4.4cqw;
+      display: flex;
+      justify-content: center;
+    }
+    .f18-gauge-tube {
+      position: relative;
+      width: 2.7cqw;
+      height: 100%;
+      background: #ffffff;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+    }
+    .f18-gauge-fill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 50%;
+      border-top: 0.3cqw solid #000000;
+      background: repeating-linear-gradient(45deg, #000000 0 0.35cqw, #fe90e8 0.35cqw 0.95cqw);
+    }
+    .f18-gauge-label {
+      position: absolute;
+      top: 0.8cqw;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: max-content;
+      writing-mode: vertical-rl;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 0.78cqw;
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+    .f18-gauge-tick {
+      position: absolute;
+      left: -1.1cqw;
+      width: 0.75cqw;
+      height: 0.3cqw;
+      margin-top: -0.15cqw;
+      background: #000000;
+    }
+    .f18-gauge-tick.f18-tick-half {
+      left: -1.5cqw;
+      width: 1.15cqw;
+    }
+
+    /* ---------- "$200" star-burst (supporting) ---------- */
+    #f18-star {
+      position: absolute;
+      left: 74.5%;
+      top: 4.5%;
+      width: 18.75cqw;
+      height: 18.75cqw;
+      z-index: 3;
+      will-change: transform;
+    }
+    #f18-star svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .f18-star-price {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 3.1cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    /* ---------- "NOW WITH LESS!" banner (focal) ---------- */
+    #f18-banner-wrap {
+      position: absolute;
+      left: 67.2%;
+      top: 49%;
+      width: max-content;
+      z-index: 4;
+      will-change: transform;
+    }
+    #f18-banner {
+      display: flex;
+      align-items: center;
+      gap: 1.1cqw;
+      padding: 1.5cqw 2.4cqw;
+      background: #fe90e8;
+      border: 0.4cqw solid #000000;
+      box-shadow: 0.8cqw 0.8cqw 0 #000000;
+      font-weight: 800;
+      font-size: 3.3cqw;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      will-change: transform;
+    }
+    .f18-spark {
+      flex: none;
+      width: 2.1cqw;
+      height: 2.1cqw;
+    }
+
+    /* ---------- fine-print crawl (supporting) ---------- */
+    #f18-crawl {
+      position: absolute;
+      left: 100%;
+      top: 75.7%;
+      width: max-content;
+      z-index: 6;
+      padding: 0.55cqw 1.2cqw;
+      background: #ffffff;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 600;
+      font-size: 0.9cqw;
+      line-height: 1;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    /* ---------- sources pill (foreground payoff) ---------- */
+    #f18-pill {
+      position: absolute;
+      left: 67.6%;
+      top: 68.5%;
+      width: max-content;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 0.55cqw;
+      padding: 0.85cqw 1.7cqw;
+      background: #ffffff;
+      border: 0.3cqw solid #000000;
+      border-radius: 9999px;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 1.4cqw;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      will-change: transform;
+    }
+    .f18-pill-arrow {
+      flex: none;
+      width: 1.05cqw;
+      height: 1.35cqw;
+      overflow: visible;
+    }
+  </style>
+
+  <div id="root" data-composition-id="18-outro" data-width="1920" data-height="1080">
+    <!-- full-bleed yellow ground: dot-grid corner + two stripe-blocks bleeding off the edges -->
+    <div id="f18-bg" class="clip" data-start="0" data-duration="5.747" data-track-index="0">
+      <div class="f18-dots"></div>
+      <div id="f18-stripe-a" class="f18-stripe"></div>
+      <div id="f18-stripe-b" class="f18-stripe"></div>
+    </div>
+
+    <!-- the PRO box: pink band, half-full CONTENTS gauge, big grin -->
+    <div id="f18-box">
+      <div class="f18-box-band">ChatGPT Pro</div>
+      <div class="f18-box-front">
+        <div class="f18-box-facecol">
+          <svg class="f18-face" viewBox="0 0 300 220" aria-hidden="true">
+            <g id="f18-eye-l">
+              <ellipse cx="95" cy="70" rx="26" ry="38" fill="#000000" />
+              <ellipse cx="104" cy="55" rx="8" ry="11" fill="#ffffff" />
+            </g>
+            <g id="f18-eye-r">
+              <ellipse cx="205" cy="70" rx="26" ry="38" fill="#000000" />
+              <ellipse cx="214" cy="55" rx="8" ry="11" fill="#ffffff" />
+            </g>
+            <path d="M50 128 Q150 150 250 128 Q240 215 150 215 Q60 215 50 128 Z" fill="#000000" />
+            <path d="M60 134 Q150 156 240 134 L238 146 Q150 170 62 146 Z" fill="#ffffff" />
+            <path d="M112 206 Q150 178 188 206 Q150 214 112 206 Z" fill="#fe90e8" />
+          </svg>
+          <div class="f18-box-price">$200<span>/MO</span></div>
+        </div>
+        <div class="f18-gauge">
+          <div class="f18-gauge-tube">
+            <div class="f18-gauge-fill"></div>
+            <div class="f18-gauge-label">CONTENTS</div>
+            <div class="f18-gauge-tick" style="top: 25%"></div>
+            <div class="f18-gauge-tick f18-tick-half" style="top: 50%"></div>
+            <div class="f18-gauge-tick" style="top: 75%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- blue "$200" star-burst -->
+    <div id="f18-star">
+      <svg viewBox="-8 -8 116 116" aria-hidden="true">
+        <polygon
+          points="50,2 61.12,15.76 78.21,11.17 79.12,28.84 95.65,35.17 86,50 95.65,64.83 79.12,71.16 78.21,88.83 61.12,84.24 50,98 38.88,84.24 21.79,88.83 20.88,71.16 4.35,64.83 14,50 4.35,35.17 20.88,28.84 21.79,11.17 38.88,15.76"
+          transform="translate(2.5 2.5)"
+          fill="#000000"
+          stroke="#000000"
+          stroke-width="1.9"
+          stroke-linejoin="miter"
+        />
+        <polygon
+          points="50,2 61.12,15.76 78.21,11.17 79.12,28.84 95.65,35.17 86,50 95.65,64.83 79.12,71.16 78.21,88.83 61.12,84.24 50,98 38.88,84.24 21.79,88.83 20.88,71.16 4.35,64.83 14,50 4.35,35.17 20.88,28.84 21.79,11.17 38.88,15.76"
+          fill="#c0f7fe"
+          stroke="#000000"
+          stroke-width="1.9"
+          stroke-linejoin="miter"
+        />
+      </svg>
+      <div class="f18-star-price">$200</div>
+    </div>
+
+    <!-- focal: the banner -->
+    <div id="f18-banner-wrap">
+      <div id="f18-banner">
+        <svg class="f18-spark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 0 L14.6 9.4 L24 12 L14.6 14.6 L12 24 L9.4 14.6 L0 12 L9.4 9.4 Z" fill="#000000" />
+        </svg>
+        <span>Now with less!</span>
+        <svg class="f18-spark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 0 L14.6 9.4 L24 12 L14.6 14.6 L12 24 L9.4 14.6 L0 12 L9.4 9.4 Z" fill="#000000" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- payoff: sources pill -->
+    <div id="f18-pill">
+      <span>Full breakdown + sources</span>
+      <svg class="f18-pill-arrow" viewBox="0 0 20 26" aria-hidden="true">
+        <path
+          d="M10 2 V22 M2.5 14.5 L10 22 L17.5 14.5"
+          fill="none"
+          stroke="#000000"
+          stroke-width="3.4"
+          stroke-linecap="square"
+          stroke-linejoin="miter"
+        />
+      </svg>
+      <span>in the description</span>
+    </div>
+
+    <!-- super-fast fine-print crawl -->
+    <div id="f18-crawl">*TERMS AND CONDITIONS APPLY · 10x PLUS FROM OCT 30 · $20 PER 1x · GPT-6 PRO 100/WEEK · EXTRAS UNSPECIFIED · NO BULK DISCOUNT · SAME $200</div>
+
+    <!-- VHS "PLAY" readout: the tape resumes (0.0–0.5s, then hard cut) -->
+    <div id="f18-osd-layer" class="clip" data-start="0" data-duration="0.5" data-track-index="1">
+      <div class="f18-osd">
+        <svg class="f18-osd-tri" viewBox="0 0 24 24" aria-hidden="true">
+          <polygon
+            points="4,3 21,12 4,21"
+            fill="#ffffff"
+            stroke="#000000"
+            stroke-width="4.4"
+            stroke-linejoin="miter"
+            paint-order="stroke"
+          />
+        </svg>
+        <span>Play</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var byId = function (id) {
+        return document.getElementById(id);
+      };
+      var box = byId("f18-box");
+      var star = byId("f18-star");
+      var bannerWrap = byId("f18-banner-wrap");
+      var banner = byId("f18-banner");
+      var eyeR = byId("f18-eye-r");
+      var crawl = byId("f18-crawl");
+      var pill = byId("f18-pill");
+
+      gsap.set(eyeR, { transformOrigin: "50% 50%" });
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 — "ChatGPT" (0.27s): the PRO box drops in at left-center and lands with a small bounce.
+      tl.fromTo(
+        box,
+        { y: -900, rotation: -10 },
+        { y: 0, rotation: -3, duration: 0.5, ease: "back.out(1.3)" },
+        0.27,
+      );
+      // "hundred!" (1.47s): the blue "$200" star-burst spring-pops upper-right (playful overshoot).
+      tl.fromTo(
+        star,
+        { scale: 0, rotation: -30, opacity: 0 },
+        { scale: 1, rotation: 8, opacity: 1, duration: 0.5, ease: "back.out(1.7)" },
+        1.47,
+      );
+
+      // Scene 2 — "Now" (2.21s): the banner slaps down from oversized onto the surface, tilted -5deg.
+      tl.fromTo(bannerWrap, { opacity: 0 }, { opacity: 1, duration: 0.05, ease: "none" }, 2.21);
+      tl.fromTo(
+        bannerWrap,
+        { xPercent: -50, yPercent: -50, scale: 1.8, rotation: -12 },
+        { xPercent: -50, yPercent: -50, scale: 1, rotation: -5, duration: 0.2, ease: "power3.in" },
+        2.21,
+      );
+      // impact squash on landing (inner element, so each property has one owner)
+      tl.to(
+        banner,
+        {
+          keyframes: [
+            { scaleX: 1.06, scaleY: 0.86, duration: 0.05, ease: "power2.out" },
+            { scaleX: 1, scaleY: 1, duration: 0.32, ease: "power3.out" },
+          ],
+        },
+        2.41,
+      );
+      // "less!" (2.64s): the mascot winks — one eye scaleY 1 -> 0.1 -> 1; the gauge stays at HALF.
+      tl.to(
+        eyeR,
+        {
+          keyframes: [
+            { scaleY: 0.1, duration: 0.08, ease: "power2.in" },
+            { scaleY: 0.1, duration: 0.14 },
+            { scaleY: 1, duration: 0.14, ease: "power2.out" },
+          ],
+        },
+        2.64,
+      );
+
+      // Scene 3 — "Terms" (3.34s): the fine-print strip zips right-to-left across the frame, linear, 1.3s.
+      tl.fromTo(
+        crawl,
+        { x: 0, xPercent: 0 },
+        { x: -1960, xPercent: -100, duration: 1.3, ease: "none" },
+        3.34,
+      );
+
+      // Scene 4 — "Sources" (4.62s): the sources pill spring-pops under the banner, then holds.
+      tl.fromTo(
+        pill,
+        { xPercent: -50, yPercent: -50, scale: 0, rotation: -6, opacity: 0 },
+        {
+          xPercent: -50,
+          yPercent: -50,
+          scale: 1,
+          rotation: 2,
+          opacity: 1,
+          duration: 0.5,
+          ease: "back.out(1.6)",
+        },
+        4.62,
+      );
+
+      // hold to the frame's fixed length
+      tl.set({}, {}, 5.747);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["18-outro"] = tl;
+    })();
+  </script>
+</template>

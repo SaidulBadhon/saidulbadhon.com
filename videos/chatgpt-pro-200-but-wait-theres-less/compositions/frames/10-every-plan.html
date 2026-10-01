@@ -1,0 +1,723 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    @font-face {
+      font-family: "Inter";
+      src: url("assets/fonts/inter-800.woff2") format("woff2");
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Inter";
+      src: url("assets/fonts/inter-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-600.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Permanent Marker";
+      src: url("assets/fonts/permanent-marker-400.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Inter", sans-serif;
+      color: #000000;
+    }
+
+    /* ---------- CHECKER stage (paused tape) — static, full duration ---------- */
+    #f10-stage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #1b1b1f;
+    }
+    .f10-scan {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+    .f10-ghost-star {
+      position: absolute;
+      left: 1690px;
+      top: 560px;
+      width: 300px;
+      height: 300px;
+      opacity: 0.08;
+      transform: rotate(12deg);
+      overflow: visible;
+    }
+    .f10-ghost-star polygon {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 4;
+      stroke-linejoin: miter;
+    }
+    .f10-ghost-stripe {
+      position: absolute;
+      left: 1700px;
+      top: 430px;
+      width: 300px;
+      height: 84px;
+      box-sizing: border-box;
+      border: 3px solid #ffffff;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #ffffff 0px,
+        #ffffff 12px,
+        transparent 12px,
+        transparent 24px
+      );
+      opacity: 0.08;
+      transform: rotate(-9deg);
+    }
+    .f10-osd {
+      position: absolute;
+      left: 60px;
+      top: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 33px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+    }
+    .f10-pause-ico {
+      display: flex;
+      gap: 7px;
+    }
+    .f10-pause-ico i {
+      display: block;
+      width: 10px;
+      height: 30px;
+      background: #ffffff;
+    }
+    .f10-sp {
+      margin-left: 18px;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+    }
+    .f10-fc-pill {
+      position: absolute;
+      right: 60px;
+      top: 46px;
+      padding: 10px 22px;
+      background: #ffffff;
+      color: #000000;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    /* ---------- content layer ---------- */
+    #f10-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+    /* chart card: x 8–92%, y 150–880 (+8px shadow = 888, above the 896 keep-out) */
+    #f10-cardwrap {
+      position: absolute;
+      left: 154px;
+      top: 150px;
+      width: 1612px;
+      height: 730px;
+    }
+    #f10-cardshake {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1612px;
+      height: 730px;
+    }
+    #f10-card {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1612px;
+      height: 730px;
+      box-sizing: border-box;
+      background: #ffffff;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+
+    .f10-head {
+      position: absolute;
+      left: 40px;
+      top: 30px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 2;
+    }
+    .f10-pill {
+      display: block;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      color: #000000;
+      transform-origin: 0% 50%;
+    }
+    #f10-title {
+      padding: 11px 24px;
+      font-size: 24px;
+      background: #ffdc8b;
+    }
+    #f10-leg-a,
+    #f10-leg-b {
+      padding: 10px 20px;
+      font-size: 20px;
+    }
+    #f10-leg-a {
+      margin-left: 12px;
+      background: #c0f7fe;
+    }
+    #f10-leg-b {
+      background: #fe90e8;
+    }
+
+    .f10-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1604px;
+      height: 722px;
+      overflow: visible;
+      pointer-events: none;
+    }
+    #f10-axis-svg {
+      z-index: 3;
+    }
+    #f10-axis-svg path {
+      fill: none;
+      stroke: #000000;
+      stroke-width: 4;
+      stroke-linecap: square;
+    }
+    #f10-mark-svg {
+      z-index: 6;
+    }
+    #f10-redline {
+      fill: none;
+      stroke: #e5322d;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .f10-tick {
+      position: absolute;
+      left: 10px;
+      width: 116px;
+      text-align: right;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 32px;
+      letter-spacing: 0.02em;
+      color: #000000;
+      z-index: 3;
+    }
+
+    /* dotted guide at $20 — square dots, sits under the bars */
+    #f10-guide {
+      position: absolute;
+      left: 150px;
+      top: 240px;
+      width: 1130px;
+      height: 4px;
+      background-image: repeating-linear-gradient(
+        90deg,
+        #000000 0px,
+        #000000 8px,
+        transparent 8px,
+        transparent 18px
+      );
+      transform-origin: 0% 50%;
+      z-index: 1;
+    }
+
+    /* bars: y scale 18.4px per $ — $20 = 368px, $10 = 184px; baseline at y 610 */
+    .f10-bar {
+      position: absolute;
+      width: 100px;
+      box-sizing: border-box;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      transform-origin: 50% 100%;
+      z-index: 2;
+    }
+    .f10-blue {
+      background: #c0f7fe;
+    }
+    .f10-pink {
+      background: #fe90e8;
+    }
+
+    .f10-val {
+      position: absolute;
+      width: 100px;
+      text-align: center;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #000000;
+      z-index: 4;
+    }
+
+    .f10-cat {
+      position: absolute;
+      top: 636px;
+      width: 270px;
+      text-align: center;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      color: #000000;
+      z-index: 4;
+    }
+
+    #f10-dash4 {
+      position: absolute;
+      left: 1034px;
+      top: 540px;
+      width: 100px;
+      text-align: center;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 56px;
+      line-height: 1;
+      color: rgba(0, 0, 0, 0.35);
+      z-index: 4;
+    }
+
+    #f10-doubled {
+      position: absolute;
+      left: 834px;
+      top: 168px;
+      width: 184px;
+      box-sizing: border-box;
+      padding: 8px 0;
+      text-align: center;
+      background: #fe90e8;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #000000;
+      z-index: 5;
+    }
+    #f10-new {
+      position: absolute;
+      left: 1154px;
+      top: 190px;
+      width: 84px;
+      box-sizing: border-box;
+      padding: 6px 0;
+      text-align: center;
+      background: #f7cb46;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: #000000;
+      z-index: 5;
+    }
+
+    /* fact-checker handwriting — red ink, never a fill/border */
+    #f10-all20 {
+      position: absolute;
+      left: 1284px;
+      top: 200px;
+      padding: 10px 16px;
+      font-family: "Permanent Marker", sans-serif;
+      font-weight: 400;
+      font-size: 58px;
+      line-height: 1;
+      color: #e5322d;
+      white-space: nowrap;
+      transform-origin: 0% 50%;
+      z-index: 7;
+    }
+
+    #f10-stamp {
+      position: absolute;
+      left: 1242px;
+      top: 36px;
+      width: 336px;
+      box-sizing: border-box;
+      padding: 16px 0;
+      text-align: center;
+      background: #ffffff;
+      border: 4px solid #000000;
+      box-shadow:
+        inset 0 0 0 5px #ffffff,
+        inset 0 0 0 8px #000000,
+        8px 8px 0 #000000;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 48px;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: #000000;
+      transform-origin: 50% 50%;
+      z-index: 8;
+    }
+  </style>
+
+  <div id="root" data-composition-id="10-every-plan" data-width="1920" data-height="1080" data-duration="11.916">
+    <!-- Track 0: the paused-tape stage (static chrome, present from t=0) -->
+    <div
+      id="f10-stage"
+      class="clip"
+      data-start="0"
+      data-duration="11.916"
+      data-track-index="0"
+    >
+      <div class="f10-scan"></div>
+      <div class="f10-ghost-stripe"></div>
+      <svg class="f10-ghost-star" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <polygon
+          points="150,10 180.9,54.9 232.3,36.7 230.9,91.2 283.2,106.7 250,150 283.2,193.3 230.9,208.8 232.3,263.3 180.9,245.1 150,290 119.1,245.1 67.7,263.3 69.1,208.8 16.8,193.3 50,150 16.8,106.7 69.1,91.2 67.7,36.7 119.1,54.9"
+        />
+      </svg>
+      <div class="f10-osd">
+        <span class="f10-pause-ico"><i></i><i></i></span>
+        <span>PAUSE</span>
+        <span class="f10-sp">SP 0:07:42</span>
+      </div>
+      <div class="f10-fc-pill">FACT CHECK</div>
+    </div>
+
+    <!-- Track 1: the chart card (foreground subject) -->
+    <div
+      id="f10-content"
+      class="clip"
+      data-start="0"
+      data-duration="11.916"
+      data-track-index="1"
+    >
+      <div id="f10-cardwrap">
+        <div id="f10-cardshake">
+          <div id="f10-card">
+            <div class="f10-head">
+              <span id="f10-title" class="f10-pill">PRICE PER 1x OF PLUS USAGE</span>
+              <span id="f10-leg-a" class="f10-pill">UNTIL OCT 29</span>
+              <span id="f10-leg-b" class="f10-pill">FROM OCT 30</span>
+            </div>
+
+            <!-- $20 dotted guide (under the bars) -->
+            <div id="f10-guide"></div>
+
+            <!-- Bars — heights exact: $20 = 368px, $10 = 184px (y axis $0–$25 = 460px) -->
+            <div id="f10-b1a" class="f10-bar f10-blue" style="left: 224px; top: 242px; height: 368px"></div>
+            <div id="f10-b1b" class="f10-bar f10-pink" style="left: 336px; top: 242px; height: 368px"></div>
+            <div id="f10-b2a" class="f10-bar f10-blue" style="left: 494px; top: 242px; height: 368px"></div>
+            <div id="f10-b2b" class="f10-bar f10-pink" style="left: 606px; top: 242px; height: 368px"></div>
+            <div id="f10-b3a" class="f10-bar f10-blue" style="left: 764px; top: 426px; height: 184px"></div>
+            <div id="f10-b3b" class="f10-bar f10-pink" style="left: 876px; top: 242px; height: 368px"></div>
+            <div id="f10-b4b" class="f10-bar f10-pink" style="left: 1146px; top: 242px; height: 368px"></div>
+
+            <!-- Axis + ticks (drawn) -->
+            <svg id="f10-axis-svg" class="f10-svg" viewBox="0 0 1604 722" xmlns="http://www.w3.org/2000/svg">
+              <path id="f10-axis-y" d="M 150 150 L 150 610" />
+              <path id="f10-axis-x" d="M 150 610 L 1280 610" />
+              <path id="f10-tm20" d="M 136 242 L 150 242" />
+              <path id="f10-tm10" d="M 136 426 L 150 426" />
+              <path id="f10-tm0" d="M 136 610 L 150 610" />
+            </svg>
+            <div id="f10-tl20" class="f10-tick" style="top: 226px">$20</div>
+            <div id="f10-tl10" class="f10-tick" style="top: 410px">$10</div>
+            <div id="f10-tl0" class="f10-tick" style="top: 594px">$0</div>
+
+            <!-- Value labels on bar tops -->
+            <div id="f10-v1a" class="f10-val" style="left: 224px; top: 254px">$20</div>
+            <div id="f10-v1b" class="f10-val" style="left: 336px; top: 254px">$20</div>
+            <div id="f10-v2a" class="f10-val" style="left: 494px; top: 254px">$20</div>
+            <div id="f10-v2b" class="f10-val" style="left: 606px; top: 254px">$20</div>
+            <div id="f10-v3a" class="f10-val" style="left: 764px; top: 438px">$10</div>
+            <div id="f10-v3b" class="f10-val" style="left: 876px; top: 254px">$20</div>
+            <div id="f10-v4b" class="f10-val" style="left: 1146px; top: 254px">$20</div>
+
+            <!-- Missing before-bar for the brand-new plan -->
+            <div id="f10-dash4">&#8212;</div>
+
+            <!-- Category labels -->
+            <div id="f10-c1" class="f10-cat" style="left: 195px">PLUS</div>
+            <div id="f10-c2" class="f10-cat" style="left: 465px">PRO $100</div>
+            <div id="f10-c3" class="f10-cat" style="left: 735px">PRO $200</div>
+            <div id="f10-c4" class="f10-cat" style="left: 1005px">PRO $500</div>
+
+            <!-- Supporting tags -->
+            <div id="f10-doubled">DOUBLED</div>
+            <div id="f10-new">NEW</div>
+
+            <!-- Red marker: one flat line across every bar top at $20 -->
+            <svg id="f10-mark-svg" class="f10-svg" viewBox="0 0 1604 722" xmlns="http://www.w3.org/2000/svg">
+              <path
+                id="f10-redline"
+                d="M 198 243.5 C 380 240.5, 560 245, 740 242 S 1080 239.5, 1270 243"
+              />
+            </svg>
+            <div id="f10-all20">ALL $20</div>
+
+            <!-- Verdict stamp -->
+            <div id="f10-stamp">NO BULK<br />DISCOUNT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      function el(id) {
+        return document.getElementById(id);
+      }
+
+      // svg-path-draw setup: measure the real path length, one dash + a gap wider than the
+      // round/square cap so nothing peeks before the draw starts.
+      function prepDraw(id, fallbackLen) {
+        var p = el(id);
+        var len = 0;
+        try {
+          len = p.getTotalLength();
+        } catch (e) {
+          len = 0;
+        }
+        if (!len || !isFinite(len)) len = fallbackLen;
+        len = Math.ceil(len * 1.03) + 2;
+        p.style.strokeDasharray = len + " " + (len + 40);
+        return { node: p, start: len + 20 };
+      }
+
+      function draw(d, at, dur, ease) {
+        tl.fromTo(
+          d.node,
+          { strokeDashoffset: d.start },
+          { strokeDashoffset: 0, duration: dur, ease: ease || "power2.out" },
+          at,
+        );
+      }
+
+      function rise(target, at, dist, dur) {
+        tl.fromTo(
+          target,
+          { opacity: 0, y: dist },
+          { opacity: 1, y: 0, duration: dur || 0.35, ease: "power3.out" },
+          at,
+        );
+      }
+
+      function grow(target, at) {
+        tl.fromTo(
+          target,
+          { scaleY: 0, transformOrigin: "50% 100%" },
+          { scaleY: 1, duration: 0.6, ease: "power3.out" },
+          at,
+        );
+      }
+
+      function pop(target, at, rot) {
+        tl.fromTo(
+          target,
+          { opacity: 0, scale: 0.6, rotation: rot || 0 },
+          { opacity: 1, scale: 1, rotation: rot || 0, duration: 0.3, ease: "power3.out" },
+          at,
+        );
+      }
+
+      var axisY = prepDraw("f10-axis-y", 460);
+      var axisX = prepDraw("f10-axis-x", 1130);
+      var redLine = prepDraw("f10-redline", 1075);
+
+      // ---- Scene 1 (0.0–3.7s): card, axis, $20 guide, legend ----
+      // "Every" 0.30 — the chart card slides up onto the paused stage
+      tl.fromTo(
+        "#f10-cardwrap",
+        { y: 160, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+        0.3,
+      );
+      tl.fromTo(
+        "#f10-title",
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.35, ease: "power3.out" },
+        0.55,
+      );
+
+      // "plan" 1.36 — y-axis, then baseline, ticks top-down as the pen passes them
+      draw(axisY, 1.36, 0.4);
+      draw(axisX, 1.64, 0.55);
+      tl.fromTo(
+        ["#f10-tm20", "#f10-tl20"],
+        { opacity: 0, x: -10 },
+        { opacity: 1, x: 0, duration: 0.25, ease: "power3.out" },
+        1.42,
+      );
+      tl.fromTo(
+        ["#f10-tm10", "#f10-tl10"],
+        { opacity: 0, x: -10 },
+        { opacity: 1, x: 0, duration: 0.25, ease: "power3.out" },
+        1.53,
+      );
+      tl.fromTo(
+        ["#f10-tm0", "#f10-tl0"],
+        { opacity: 0, x: -10 },
+        { opacity: 1, x: 0, duration: 0.25, ease: "power3.out" },
+        1.66,
+      );
+
+      // "twenty" 2.39 — dotted guide at $20
+      tl.fromTo(
+        "#f10-guide",
+        { scaleX: 0, transformOrigin: "0% 50%" },
+        { scaleX: 1, duration: 0.55, ease: "power2.out" },
+        2.39,
+      );
+
+      // "unit." 3.12 — legend chips
+      pop("#f10-leg-a", 3.12);
+      pop("#f10-leg-b", 3.22);
+
+      // ---- Scene 2 (3.7–6.9s): bars grow on cue ----
+      // "Plus." 3.75
+      rise("#f10-c1", 3.75, 14);
+      grow("#f10-b1a", 3.75);
+      grow("#f10-b1b", 3.83);
+      rise("#f10-v1a", 4.15, 8, 0.3);
+      rise("#f10-v1b", 4.23, 8, 0.3);
+
+      // "Pro one hundred" 4.61
+      rise("#f10-c2", 4.61, 14);
+      grow("#f10-b2a", 4.61);
+      grow("#f10-b2b", 4.69);
+      rise("#f10-v2a", 5.01, 8, 0.3);
+      rise("#f10-v2b", 5.09, 8, 0.3);
+
+      // "Pro two hundred" 5.80 — before bar only reaches $10
+      rise("#f10-c3", 5.8, 14);
+      grow("#f10-b3a", 5.8);
+      rise("#f10-v3a", 6.2, 8, 0.3);
+      // 6.36 — after bar doubles to $20, DOUBLED tag pops above it
+      grow("#f10-b3b", 6.36);
+      rise("#f10-v3b", 6.76, 8, 0.3);
+      pop("#f10-doubled", 6.8, 4);
+
+      // ---- Scene 3 (6.9–9.4s): the brand-new plan ----
+      // "brand-new" 7.47 — PRO $500: no before-bar (grey dash), pink $20, NEW chip
+      rise("#f10-c4", 7.47, 14);
+      tl.fromTo(
+        "#f10-dash4",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: "power1.out" },
+        7.47,
+      );
+      grow("#f10-b4b", 7.55);
+      rise("#f10-v4b", 7.95, 8, 0.3);
+      pop("#f10-new", 8.05, -5);
+
+      // ---- Scene 4 (9.4–11.416s): the red marker verdict ----
+      // "No" 9.43 — one flat red line across every bar top at $20
+      draw(redLine, 9.43, 0.45, "power2.out");
+
+      // "discount." 9.98 — handwriting at the line's right end
+      tl.fromTo(
+        "#f10-all20",
+        { clipPath: "inset(0% 100% 0% 0%)", rotation: -5 },
+        { clipPath: "inset(0% 0% 0% 0%)", rotation: -5, duration: 0.45, ease: "none" },
+        9.98,
+      );
+
+      // "Anywhere." 10.75 — stamp slams onto the card's upper-right
+      tl.fromTo(
+        "#f10-stamp",
+        { opacity: 0, scale: 1.9, rotation: -14 },
+        { opacity: 1, scale: 1, rotation: -6, duration: 0.2, ease: "power4.in" },
+        10.75,
+      );
+      // impact thud on the card, then hold still
+      tl.fromTo(
+        "#f10-cardshake",
+        { x: 0, y: 0 },
+        { x: 4, y: 5, duration: 0.05, ease: "power2.out", immediateRender: false },
+        10.95,
+      );
+      tl.fromTo(
+        "#f10-cardshake",
+        { x: 4, y: 5 },
+        { x: 0, y: 0, duration: 0.25, ease: "power3.out", immediateRender: false },
+        11.0,
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["10-every-plan"] = tl;
+    })();
+  </script>
+</template>

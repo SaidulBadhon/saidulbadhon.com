@@ -1,0 +1,4 @@
+host-paul-excited ERR HeyGen POST /voices/speech → HTTP 400
+{"error":{"code":"invalid_parameter","doc_url":"https://developers.heygen.com/docs/error-codes#invalid-parameter","message":"VideoTTS cannot speak the script's language (bn) with this voice, which was designed in en. Supported languages: ar, be, bg, ca, cs, da, de, el, en, es, fa, fi, fr, he, hi, hr
+checker-elizabeth-serious ERR HeyGen POST /voices/speech → HTTP 400
+{"error":{"code":"invalid_parameter","doc_url":"https://developers.heygen.com/docs/error-codes#invalid-parameter","message":"The requested or saved voice engine is not available for speech generation. Check this voice's available_engines in List Voices and specify an allowed engine, or choose anothe

@@ -1,0 +1,614 @@
+<template>
+  <div id="root" data-composition-id="16-what-to-do" data-width="1920" data-height="1080" data-duration="14.036">
+    <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-900.woff2") format("woff2");
+        font-weight: 900;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Space Grotesk";
+        src: url("assets/fonts/space-grotesk-600.woff2") format("woff2");
+        font-weight: 600;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Space Grotesk";
+        src: url("assets/fonts/space-grotesk-700.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+        font-display: block;
+      }
+
+      #root {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: #000000;
+      }
+
+      /* ---------- CHECKER stage (paused tape) — static, full duration ---------- */
+      #f16-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #1b1b1f;
+      }
+      .f16-scan {
+        position: absolute;
+        inset: 0;
+        background-image: repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.05) 0px,
+          rgba(255, 255, 255, 0.05) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      }
+      .f16-ghost-star {
+        position: absolute;
+        left: 1690px;
+        top: 560px;
+        width: 300px;
+        height: 300px;
+        opacity: 0.08;
+        transform: rotate(12deg);
+        overflow: visible;
+      }
+      .f16-ghost-star polygon {
+        fill: none;
+        stroke: #ffffff;
+        stroke-width: 4;
+        stroke-linejoin: miter;
+      }
+      .f16-ghost-stripe {
+        position: absolute;
+        left: 1700px;
+        top: 430px;
+        width: 300px;
+        height: 84px;
+        box-sizing: border-box;
+        border: 3px solid #ffffff;
+        background-image: repeating-linear-gradient(
+          45deg,
+          #ffffff 0px,
+          #ffffff 12px,
+          transparent 12px,
+          transparent 24px
+        );
+        opacity: 0.08;
+        transform: rotate(-9deg);
+      }
+      .f16-osd {
+        position: absolute;
+        left: 60px;
+        top: 48px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 33px;
+        line-height: 1;
+        letter-spacing: 0.06em;
+        color: #ffffff;
+      }
+      .f16-pause-ico {
+        display: flex;
+        gap: 7px;
+      }
+      .f16-pause-ico i {
+        display: block;
+        width: 10px;
+        height: 30px;
+        background: #ffffff;
+      }
+      .f16-sp {
+        margin-left: 18px;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        font-size: 20px;
+        letter-spacing: 0.1em;
+      }
+      .f16-fc-pill {
+        position: absolute;
+        right: 60px;
+        top: 46px;
+        padding: 10px 22px;
+        background: #ffffff;
+        color: #000000;
+        border: 3px solid #000000;
+        border-radius: 9999px;
+        box-shadow: 4px 4px 0 #000000;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        line-height: 1;
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+      }
+
+      /* ---------- content layer: the decision card ---------- */
+      #f16-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        z-index: 8;
+      }
+      /* x 7–93%, y 12% → 880px (+8px shadow = 888, above the 896 keep-out) */
+      #f16-card {
+        position: absolute;
+        left: 134px;
+        top: 128px;
+        width: 1652px;
+        height: 752px;
+        box-sizing: border-box;
+        background: #ffffff;
+        border: 4px solid #000000;
+        box-shadow: 8px 8px 0 #000000;
+      }
+      /* all card children: coordinates inside the 1644×744 padding box */
+      #f16-tag {
+        position: absolute;
+        left: 44px;
+        top: -30px;
+        padding: 10px 22px;
+        background: #f7cb46;
+        border: 3px solid #000000;
+        border-radius: 9999px;
+        box-shadow: 4px 4px 0 #000000;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        line-height: 1;
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+      }
+      .f16-colhead {
+        position: absolute;
+        top: 52px;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 26px;
+        line-height: 1;
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+      }
+      #f16-head-l {
+        left: 48px;
+      }
+      #f16-head-r {
+        left: 720px;
+      }
+      #f16-rule {
+        position: absolute;
+        left: 48px;
+        top: 90px;
+        width: 1548px;
+        height: 4px;
+        background: #000000;
+      }
+      .f16-divider {
+        position: absolute;
+        left: 48px;
+        width: 1548px;
+        height: 3px;
+        background-image: repeating-linear-gradient(90deg, #000000 0px, #000000 14px, transparent 14px, transparent 26px);
+      }
+
+      /* row number squares (marker spring-pop) */
+      .f16-num {
+        position: absolute;
+        left: 48px;
+        width: 100px;
+        height: 100px;
+        box-sizing: border-box;
+        border: 3px solid #000000;
+        box-shadow: 4px 4px 0 #000000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 64px;
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
+      #f16-num-1 {
+        top: 146px;
+        background: #99e885;
+      }
+      #f16-num-2 {
+        top: 326px;
+        background: #f7cb46;
+      }
+      #f16-num-3 {
+        top: 584px;
+        background: #fe90e8;
+      }
+
+      /* condition pills (mask-wipe) — wrapper is the clip window, incl. the 4px shadow */
+      .f16-pillwrap {
+        position: absolute;
+        left: 168px;
+        width: 452px;
+        height: 92px;
+      }
+      #f16-pillwrap-1 {
+        top: 156px;
+      }
+      #f16-pillwrap-2 {
+        top: 336px;
+      }
+      #f16-pillwrap-3 {
+        top: 594px;
+      }
+      .f16-pill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 440px;
+        height: 80px;
+        box-sizing: border-box;
+        padding-left: 30px;
+        background: #c0f7fe;
+        border: 3px solid #000000;
+        border-radius: 9999px;
+        box-shadow: 4px 4px 0 #000000;
+        display: flex;
+        align-items: center;
+        font-weight: 900;
+        font-size: 34px;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      .f16-pill span {
+        display: inline-block;
+      }
+
+      /* red-marker arrows: condition → action (svg-path-draw) */
+      .f16-arrow {
+        position: absolute;
+        left: 612px;
+        width: 100px;
+        height: 44px;
+        overflow: visible;
+      }
+      #f16-arrow-1 {
+        top: 174px;
+      }
+      #f16-arrow-2 {
+        top: 354px;
+      }
+      #f16-arrow-3 {
+        top: 612px;
+      }
+      .f16-arrow path {
+        fill: none;
+        stroke: #e5322d;
+        stroke-width: 9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* actions (mask-wipe) */
+      .f16-act {
+        position: absolute;
+        left: 720px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+      }
+      #f16-act-1 {
+        top: 156px;
+      }
+      #f16-act-3 {
+        top: 594px;
+      }
+      .f16-wipe {
+        position: relative;
+        display: inline-block;
+        padding: 6px 10px 8px 0;
+      }
+      .f16-acttext {
+        display: inline-block;
+        font-weight: 900;
+        font-size: 33px;
+        line-height: 1.14;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      #f16-actwrap-2a {
+        position: absolute;
+        left: 720px;
+        top: 334px;
+      }
+      #f16-actwrap-2b {
+        position: absolute;
+        left: 720px;
+        top: 374px;
+      }
+      #f16-decide-tilt {
+        position: absolute;
+        left: 720px;
+        top: 428px;
+        transform: rotate(-2deg);
+        transform-origin: 0% 50%;
+      }
+      #f16-decidewrap {
+        display: inline-block;
+        padding: 0 10px 10px 0;
+      }
+      #f16-decide {
+        display: inline-block;
+        padding: 8px 18px;
+        background: #f7cb46;
+        border: 3px solid #000000;
+        box-shadow: 4px 4px 0 #000000;
+        font-weight: 900;
+        font-size: 33px;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+
+      /* status chips (card-small stickers) */
+      .f16-chip {
+        box-sizing: border-box;
+        border: 3px solid #000000;
+        box-shadow: 4px 4px 0 #000000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      #f16-chip-half {
+        position: absolute;
+        left: 530px;
+        top: 286px;
+        width: 140px;
+        height: 56px;
+        background: #fe90e8;
+        font-size: 38px;
+      }
+      #f16-chip-same,
+      #f16-chip-200 {
+        flex: 0 0 auto;
+        height: 52px;
+        padding: 0 16px;
+        background: #99e885;
+        font-size: 30px;
+      }
+      .f16-approx {
+        display: block;
+        width: 28px;
+        height: 28px;
+        overflow: visible;
+      }
+      .f16-approx path {
+        fill: none;
+        stroke: #000000;
+        stroke-width: 3.4;
+        stroke-linecap: round;
+      }
+    </style>
+
+    <!-- Track 0: the paused-tape stage (static chrome, present from t=0) -->
+    <div id="f16-stage" class="clip" data-start="0" data-duration="14.036" data-track-index="0">
+      <div class="f16-scan"></div>
+      <div class="f16-ghost-stripe"></div>
+      <svg class="f16-ghost-star" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <polygon
+          points="150,10 180.9,54.9 232.3,36.7 230.9,91.2 283.2,106.7 250,150 283.2,193.3 230.9,208.8 232.3,263.3 180.9,245.1 150,290 119.1,245.1 67.7,263.3 69.1,208.8 16.8,193.3 50,150 16.8,106.7 69.1,91.2 67.7,36.7 119.1,54.9"
+        />
+      </svg>
+      <div class="f16-osd">
+        <span class="f16-pause-ico"><i></i><i></i></span>
+        <span>PAUSE</span>
+        <span class="f16-sp">SP 0:12:30</span>
+      </div>
+      <div class="f16-fc-pill">FACT CHECK</div>
+    </div>
+
+    <!-- Track 1: the decision card (foreground subject) -->
+    <div id="f16-content" class="clip" data-start="0" data-duration="14.036" data-track-index="1">
+      <div id="f16-card">
+        <div id="f16-tag">WHAT TO DO</div>
+        <div id="f16-head-l" class="f16-colhead">IF YOU MOSTLY USE&hellip;</div>
+        <div id="f16-head-r" class="f16-colhead">DO THIS</div>
+        <div id="f16-rule"></div>
+        <div class="f16-divider" style="top: 292px"></div>
+        <div class="f16-divider" style="top: 540px"></div>
+
+        <!-- Row 1 — GPT-6 SOL → RELAX -->
+        <div id="f16-num-1" class="f16-num">1</div>
+        <div id="f16-pillwrap-1" class="f16-pillwrap">
+          <div class="f16-pill"><span id="f16-pilltxt-1">GPT-6 SOL</span></div>
+        </div>
+        <svg id="f16-arrow-1" class="f16-arrow" viewBox="0 0 100 44" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 25 C 24 18, 46 29, 66 21 S 84 19, 90 21" />
+          <path d="M73 8 L91 21 L74 35" />
+        </svg>
+        <div id="f16-act-1" class="f16-act">
+          <div id="f16-actwrap-1" class="f16-wipe">
+            <span id="f16-acttxt-1" class="f16-acttext">RELAX &mdash; YOU&rsquo;LL BARELY NOTICE</span>
+          </div>
+          <div id="f16-chip-same" class="f16-chip">
+            <svg class="f16-approx" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 9 C 6 6, 9 6, 12 9 S 18 12, 21 9" />
+              <path d="M3 16 C 6 13, 9 13, 12 16 S 18 19, 21 16" />
+            </svg>
+            <span>SAME</span>
+          </div>
+        </div>
+
+        <!-- Row 2 — ASTRA / GPT-6 PRO → SPEND THE OLD QUOTA + CREDIT, THEN DECIDE -->
+        <div id="f16-num-2" class="f16-num">2</div>
+        <div id="f16-pillwrap-2" class="f16-pillwrap">
+          <div class="f16-pill"><span id="f16-pilltxt-2">ASTRA / GPT-6 PRO</span></div>
+        </div>
+        <div id="f16-chip-half" class="f16-chip">&minus;50%</div>
+        <svg id="f16-arrow-2" class="f16-arrow" viewBox="0 0 100 44" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 23 C 26 28, 44 17, 64 23 S 83 21, 90 22" />
+          <path d="M74 9 L91 22 L73 36" />
+        </svg>
+        <div id="f16-actwrap-2a" class="f16-wipe">
+          <span id="f16-acttxt-2a" class="f16-acttext">USE THE OLD QUOTA (TO OCT 29)</span>
+        </div>
+        <div id="f16-actwrap-2b" class="f16-wipe">
+          <span id="f16-acttxt-2b" class="f16-acttext">+ THE $2,500 CREDIT</span>
+        </div>
+        <div id="f16-decide-tilt">
+          <div id="f16-decidewrap">
+            <div id="f16-decide">&hellip;THEN DECIDE</div>
+          </div>
+        </div>
+
+        <!-- Row 3 — HEAVY CODEX → TRY CLAUDE MAX 20x -->
+        <div id="f16-num-3" class="f16-num">3</div>
+        <div id="f16-pillwrap-3" class="f16-pillwrap">
+          <div class="f16-pill"><span id="f16-pilltxt-3">HEAVY CODEX USE</span></div>
+        </div>
+        <svg id="f16-arrow-3" class="f16-arrow" viewBox="0 0 100 44" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 24 C 22 17, 47 28, 67 20 S 85 22, 90 21" />
+          <path d="M72 7 L91 21 L75 34" />
+        </svg>
+        <div id="f16-act-3" class="f16-act">
+          <div id="f16-actwrap-3" class="f16-wipe">
+            <span id="f16-acttxt-3" class="f16-acttext">TRY CLAUDE MAX 20x FOR A MONTH</span>
+          </div>
+          <div id="f16-chip-200" class="f16-chip">SAME $200</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+        var tl = gsap.timeline({ paused: true });
+        var DUR = 13.636;
+
+        // Measured word onsets from the voice track (seconds from frame start).
+        var CUE = {
+          card: 0.3, // "So what"
+          mostly: 1.24,
+          sol: 1.75, // "GPT-6 Sol?"
+          relax: 3.2,
+          rely: 3.97,
+          astra: 4.35, // "Astra or GPT-6 Pro?"
+          half: 6.61, // "losing half"
+          useUp: 7.17,
+          decide: 9.0, // "then decide"
+          heavy: 10.24,
+          codex: 10.5, // "Codex user?"
+          claude: 11.48, // "Try Claude Max"
+          month: 13.18,
+        };
+
+        // Marker spring-pop (spring-pop-entrance, CHECKER register: power3 settle, no overshoot).
+        // The tilt is held constant through the pop — only scale / opacity / a small rise animate.
+        function pop(sel, at, rot, dur) {
+          tl.fromTo(
+            sel,
+            { scale: 0, opacity: 0, y: 14, rotation: rot, transformOrigin: "50% 50%" },
+            { scale: 1, opacity: 1, y: 0, rotation: rot, duration: dur || 0.5, ease: "power3.out" },
+            at,
+          );
+        }
+
+        // Pill / label mask-wipe (clip-path reveal): the window opens left → right while the
+        // content slides a short way through it.
+        function wipe(wrapSel, innerSel, at, dur) {
+          var d = dur || 0.55;
+          tl.fromTo(
+            wrapSel,
+            { clipPath: "inset(0% 100% 0% 0%)" },
+            { clipPath: "inset(0% 0% 0% 0%)", duration: d, ease: "power3.out" },
+            at,
+          );
+          tl.fromTo(innerSel, { x: -26 }, { x: 0, duration: d + 0.1, ease: "power3.out" }, at);
+        }
+
+        // Red-marker draw-in (svg-path-draw): measured length, shaft first, head at ~75%.
+        function draw(svgSel, at) {
+          var paths = document.querySelectorAll(svgSel + " path");
+          var shaftDur = 0.3;
+          for (var i = 0; i < paths.length; i++) {
+            var p = paths[i];
+            var len = (p.getTotalLength ? p.getTotalLength() : 0) || 110;
+            len = len * 1.05;
+            p.style.strokeDasharray = len + " " + len * 2;
+            tl.fromTo(
+              p,
+              { strokeDashoffset: len + 12 },
+              { strokeDashoffset: 0, duration: i === 0 ? shaftDur : 0.18, ease: "power2.out" },
+              i === 0 ? at : at + shaftDur * 0.75,
+            );
+          }
+        }
+
+        // Scene 1 (0.0–1.24) — the white decision card slides up onto the paused stage;
+        // label-pill + column headers settle in.
+        tl.fromTo("#f16-card", { y: 60 }, { y: 0, duration: 0.75, ease: "power3.out" }, CUE.card);
+        tl.fromTo("#f16-card", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, CUE.card);
+        pop("#f16-tag", 0.52, -3, 0.45);
+        tl.fromTo(
+          "#f16-rule",
+          { scaleX: 0, transformOrigin: "0% 50%" },
+          { scaleX: 1, duration: 0.6, ease: "power3.out" },
+          0.62,
+        );
+        tl.fromTo("#f16-head-l", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.66);
+        tl.fromTo("#f16-head-r", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.8);
+
+        // Scene 2 (1.24–3.97) — row 1: square "1" pops, GPT-6 SOL wipes, arrow draws, RELAX + ≈ SAME.
+        pop("#f16-num-1", CUE.mostly, -3);
+        wipe("#f16-pillwrap-1", "#f16-pilltxt-1", CUE.sol);
+        draw("#f16-arrow-1", CUE.relax - 0.12);
+        wipe("#f16-actwrap-1", "#f16-acttxt-1", CUE.relax, 0.6);
+        pop("#f16-chip-same", CUE.relax + 0.42, 4, 0.45);
+
+        // Scene 3 (3.97–10.24) — row 2: square "2", ASTRA / GPT-6 PRO, −50% sticker at the pill's end,
+        // arrow + two-line action, then the "…THEN DECIDE" line.
+        pop("#f16-num-2", CUE.rely, 3);
+        wipe("#f16-pillwrap-2", "#f16-pilltxt-2", CUE.astra);
+        pop("#f16-chip-half", CUE.half, -5, 0.45);
+        draw("#f16-arrow-2", CUE.useUp - 0.12);
+        wipe("#f16-actwrap-2a", "#f16-acttxt-2a", CUE.useUp, 0.6);
+        wipe("#f16-actwrap-2b", "#f16-acttxt-2b", CUE.useUp + 0.4, 0.6);
+        wipe("#f16-decidewrap", "#f16-decide", CUE.decide, 0.5);
+
+        // Scene 4 (10.24–13.636) — row 3: square "3", HEAVY CODEX USE, arrow + TRY CLAUDE MAX 20x,
+        // SAME $200 chip on "month." — then hold (rows stay lit; no exit).
+        pop("#f16-num-3", CUE.heavy, -3);
+        wipe("#f16-pillwrap-3", "#f16-pilltxt-3", CUE.codex);
+        draw("#f16-arrow-3", CUE.claude - 0.12);
+        wipe("#f16-actwrap-3", "#f16-acttxt-3", CUE.claude, 0.6);
+        pop("#f16-chip-200", CUE.month, -4, 0.4);
+
+        // Pin the timeline length to the frame duration (held, still).
+        tl.set({}, {}, DUR);
+
+        window.__timelines["16-what-to-do"] = tl;
+      })();
+    </script>
+  </div>
+</template>

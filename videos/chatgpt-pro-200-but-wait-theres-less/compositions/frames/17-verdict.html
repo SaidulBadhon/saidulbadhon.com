@@ -1,0 +1,538 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Inter";
+      src: url("assets/fonts/inter-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+    }
+
+    /* full-bleed inverted ground */
+    #f17-ground {
+      position: absolute;
+      inset: 0;
+      background: #000000;
+    }
+    #f17-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* BlockFrame close-frame: black, white 0.4cqw border, 1.2cqw yellow hard shadow */
+    #f17-frame {
+      position: absolute;
+      left: 18cqw;
+      top: 14cqh;
+      width: 64cqw;
+      height: 66cqh;
+      box-sizing: border-box;
+      background: #000000;
+      border: 0.4cqw solid #ffffff;
+      box-shadow: 1.2cqw 1.2cqw 0 #f7cb46;
+      overflow: hidden;
+    }
+
+    /* inverted label-pill straddling the frame's top edge */
+    #f17-pill {
+      position: absolute;
+      left: 22cqw;
+      top: calc(14cqh - 1.4cqw);
+      padding: 0.45cqw 1.2cqw;
+      background: #ffffff;
+      border: 0.3cqw solid #000000;
+      border-radius: 9999px;
+      box-shadow: 0.4cqw 0.4cqw 0 #ffffff;
+      font-family: "Space Grotesk";
+      font-weight: 700;
+      font-size: 1.3cqw;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #000000;
+      white-space: nowrap;
+      transform: rotate(-3deg);
+    }
+
+    /* pink star-burst puncturing the top-right corner */
+    #f17-star {
+      position: absolute;
+      left: 77.1875cqw;
+      top: 3.8542cqw;
+      width: 9.1667cqw;
+      height: 9.1667cqw;
+      overflow: visible;
+      transform: rotate(12deg);
+    }
+
+    /* ---------- Scene 1–2: the checklist ---------- */
+    #f17-list {
+      position: absolute;
+      left: 9.6cqw;
+      top: calc(50% - 10.4cqw);
+      width: 44cqw;
+      display: flex;
+      flex-direction: column;
+      gap: 2.6cqw;
+      transform-origin: 50% 0%;
+    }
+    .f17-row {
+      position: relative;
+      height: 5.2cqw;
+      display: flex;
+      align-items: center;
+      gap: 1.6cqw;
+    }
+    .f17-mask {
+      flex: none;
+      overflow: hidden;
+      padding: 0.3cqw 0;
+    }
+    .f17-row-text {
+      display: block;
+      font-family: "Inter";
+      font-weight: 900;
+      font-size: 4.2cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .f17-leader {
+      flex: 1;
+      height: 0;
+      align-self: flex-end;
+      margin-bottom: 1.05cqw;
+      border-bottom: 0.3cqw dotted rgba(255, 255, 255, 0.5);
+      transform-origin: 0% 50%;
+    }
+    .f17-box {
+      flex: none;
+      position: relative;
+      width: 5.2cqw;
+      height: 5.2cqw;
+      box-sizing: border-box;
+      border: 0.4cqw solid #ffffff;
+      transform-origin: 50% 50%;
+    }
+    .f17-check {
+      position: absolute;
+      left: -0.4cqw;
+      top: -2cqw;
+      width: 6.4cqw;
+      height: 7.2cqw;
+      overflow: visible;
+    }
+    .f17-check path {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 13;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+    }
+    .f17-x {
+      position: absolute;
+      left: -3.0042cqw;
+      top: -3.0042cqw;
+      width: 10.4167cqw;
+      height: 10.4167cqw;
+      overflow: visible;
+    }
+    /* red marker: hand-drawn strokes only, round caps/joins */
+    .f17-x path {
+      fill: none;
+      stroke: #e5322d;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #f17-x1,
+    #f17-x2 {
+      opacity: 0;
+    }
+
+    /* ---------- Scene 3–4: the award ---------- */
+    #f17-award {
+      position: absolute;
+      inset: 0;
+    }
+    .f17-tail {
+      position: absolute;
+      top: 13.3333cqw;
+      width: 6.6667cqw;
+      height: 14.0625cqw;
+      overflow: visible;
+      transform-origin: 46.875% 2.222%;
+    }
+    #f17-tail-l {
+      left: 25.2458cqw;
+    }
+    #f17-tail-r {
+      left: 31.7042cqw;
+    }
+    .f17-tail .f17-tail-sh {
+      fill: #ffffff;
+      stroke: #ffffff;
+      stroke-width: 11.52;
+      stroke-linejoin: miter;
+    }
+    .f17-tail .f17-tail-body {
+      fill: #ffdc8b;
+      stroke: #000000;
+      stroke-width: 11.52;
+      stroke-linejoin: miter;
+    }
+
+    #f17-plate-fade {
+      position: absolute;
+      left: 24.5688cqw;
+      top: 19.7396cqw;
+      width: 14.0625cqw;
+      height: 6.1979cqw;
+    }
+    #f17-plate-drop {
+      position: absolute;
+      inset: 0;
+    }
+    /* card-small name plate; pivots on its right hook */
+    #f17-plate {
+      position: absolute;
+      inset: 0;
+      box-sizing: border-box;
+      background: #ffffff;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #ffffff;
+      transform-origin: 86.667% 15.966%;
+    }
+    .f17-hole {
+      position: absolute;
+      top: 0.4292cqw;
+      width: 1.4583cqw;
+      height: 1.4583cqw;
+      background: #000000;
+    }
+    #f17-hole-l {
+      left: 0.8458cqw;
+    }
+    #f17-hole-r {
+      left: 11.1583cqw;
+    }
+    .f17-plate-text {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0.7cqw;
+      text-align: center;
+      font-family: "Inter";
+      font-weight: 900;
+      font-size: 2.8cqw;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #000000;
+      white-space: nowrap;
+    }
+
+    .f17-hook {
+      position: absolute;
+      top: 12.9167cqw;
+      width: 2.0833cqw;
+      height: 8.3333cqw;
+      overflow: visible;
+      transform-origin: 35% 0%;
+    }
+    #f17-hook-l {
+      left: 25.2979cqw;
+    }
+    #f17-hook-r {
+      left: 35.6104cqw;
+    }
+    .f17-hook .f17-hook-edge {
+      fill: none;
+      stroke: #000000;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .f17-hook .f17-hook-core {
+      fill: none;
+      stroke: #f7cb46;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #f17-rosette {
+      position: absolute;
+      left: 22.225cqw;
+      top: 2.1875cqw;
+      width: 19.375cqw;
+      height: 19.375cqw;
+      transform-origin: 48.387% 48.387%;
+    }
+    .f17-rosette-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .f17-ros-sh {
+      fill: #ffffff;
+      stroke: #ffffff;
+      stroke-width: 10;
+      stroke-linejoin: miter;
+    }
+    .f17-ros {
+      fill: #f7cb46;
+      stroke: #000000;
+      stroke-width: 10;
+      stroke-linejoin: miter;
+    }
+    .f17-ros-text {
+      position: absolute;
+      left: 0;
+      top: 4.22cqw;
+      width: 18.75cqw;
+      text-align: center;
+    }
+    .f17-ros-line {
+      font-family: "Inter";
+      font-weight: 900;
+      font-size: 3.8cqw;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: #000000;
+      white-space: nowrap;
+    }
+    .f17-sub-wrap {
+      margin-top: 0.6cqw;
+    }
+    #f17-sub {
+      display: inline-block;
+      padding: 0.45cqw 0.9cqw;
+      background: #ffffff;
+      border: 0.3cqw solid #000000;
+      border-radius: 9999px;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      font-family: "Space Grotesk";
+      font-weight: 700;
+      font-size: 1.4cqw;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #000000;
+      white-space: nowrap;
+      transform-origin: 50% 50%;
+    }
+  </style>
+
+  <div id="root" data-composition-id="17-verdict" data-width="1920" data-height="1080" data-duration="9.064">
+    <div id="f17-ground" class="clip" data-start="0" data-duration="9.064" data-track-index="0"></div>
+
+    <div id="f17-stage" class="clip" data-start="0" data-duration="9.064" data-track-index="1">
+      <div id="f17-frame">
+        <!-- Scene 1–2: NAME ✓  PRICE ✓  PLAN ✗ -->
+        <div id="f17-list">
+          <div class="f17-row">
+            <div class="f17-mask"><div id="f17-t1" class="f17-row-text">The name</div></div>
+            <div id="f17-l1" class="f17-leader"></div>
+            <div id="f17-box1" class="f17-box">
+              <svg class="f17-check" viewBox="0 0 123 138" xmlns="http://www.w3.org/2000/svg">
+                <path id="f17-c1" d="M 20 84 L 44 108 L 108 18" />
+              </svg>
+            </div>
+          </div>
+          <div class="f17-row">
+            <div class="f17-mask"><div id="f17-t2" class="f17-row-text">The price</div></div>
+            <div id="f17-l2" class="f17-leader"></div>
+            <div id="f17-box2" class="f17-box">
+              <svg class="f17-check" viewBox="0 0 123 138" xmlns="http://www.w3.org/2000/svg">
+                <path id="f17-c2" d="M 20 84 L 44 108 L 108 18" />
+              </svg>
+            </div>
+          </div>
+          <div class="f17-row">
+            <div class="f17-mask"><div id="f17-t3" class="f17-row-text">The plan</div></div>
+            <div id="f17-l3" class="f17-leader"></div>
+            <div id="f17-box3" class="f17-box">
+              <svg class="f17-x" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path id="f17-x1" d="M 30 36 C 66 68, 112 124, 172 168" />
+                <path id="f17-x2" d="M 168 30 C 134 70, 76 120, 32 172" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3–4: BEST VALUE rosette + OPENAI name plate on two hooks -->
+        <div id="f17-award">
+          <svg id="f17-tail-l" class="f17-tail" viewBox="0 0 128 270" xmlns="http://www.w3.org/2000/svg">
+            <polygon class="f17-tail-sh" points="13.7,13.7 121.7,13.7 121.7,263.7 67.7,225.7 13.7,263.7" />
+            <polygon class="f17-tail-body" points="6,6 114,6 114,256 60,218 6,256" />
+          </svg>
+          <svg id="f17-tail-r" class="f17-tail" viewBox="0 0 128 270" xmlns="http://www.w3.org/2000/svg">
+            <polygon class="f17-tail-sh" points="13.7,13.7 121.7,13.7 121.7,263.7 67.7,225.7 13.7,263.7" />
+            <polygon class="f17-tail-body" points="6,6 114,6 114,256 60,218 6,256" />
+          </svg>
+
+          <div id="f17-plate-fade">
+            <div id="f17-plate-drop">
+              <div id="f17-plate">
+                <div id="f17-hole-l" class="f17-hole"></div>
+                <div id="f17-hole-r" class="f17-hole"></div>
+                <div class="f17-plate-text">OpenAI</div>
+              </div>
+            </div>
+          </div>
+
+          <svg id="f17-hook-l" class="f17-hook" viewBox="0 0 40 160" xmlns="http://www.w3.org/2000/svg">
+            <path class="f17-hook-edge" d="M 14 0 L 14 136 Q 14 150 22 150 Q 30 150 30 140" />
+            <path class="f17-hook-core" d="M 14 0 L 14 136 Q 14 150 22 150 Q 30 150 30 140" />
+          </svg>
+          <svg id="f17-hook-r" class="f17-hook" viewBox="0 0 40 160" xmlns="http://www.w3.org/2000/svg">
+            <path class="f17-hook-edge" d="M 14 0 L 14 136 Q 14 150 22 150 Q 30 150 30 140" />
+            <path class="f17-hook-core" d="M 14 0 L 14 136 Q 14 150 22 150 Q 30 150 30 140" />
+          </svg>
+
+          <div id="f17-rosette">
+            <svg class="f17-rosette-svg" viewBox="0 0 372 372" xmlns="http://www.w3.org/2000/svg">
+              <polygon class="f17-ros-sh" points="191.5,21.5 236.6,52.6 291.4,54.0 309.6,105.7 353.2,139.0 337.5,191.5 353.2,244.0 309.6,277.3 291.4,329.0 236.6,330.4 191.5,361.5 146.4,330.4 91.6,329.0 73.4,277.3 29.8,244.0 45.5,191.5 29.8,139.0 73.4,105.7 91.6,54.0 146.4,52.6" />
+              <polygon class="f17-ros" points="180.0,10.0 225.1,41.1 279.9,42.5 298.1,94.2 341.7,127.5 326.0,180.0 341.7,232.5 298.1,265.8 279.9,317.5 225.1,318.9 180.0,350.0 134.9,318.9 80.1,317.5 61.9,265.8 18.3,232.5 34.0,180.0 18.3,127.5 61.9,94.2 80.1,42.5 134.9,41.1" />
+            </svg>
+            <div data-layout-allow-overlap class="f17-ros-text">
+              <div data-layout-allow-overlap class="f17-ros-line">Best</div>
+              <div data-layout-allow-overlap class="f17-ros-line">Value</div>
+              <div data-layout-allow-overlap class="f17-sub-wrap"><span data-layout-allow-overlap id="f17-sub">In AI coding</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="f17-pill">The verdict</div>
+
+      <svg id="f17-star" viewBox="0 0 176 176" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="91.7,13.7 109.0,38.4 137.5,28.6 137.0,58.8 165.9,67.6 147.7,91.7 165.9,115.8 137.0,124.6 137.5,154.8 109.0,145.0 91.7,169.7 74.4,145.0 45.9,154.8 46.4,124.6 17.5,115.8 35.7,91.7 17.5,67.6 46.4,58.8 45.9,28.6 74.4,38.4" fill="#ffffff" stroke="#ffffff" stroke-width="8" stroke-linejoin="miter" />
+        <polygon points="84.0,6.0 101.3,30.7 129.8,20.9 129.3,51.1 158.2,59.9 140.0,84.0 158.2,108.1 129.3,116.9 129.8,147.1 101.3,137.3 84.0,162.0 66.7,137.3 38.2,147.1 38.7,116.9 9.8,108.1 28.0,84.0 9.8,59.9 38.7,51.1 38.2,20.9 66.7,30.7" fill="#fe90e8" stroke="#000000" stroke-width="8" stroke-linejoin="miter" />
+      </svg>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      // svg-path-draw: dasharray = measured length, dashoffset length -> 0.
+      function primeStroke(sel, fallback) {
+        var el = document.querySelector(sel);
+        var len = 0;
+        if (el && typeof el.getTotalLength === "function") {
+          try {
+            len = el.getTotalLength();
+          } catch (e) {
+            len = 0;
+          }
+        }
+        if (!(len > 0)) len = fallback;
+        len = Math.ceil(len * 1.05);
+        gsap.set(sel, { strokeDasharray: len, strokeDashoffset: len });
+        return len;
+      }
+      var lenC1 = primeStroke("#f17-c1", 145);
+      var lenC2 = primeStroke("#f17-c2", 145);
+      var lenX1 = primeStroke("#f17-x1", 205);
+      var lenX2 = primeStroke("#f17-x2", 205);
+
+      // ---- Scene 1 (0.0–2.9s): plate holds; empty ballot boxes land, rows fill on their words ----
+      tl.fromTo("#f17-box1", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.12);
+      tl.fromTo("#f17-box2", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.19);
+      tl.fromTo("#f17-box3", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.26);
+
+      // "name" @1.36
+      tl.fromTo("#f17-t1", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "power3.out" }, 1.32);
+      tl.fromTo("#f17-l1", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 1.4);
+      tl.fromTo("#f17-c1", { strokeDashoffset: lenC1 }, { strokeDashoffset: 0, duration: 0.32, ease: "power2.out" }, 1.54);
+
+      // "price." @2.22
+      tl.fromTo("#f17-t2", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "power3.out" }, 2.18);
+      tl.fromTo("#f17-l2", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 2.26);
+      tl.fromTo("#f17-c2", { strokeDashoffset: lenC2 }, { strokeDashoffset: 0, duration: 0.32, ease: "power2.out" }, 2.4);
+
+      // ---- Scene 2 (2.9–4.2s): "plan." @3.50 — row lands, red marker X in two strokes ----
+      tl.fromTo("#f17-t3", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "power3.out" }, 3.46);
+      tl.fromTo("#f17-l3", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 3.54);
+      tl.set("#f17-x1", { opacity: 1 }, 3.6);
+      tl.fromTo("#f17-x1", { strokeDashoffset: lenX1 }, { strokeDashoffset: 0, duration: 0.16, ease: "power2.out" }, 3.6);
+      tl.set("#f17-x2", { opacity: 1 }, 3.76);
+      tl.fromTo("#f17-x2", { strokeDashoffset: lenX2 }, { strokeDashoffset: 0, duration: 0.17, ease: "power2.out" }, 3.76);
+
+      // ---- Scene 3 (4.2–7.6s): scale-swap — checklist shrinks/fades toward the top, rosette arrives ----
+      // "The best" @4.27
+      tl.to("#f17-list", { scale: 0.72, y: -70, duration: 0.3, ease: "power2.in" }, 4.27);
+      tl.to("#f17-list", { opacity: 0, duration: 0.3, ease: "none" }, 4.27);
+      tl.fromTo(
+        "#f17-rosette",
+        { scale: 0.72, opacity: 0, rotation: -16 },
+        { scale: 1, opacity: 1, rotation: -4, duration: 0.65, ease: "expo.out" },
+        4.42
+      );
+      tl.fromTo(
+        "#f17-tail-l",
+        { opacity: 0, rotation: 0, scaleY: 0.4 },
+        { opacity: 1, rotation: 26, scaleY: 1, duration: 0.55, ease: "power3.out" },
+        4.62
+      );
+      tl.fromTo(
+        "#f17-tail-r",
+        { opacity: 0, rotation: 0, scaleY: 0.4 },
+        { opacity: 1, rotation: -26, scaleY: 1, duration: 0.55, ease: "power3.out" },
+        4.67
+      );
+      // "in AI coding" @5.08
+      tl.fromTo(
+        "#f17-sub",
+        { opacity: 0, scale: 0.6, rotation: -6 },
+        { opacity: 1, scale: 1, rotation: 3, duration: 0.4, ease: "power3.out" },
+        5.06
+      );
+      // empty hooks lower from behind the rosette on "coding"
+      tl.fromTo("#f17-hook-l", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 5.52);
+      tl.fromTo("#f17-hook-r", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 5.58);
+      // "OpenAI's" @6.49 — name plate drops onto the hooks and settles
+      tl.fromTo("#f17-plate-fade", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 6.45);
+      tl.fromTo("#f17-plate-drop", { y: -80 }, { y: 0, duration: 0.26, ease: "power2.in" }, 6.45);
+      tl.to("#f17-plate-drop", { y: 7, duration: 0.07, ease: "power1.out" }, 6.71);
+      tl.to("#f17-plate-drop", { y: 0, duration: 0.34, ease: "power3.out" }, 6.78);
+
+      // ---- Scene 4 (7.6–9.064s): "Today…" @7.72 left hook lets go, plate swings on its right hook ----
+      tl.to("#f17-hook-l", { rotation: 16, duration: 0.12, ease: "power2.out" }, 7.72);
+      tl.to("#f17-hook-l", { rotation: 0, duration: 0.5, ease: "power3.out" }, 7.84);
+      tl.to("#f17-plate", { rotation: -86, duration: 0.5, ease: "power2.inOut" }, 7.74);
+      tl.to("#f17-plate", { rotation: -68, duration: 0.28, ease: "power2.inOut" }, 8.24);
+      // "doesn't." @8.53 — plate drops straight out of the frame; two empty hooks hold
+      tl.to("#f17-plate", { y: 460, duration: 0.36, ease: "power3.in" }, 8.53);
+      tl.to("#f17-hook-r", { rotation: -10, duration: 0.1, ease: "power2.out" }, 8.53);
+      tl.to("#f17-hook-r", { rotation: 0, duration: 0.4, ease: "power3.out" }, 8.63);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["17-verdict"] = tl;
+    })();
+  </script>
+</template>

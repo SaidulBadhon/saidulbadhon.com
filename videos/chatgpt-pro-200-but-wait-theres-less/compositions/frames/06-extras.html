@@ -1,0 +1,696 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Inter";
+      src: url("assets/fonts/inter-800.woff2") format("woff2");
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Inter";
+      src: url("assets/fonts/inter-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-600.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Inter", sans-serif;
+      color: #000000;
+    }
+
+    /* ---- full-bleed ground (clip, lowest track) ---- */
+    #f06-bg {
+      position: absolute;
+      inset: 0;
+      background: #c0f7fe;
+      overflow: hidden;
+    }
+    #f06-dots {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 33.4cqw;
+      height: 22cqw;
+      background-image: radial-gradient(circle, #000000 0.12cqw, transparent 0.15cqw);
+      background-size: 2.08cqw 2.08cqw;
+      background-position: 1.04cqw 1.04cqw;
+      opacity: 0.26;
+    }
+    #f06-stripe {
+      position: absolute;
+      left: 69.3cqw;
+      top: 8.1cqw;
+      width: 36.5cqw;
+      height: 5cqw;
+      box-sizing: border-box;
+      border: 0.3cqw solid #000000;
+      background: repeating-linear-gradient(45deg, #000000 0 0.75cqw, #f7cb46 0.75cqw 1.5cqw);
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      transform: rotate(-5deg);
+      transform-origin: 0% 50%;
+    }
+
+    /* ---- content stage ---- */
+    #f06-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* eyebrow + heading */
+    #f06-head {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 3.2cqw;
+      text-align: center;
+    }
+    #f06-pill {
+      display: inline-block;
+      padding: 0.45cqw 1.25cqw;
+      background: #f7cb46;
+      border: 0.3cqw solid #000000;
+      border-radius: 9999px;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 600;
+      font-size: 1.15cqw;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+      transform-origin: 50% 50%;
+    }
+    #f06-heading {
+      margin-top: 1.1cqw;
+      font-weight: 800;
+      font-size: 3.3cqw;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .f06-word {
+      display: inline-block;
+      transform-origin: 50% 60%;
+    }
+
+    /* bonus cards (card-elevated) */
+    .f06-card {
+      position: absolute;
+      top: 13.65cqw;
+      width: 28.55cqw;
+      height: 28.15cqw;
+      box-sizing: border-box;
+      background: #ffffff;
+      border: 0.4cqw solid #000000;
+      box-shadow: 0.8cqw 0.8cqw 0 #000000;
+      transform-origin: 50% 50%;
+    }
+    #f06-card1 {
+      left: 3.44cqw;
+    }
+    #f06-card2 {
+      left: 35.73cqw;
+    }
+    #f06-card3 {
+      left: 68.02cqw;
+    }
+    .f06-tag {
+      position: absolute;
+      top: -1.25cqw;
+      left: 1.4cqw;
+      padding: 0.35cqw 0.9cqw;
+      background: #ffffff;
+      border: 0.3cqw solid #000000;
+      border-radius: 9999px;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 600;
+      font-size: 0.95cqw;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+      transform: rotate(-3deg);
+    }
+    .f06-icon {
+      position: absolute;
+      left: 1.5cqw;
+      right: 1.5cqw;
+      top: 2.3cqw;
+      height: 17.2cqw;
+      box-sizing: border-box;
+      border: 0.3cqw solid #000000;
+    }
+    .f06-icon svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .f06-icon-pink {
+      background: #fe90e8;
+    }
+    .f06-icon-green {
+      background: #99e885;
+    }
+    .f06-icon-yellow {
+      background: #f7cb46;
+    }
+    .f06-ctitle {
+      position: absolute;
+      left: 1.5cqw;
+      right: 1.5cqw;
+      top: 20.9cqw;
+      font-weight: 900;
+      font-size: 2.5cqw;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .f06-ast {
+      position: relative;
+      top: -0.5em;
+      font-size: 0.6em;
+    }
+
+    /* number wheel (scoped adaptation of compositions/components/number-wheel.html) */
+    .f06-numrow {
+      display: flex;
+      align-items: flex-start;
+      height: 1em;
+    }
+    .f06-ch {
+      display: block;
+      height: 1em;
+      line-height: 1em;
+    }
+    .f06-wheel {
+      display: flex;
+      align-items: flex-start;
+      font-variant-numeric: tabular-nums;
+    }
+    .f06-wheel-digit {
+      display: block;
+      height: 1em;
+      overflow: hidden;
+    }
+    .f06-wheel-strip {
+      display: grid;
+      will-change: transform;
+    }
+    .f06-wheel-strip span {
+      display: block;
+      height: 1em;
+      line-height: 1em;
+      letter-spacing: 0;
+    }
+
+    /* empty third slot */
+    #f06-slot {
+      position: absolute;
+      left: 68.02cqw;
+      top: 13.65cqw;
+      width: 28.55cqw;
+      height: 28.15cqw;
+      box-sizing: border-box;
+      border: 0.4cqw dashed #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+    }
+    #f06-q {
+      display: inline-block;
+      font-weight: 900;
+      font-size: 12cqw;
+      line-height: 1;
+      transform-origin: 50% 70%;
+    }
+
+    /* BONUS! star-burst */
+    #f06-star {
+      position: absolute;
+      left: 82.55cqw;
+      top: 0.3cqw;
+      width: 15.1cqw;
+      height: 15.1cqw;
+      transform-origin: 50% 50%;
+    }
+    #f06-star-in {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 50%;
+    }
+    #f06-star-in svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #f06-star-txt {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 2.3cqw;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    /* fine print */
+    #f06-fine {
+      position: absolute;
+      right: 3.33cqw;
+      top: 44.1cqw;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 600;
+      font-size: 0.95cqw;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    /* VHS OSD */
+    #f06-osd {
+      position: absolute;
+      left: 3.125cqw;
+      top: 2.4cqw;
+      display: flex;
+      align-items: center;
+      gap: 0.6cqw;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 1.7cqw;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow:
+        3px 0 0 #000000,
+        -3px 0 0 #000000,
+        0 3px 0 #000000,
+        0 -3px 0 #000000,
+        2px 2px 0 #000000,
+        -2px -2px 0 #000000,
+        2px -2px 0 #000000,
+        -2px 2px 0 #000000;
+    }
+    #f06-osd svg {
+      display: block;
+      width: 1.35cqw;
+      height: 1.5cqw;
+      overflow: visible;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="06-extras"
+    data-start="0"
+    data-duration="7.628"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- blue infomercial ground: dot-grid top-left, stripe-block bleeding off the right edge -->
+    <div id="f06-bg" class="clip" data-start="0" data-duration="7.628" data-track-index="0">
+      <div id="f06-dots"></div>
+      <div id="f06-stripe"></div>
+    </div>
+
+    <div id="f06-stage">
+      <!-- eyebrow + heading -->
+      <div id="f06-head">
+        <div id="f06-pill">Limited time</div>
+        <div id="f06-heading">
+          <span class="f06-word" id="f06-w1">Amazing</span>
+          <span class="f06-word" id="f06-w2">Extras!</span>
+        </div>
+      </div>
+
+      <!-- card 1: no 5-hour limit -->
+      <div class="f06-card" id="f06-card1">
+        <div class="f06-icon f06-icon-pink">
+          <svg viewBox="0 0 460 320" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect x="146" y="40" width="66" height="30" fill="#000000" transform="rotate(-18 179 55)" />
+            <rect x="248" y="40" width="66" height="30" fill="#000000" transform="rotate(18 281 55)" />
+            <rect x="221" y="38" width="18" height="26" fill="#000000" />
+            <rect x="140" y="62" width="180" height="180" fill="#000000" />
+            <rect x="158" y="80" width="144" height="144" fill="#FFFFFF" />
+            <rect x="226" y="86" width="8" height="16" fill="#000000" />
+            <rect x="226" y="202" width="8" height="16" fill="#000000" />
+            <rect x="164" y="148" width="16" height="8" fill="#000000" />
+            <rect x="280" y="148" width="16" height="8" fill="#000000" />
+            <text
+              x="230"
+              y="178"
+              text-anchor="middle"
+              font-family="Inter"
+              font-weight="900"
+              font-size="72"
+              letter-spacing="-2"
+              fill="#000000"
+            >5H</text>
+            <rect x="156" y="240" width="26" height="22" fill="#000000" />
+            <rect x="278" y="240" width="26" height="22" fill="#000000" />
+            <path
+              id="f06-slash-u"
+              d="M126 44 L334 268"
+              fill="none"
+              stroke="#FE90E8"
+              stroke-width="46"
+              stroke-dasharray="310"
+              stroke-dashoffset="0"
+            />
+            <path
+              id="f06-slash-b"
+              d="M126 44 L334 268"
+              fill="none"
+              stroke="#000000"
+              stroke-width="26"
+              stroke-dasharray="310"
+              stroke-dashoffset="0"
+            />
+          </svg>
+        </div>
+        <div class="f06-ctitle">No 5-hour<br />limit!</div>
+        <div class="f06-tag">Bonus 01</div>
+      </div>
+
+      <!-- card 2: $2,500 credit -->
+      <div class="f06-card" id="f06-card2">
+        <div class="f06-icon f06-icon-green">
+          <svg viewBox="0 0 460 320" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g id="f06-bill1">
+              <rect x="123" y="126" width="250" height="116" fill="#FFFFFF" stroke="#000000" stroke-width="6" />
+            </g>
+            <g id="f06-bill2">
+              <rect x="111" y="110" width="250" height="116" fill="#FFFFFF" stroke="#000000" stroke-width="6" />
+            </g>
+            <g id="f06-bill3">
+              <rect x="99" y="94" width="250" height="116" fill="#FFFFFF" stroke="#000000" stroke-width="6" />
+            </g>
+            <g id="f06-bill4">
+              <rect x="87" y="78" width="250" height="116" fill="#FFFFFF" stroke="#000000" stroke-width="6" />
+              <rect x="101" y="92" width="222" height="88" fill="none" stroke="#000000" stroke-width="3" />
+              <rect x="113" y="107" width="50" height="58" fill="#99E885" stroke="#000000" stroke-width="3" />
+              <text
+                x="138"
+                y="151"
+                text-anchor="middle"
+                font-family="Inter"
+                font-weight="900"
+                font-size="40"
+                fill="#000000"
+              >$</text>
+              <rect x="261" y="107" width="50" height="58" fill="#99E885" stroke="#000000" stroke-width="3" />
+              <text
+                x="286"
+                y="151"
+                text-anchor="middle"
+                font-family="Inter"
+                font-weight="900"
+                font-size="40"
+                fill="#000000"
+              >$</text>
+              <rect x="196" y="70" width="32" height="132" fill="#F7CB46" stroke="#000000" stroke-width="6" />
+            </g>
+          </svg>
+        </div>
+        <div data-layout-allow-overlap class="f06-ctitle">
+          <div data-layout-allow-overlap class="f06-numrow">
+            <span data-layout-allow-overlap class="f06-ch">$</span><span data-layout-allow-overlap class="f06-wheel" id="f06-wheel" data-value="2,500"></span>
+          </div>
+          <div data-layout-allow-overlap>Credit!</div>
+        </div>
+        <div class="f06-tag">Bonus 02</div>
+      </div>
+
+      <!-- empty right slot (dashed placeholder) -->
+      <div id="f06-slot"><span id="f06-q">?</span></div>
+
+      <!-- card 3: unmetered extras* -->
+      <div class="f06-card" id="f06-card3">
+        <div class="f06-icon f06-icon-yellow">
+          <svg viewBox="0 0 460 320" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect x="140" y="132" width="180" height="128" fill="#FE90E8" stroke="#000000" stroke-width="6" />
+            <rect x="212" y="132" width="36" height="128" fill="#C0F7FE" stroke="#000000" stroke-width="6" />
+            <rect x="192" y="164" width="76" height="82" fill="#FFFFFF" stroke="#000000" stroke-width="6" />
+            <text
+              x="230"
+              y="229"
+              text-anchor="middle"
+              font-family="Inter"
+              font-weight="900"
+              font-size="66"
+              fill="#000000"
+            >?</text>
+            <polygon
+              points="230,98 176,66 176,98"
+              fill="#C0F7FE"
+              stroke="#000000"
+              stroke-width="6"
+              stroke-linejoin="miter"
+            />
+            <polygon
+              points="230,98 284,66 284,98"
+              fill="#C0F7FE"
+              stroke="#000000"
+              stroke-width="6"
+              stroke-linejoin="miter"
+            />
+            <rect x="126" y="98" width="208" height="40" fill="#FE90E8" stroke="#000000" stroke-width="6" />
+            <rect x="212" y="98" width="36" height="40" fill="#C0F7FE" stroke="#000000" stroke-width="6" />
+            <rect x="218" y="82" width="24" height="18" fill="#C0F7FE" stroke="#000000" stroke-width="6" />
+          </svg>
+        </div>
+        <div class="f06-ctitle">Unmetered<br />extras<span class="f06-ast">*</span>!</div>
+        <div class="f06-tag">Bonus 03</div>
+      </div>
+
+      <!-- BONUS! star-burst (10-point, pink, 3px border + 4px hard shadow) -->
+      <div id="f06-star">
+        <div id="f06-star-in">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <polygon
+              transform="translate(5 5)"
+              points="98.0,6.0 119.6,31.4 152.1,23.6 154.6,56.9 185.5,69.6 168.0,98.0 185.5,126.4 154.6,139.1 152.1,172.4 119.6,164.6 98.0,190.0 76.4,164.6 43.9,172.4 41.4,139.1 10.5,126.4 28.0,98.0 10.5,69.6 41.4,56.9 43.9,23.6 76.4,31.4"
+              fill="#000000"
+            />
+            <polygon
+              points="98.0,6.0 119.6,31.4 152.1,23.6 154.6,56.9 185.5,69.6 168.0,98.0 185.5,126.4 154.6,139.1 152.1,172.4 119.6,164.6 98.0,190.0 76.4,164.6 43.9,172.4 41.4,139.1 10.5,126.4 28.0,98.0 10.5,69.6 41.4,56.9 43.9,23.6 76.4,31.4"
+              fill="#FE90E8"
+              stroke="#000000"
+              stroke-width="4"
+              stroke-linejoin="miter"
+            />
+          </svg>
+          <div id="f06-star-txt">Bonus!</div>
+        </div>
+      </div>
+
+      <!-- fine print -->
+      <div id="f06-fine">*Extras not specified</div>
+
+      <!-- VHS OSD: tape resuming -->
+      <div id="f06-osd">
+        <svg viewBox="0 0 26 28" aria-hidden="true">
+          <polygon
+            points="2,2 2,26 24,14"
+            fill="#FFFFFF"
+            stroke="#000000"
+            stroke-width="5"
+            stroke-linejoin="miter"
+            paint-order="stroke"
+          />
+        </svg>
+        <span>Play</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var byId = function (id) {
+        return document.getElementById(id);
+      };
+
+      // ---- number wheel: scoped build (adapted from compositions/components/number-wheel.html,
+      // spin = double so the zeros also roll; one column per digit, strip lands on its own digit) ----
+      var wheel = byId("f06-wheel");
+      var CYCLES = 1;
+      if (wheel && wheel.dataset.f06Ready !== "1") {
+        var value = wheel.dataset.value || "0";
+        wheel.textContent = "";
+        for (var c = 0; c < value.length; c++) {
+          var ch = value.charAt(c);
+          if (!/\d/.test(ch)) {
+            var sep = document.createElement("span");
+            sep.className = "f06-ch";
+            sep.textContent = ch;
+            wheel.appendChild(sep);
+            continue;
+          }
+          var stops = CYCLES * 10 + Number(ch);
+          var frame = document.createElement("span");
+          frame.className = "f06-wheel-digit";
+          var strip = document.createElement("span");
+          strip.className = "f06-wheel-strip";
+          strip.setAttribute("data-stops", String(stops));
+          for (var s = 0; s <= stops; s++) {
+            var step = document.createElement("span");
+            step.textContent = String(s % 10);
+            strip.appendChild(step);
+          }
+          frame.appendChild(strip);
+          wheel.appendChild(frame);
+        }
+        wheel.dataset.f06Ready = "1";
+      }
+      var strips = wheel ? Array.prototype.slice.call(wheel.querySelectorAll(".f06-wheel-strip")) : [];
+
+      var osd = byId("f06-osd");
+      var star = byId("f06-star");
+      var starIn = byId("f06-star-in");
+      var pill = byId("f06-pill");
+      var words = [byId("f06-w1"), byId("f06-w2")];
+      var card1 = byId("f06-card1");
+      var card2 = byId("f06-card2");
+      var card3 = byId("f06-card3");
+      var slashes = [byId("f06-slash-u"), byId("f06-slash-b")];
+      var bills = [byId("f06-bill1"), byId("f06-bill2"), byId("f06-bill3"), byId("f06-bill4")];
+      var slot = byId("f06-slot");
+      var q = byId("f06-q");
+      var fine = byId("f06-fine");
+
+      var tl = gsap.timeline({ paused: true });
+
+      // ---- Scene 1 (0.0–2.2s): tape resumes, BONUS! pops on "look", heading slams on "amazing" ----
+      tl.set(osd, { autoAlpha: 0 }, 0.5); // hard cut off — the tape resuming
+
+      tl.fromTo(
+        star,
+        { scale: 0, rotation: -28, autoAlpha: 0 },
+        { scale: 1, rotation: -8, autoAlpha: 1, duration: 0.55, ease: "back.out(1.7)" },
+        0.4
+      );
+
+      tl.fromTo(
+        pill,
+        { scale: 0, rotation: 8, autoAlpha: 0 },
+        { scale: 1, rotation: -3, autoAlpha: 1, duration: 0.45, ease: "power3.out" },
+        0.88
+      );
+
+      words.forEach(function (w, i) {
+        tl.fromTo(
+          w,
+          { scale: 1.8, y: -12, autoAlpha: 0 },
+          { scale: 1, y: 0, autoAlpha: 1, duration: 0.4, ease: "power3.out" },
+          0.93 + i * 0.12
+        );
+      });
+
+      // star-burst: subtle finite jitter on its inner layer (sine-wave-loop, low amplitude, settles to 0)
+      var jitter = [1.5, -1.5, 1.5, -1.5, 1.5, -1.5, 0.8, 0];
+      jitter.forEach(function (r, i) {
+        tl.to(starIn, { rotation: r, duration: 0.78, ease: "sine.inOut" }, 1.1 + i * 0.78);
+      });
+
+      // ---- Scene 2 (2.2–3.4s): card 1 pops into the left third on "No", slash strikes the 5H ----
+      tl.fromTo(
+        card1,
+        { scale: 0, y: 28, rotation: -7, autoAlpha: 0 },
+        { scale: 1, y: 0, rotation: -2, autoAlpha: 1, duration: 0.55, ease: "power3.out" },
+        2.22
+      );
+      tl.fromTo(
+        slashes,
+        { attr: { "stroke-dashoffset": 310 } },
+        { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.inOut" },
+        2.58
+      );
+
+      // ---- Scene 3 (3.4–5.1s): card 2 pops center on "twenty-five-hundred", 2,500 rolls in by 4.6s ----
+      tl.fromTo(
+        card2,
+        { scale: 0, y: 28, rotation: 7, autoAlpha: 0 },
+        { scale: 1, y: 0, rotation: 2, autoAlpha: 1, duration: 0.55, ease: "power3.out" },
+        3.54
+      );
+      strips.forEach(function (strip, i) {
+        var n = Number(strip.getAttribute("data-stops"));
+        tl.fromTo(
+          strip,
+          { yPercent: 0 },
+          { yPercent: (-100 * n) / (n + 1), duration: 0.86, ease: "power3.out" },
+          3.62 + i * 0.04
+        );
+      });
+      bills.forEach(function (b, i) {
+        tl.fromTo(
+          b,
+          { y: -40, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.32, ease: "power3.out" },
+          3.74 + i * 0.08
+        );
+      });
+
+      // ---- Scene 4 (5.1–7.628s): "And…" empty slot + jittering ?, card 3 on "unmetered", fine print on "extras" ----
+      tl.fromTo(
+        slot,
+        { scale: 0.9, rotation: -2, autoAlpha: 0 },
+        { scale: 1, rotation: -2, autoAlpha: 1, duration: 0.28, ease: "power3.out" },
+        5.12
+      );
+      // the ? jitters once
+      tl.to(q, { rotation: -14, duration: 0.07, ease: "power1.out" }, 5.34);
+      tl.to(q, { rotation: 12, duration: 0.09, ease: "power1.inOut" }, ">");
+      tl.to(q, { rotation: -7, duration: 0.08, ease: "power1.inOut" }, ">");
+      tl.to(q, { rotation: 3, duration: 0.07, ease: "power1.inOut" }, ">");
+      tl.to(q, { rotation: 0, duration: 0.08, ease: "power1.out" }, ">");
+
+      // card 3 pops in over the placeholder (within-frame swap: slot dissolves under the arriving card)
+      tl.fromTo(
+        card3,
+        { scale: 0, y: 28, rotation: -7, autoAlpha: 0 },
+        { scale: 1, y: 0, rotation: -2, autoAlpha: 1, duration: 0.55, ease: "power3.out" },
+        6.4
+      );
+      tl.to(slot, { autoAlpha: 0, duration: 0.16, ease: "none" }, 6.5);
+
+      tl.fromTo(
+        fine,
+        { autoAlpha: 0, y: 8 },
+        { autoAlpha: 1, y: 0, duration: 0.4, ease: "power3.out" },
+        6.88
+      );
+
+      // hold to the frame's fixed length
+      tl.set({}, {}, 7.628);
+
+      window.__timelines["06-extras"] = tl;
+    })();
+  </script>
+</template>

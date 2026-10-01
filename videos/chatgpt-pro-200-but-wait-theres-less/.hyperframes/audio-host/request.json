@@ -1,0 +1,39 @@
+{
+  "provider": "heygen",
+  "voice": "5f9c155f4108437f970c308c95b06e11",
+  "speed": 1.1,
+  "lang": "en",
+  "lines": [
+    {
+      "id": "01",
+      "text": "Introducing the all-new ChatGPT Pro! Same great two-hundred-dollar price… now with HALF the usage!"
+    },
+    {
+      "id": "04",
+      "text": "But wait… there's LESS!"
+    },
+    {
+      "id": "06",
+      "text": "But look at these amazing extras! No five-hour limit! A twenty-five-hundred-dollar credit! And… unmetered extras!"
+    },
+    {
+      "id": "09",
+      "text": "And the new Pro? Just twenty dollars a unit! The same as Plus! What a… deal?"
+    },
+    {
+      "id": "12",
+      "text": "But wait! The models got CHEAPER! So half the dollars buys just as much! …Right?"
+    },
+    {
+      "id": "14",
+      "text": "Still not enough? Upgrade to the all-new Pro five hundred! Twenty-five-x! Ultrafast speed! Call now!"
+    },
+    {
+      "id": "18",
+      "text": "ChatGPT Pro two hundred! Now with less! Terms and conditions apply. Sources in the description!"
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  }
+}

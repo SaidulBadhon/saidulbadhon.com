@@ -1,0 +1,10 @@
+{
+  "provider": "heygen",
+  "lines": [],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "cheesy upbeat 90s late-night infomercial jingle, bright retro synth funk, game-show energy",
+    "blob": "ChatGPT Pro $200 is back at the same price with half the usage — its bulk discount is gone, while Claude Max 20x still gives 20x for $200.",
+    "arc": "story-explainer with listicle — Hook (infomercial) → Freeze → Thesis → Title → Timeline → Concession → Unit price → Every plan the same → Claude comparison → \"Models got cheaper\" → Model math → $500 upsell → Why → What to do → Verdict → Outro"
+  }
+}
