@@ -1,0 +1,936 @@
+{
+  "ok": true,
+  "strict": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 14,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "composition_file_too_large",
+        "severity": "warning",
+        "message": "This HTML composition file has 740 lines. Smaller sub-compositions are easier to read, iterate on, and diff.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f04-wait\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f04-wait",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\04-title.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f04-wait\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f04-less-card\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f04-less-card",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\04-title.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f04-less-card\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      },
+      {
+        "code": "negative_z_index",
+        "severity": "warning",
+        "message": "`z-index: -1` paints the element behind its nearest stacking context's own content. With no stacking-context ancestor that context is the composition root itself, so an opaque background there hides it entirely: in the DOM, laid out, and absent from the picture. A transparent root leaves it visible. Siblings at `z-index: 0` or above are unaffected.",
+        "selector": ".f05-hl",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\05-the-tin.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Give the element's parent a stacking context - `isolation: isolate` is the cheapest, and `transform`, `filter`, `opacity` below 1, `contain: paint` and `will-change` all work too. The negative-z child then paints above that parent's background and renders normally. Or express paint order through DOM order - an earlier sibling paints behind a later one - and raise the elements that should sit in front rather than lowering this one."
+      },
+      {
+        "code": "composition_file_too_large",
+        "severity": "warning",
+        "message": "This HTML composition file has 375 lines. Smaller sub-compositions are easier to read, iterate on, and diff.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\06-extras.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Split this sub-composition further into smaller .html files, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f09-boxwrap\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f09-boxwrap",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\09-same-as-plus.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f09-boxwrap\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f11-sign\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f11-sign",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\11-one-shelf-over.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f11-sign\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f12-wait\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f12-wait",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\12-models-cheaper.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f12-wait\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f12-star\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f12-star",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\12-models-cheaper.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f12-star\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      },
+      {
+        "code": "composition_file_too_large",
+        "severity": "warning",
+        "message": "This HTML composition file has 387 lines. Smaller sub-compositions are easier to read, iterate on, and diff.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\14-pro-500.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Split this sub-composition further into smaller .html files, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f15-shelf-in\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f15-shelf-in",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\15-why.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f15-shelf-in\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      },
+      {
+        "code": "composition_file_too_large",
+        "severity": "warning",
+        "message": "This HTML composition file has 307 lines. Smaller sub-compositions are easier to read, iterate on, and diff.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\15-why.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Split this sub-composition further into smaller .html files, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f16-card\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f16-card",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\16-what-to-do.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f16-card\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#f19-plate\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#f19-plate",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\sb_sa\\Documents\\GitHub\\saidulbadhon.com\\videos\\chatgpt-pro-200-but-wait-theres-less-bn\\compositions\\frames\\19-end-card.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to the destination vars of each future fromTo, or set a safe resting state with an earlier `tl.set(\"#f19-plate\", { ... }, 0)`. Pre-first-tween seeks must not inherit whichever fromTo call happened to author last."
+      }
+    ],
+    "filesScanned": 20
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 16,
+    "findings": [
+      {
+        "code": "canvas_overflow",
+        "severity": "info",
+        "time": 38.367,
+        "selector": "div.f05-tin-tag > span:nth-of-type(1)",
+        "message": "Text extends outside the composition canvas.",
+        "rect": {
+          "left": 4332.71,
+          "top": 370.23,
+          "right": 4462.96,
+          "bottom": 407.93,
+          "width": 130.25,
+          "height": 37.7
+        },
+        "containerSelector": "#root",
+        "text": "PRO $200",
+        "fixHint": "Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "right": 2542.96
+        },
+        "dataAttributes": {
+          "data-layout-allow-overlap": ""
+        },
+        "sourceFile": "compositions/frames/05-the-tin.html",
+        "bbox": {
+          "x": 4332.71,
+          "y": 370.23,
+          "width": 130.25,
+          "height": 37.7
+        },
+        "firstSeen": 38.367,
+        "lastSeen": 38.367,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "canvas_overflow",
+        "severity": "info",
+        "time": 38.367,
+        "selector": "div.f05-tin-big",
+        "message": "Text extends outside the composition canvas.",
+        "rect": {
+          "left": 4287.63,
+          "top": 391.77,
+          "right": 4516.54,
+          "bottom": 548.17,
+          "width": 228.91,
+          "height": 156.4
+        },
+        "containerSelector": "#root",
+        "text": "20x",
+        "fixHint": "Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "right": 2596.54
+        },
+        "dataAttributes": {
+          "data-layout-allow-overlap": ""
+        },
+        "sourceFile": "compositions/frames/05-the-tin.html",
+        "bbox": {
+          "x": 4287.63,
+          "y": 391.77,
+          "width": 228.91,
+          "height": 156.4
+        },
+        "firstSeen": 38.367,
+        "lastSeen": 38.367,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "escaped_container",
+        "severity": "info",
+        "time": 38.367,
+        "selector": "div.f05-ticks",
+        "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
+        "rect": {
+          "left": -593,
+          "top": 805,
+          "right": 6807,
+          "bottom": 816,
+          "width": 7400,
+          "height": 11
+        },
+        "containerSelector": "#f05-world",
+        "text": "",
+        "fixHint": "Compute left/top in the offset parent's frame (subtract its rect), or mark intentional placement with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/05-the-tin.html",
+        "bbox": {
+          "x": -593,
+          "y": 805,
+          "width": 7400,
+          "height": 11
+        },
+        "firstSeen": 38.367,
+        "lastSeen": 38.367,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "escaped_container",
+        "severity": "info",
+        "time": 38.367,
+        "selector": "div.f05-line",
+        "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
+        "rect": {
+          "left": -600,
+          "top": 818,
+          "right": 6800,
+          "bottom": 822,
+          "width": 7400,
+          "height": 4
+        },
+        "containerSelector": "#f05-world",
+        "text": "",
+        "fixHint": "Compute left/top in the offset parent's frame (subtract its rect), or mark intentional placement with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/05-the-tin.html",
+        "bbox": {
+          "x": -600,
+          "y": 818,
+          "width": 7400,
+          "height": 4
+        },
+        "firstSeen": 38.367,
+        "lastSeen": 38.367,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "escaped_container",
+        "severity": "info",
+        "time": 38.367,
+        "selector": "#f05-st3",
+        "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
+        "rect": {
+          "left": 3840,
+          "top": 0,
+          "right": 5760,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "containerSelector": "#f05-world",
+        "text": "PRO $200 20x 10x “…API খরচে অর্ধেক ডলার।” — OpenAI DevDay · 28–29 সেপ্টেম্বর",
+        "fixHint": "Compute left/top in the offset parent's frame (subtract its rect), or mark intentional placement with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/05-the-tin.html",
+        "bbox": {
+          "x": 3840,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "firstSeen": 38.367,
+        "lastSeen": 38.367,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 55.725,
+        "selector": "#f06-pill",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 855.28,
+          "top": 67.44,
+          "right": 1064.7,
+          "bottom": 105.28,
+          "width": 209.42,
+          "height": 37.84
+        },
+        "containerSelector": "#f06-w2",
+        "text": "সীমিত সময়ের অফার",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/06-extras.html",
+        "bbox": {
+          "x": 855.28,
+          "y": 67.44,
+          "width": 209.42,
+          "height": 37.84
+        },
+        "firstSeen": 55.725,
+        "lastSeen": 55.725,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 55.725,
+        "selector": "#f06-w1",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 701.29,
+          "top": 118.8,
+          "right": 998.05,
+          "bottom": 213.06,
+          "width": 296.76,
+          "height": 94.26
+        },
+        "containerSelector": "#f06-w2",
+        "text": "দারুণ সব",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/06-extras.html",
+        "bbox": {
+          "x": 701.29,
+          "y": 118.8,
+          "width": 296.76,
+          "height": 94.26
+        },
+        "firstSeen": 55.725,
+        "lastSeen": 55.725,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "canvas_overflow",
+        "severity": "info",
+        "time": 89.522,
+        "selector": "div.f08-box-band > span:nth-of-type(1)",
+        "message": "Text extends outside the composition canvas.",
+        "rect": {
+          "left": 1218.89,
+          "top": -648.06,
+          "right": 1315.91,
+          "bottom": -591.06,
+          "width": 97.02,
+          "height": 57
+        },
+        "containerSelector": "#root",
+        "text": "PRO",
+        "fixHint": "Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "top": 648.06
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/08-unit-price.html",
+        "bbox": {
+          "x": 1218.89,
+          "y": -648.06,
+          "width": 97.02,
+          "height": 57
+        },
+        "firstSeen": 89.522,
+        "lastSeen": 89.522,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "canvas_overflow",
+        "severity": "info",
+        "time": 89.522,
+        "selector": "div.f08-box-price",
+        "message": "Text extends outside the composition canvas.",
+        "rect": {
+          "left": 1131.08,
+          "top": -487.17,
+          "right": 1328.28,
+          "bottom": -396.17,
+          "width": 197.2,
+          "height": 91
+        },
+        "containerSelector": "#root",
+        "text": "$200",
+        "fixHint": "Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "top": 487.17
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/08-unit-price.html",
+        "bbox": {
+          "x": 1131.08,
+          "y": -487.17,
+          "width": 197.2,
+          "height": 91
+        },
+        "firstSeen": 89.522,
+        "lastSeen": 89.522,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "canvas_overflow",
+        "severity": "info",
+        "time": 89.522,
+        "selector": "div.f08-sticker > span:nth-of-type(1)",
+        "message": "Text extends outside the composition canvas.",
+        "rect": {
+          "left": 1080.46,
+          "top": -564.88,
+          "right": 1183.61,
+          "bottom": -504.71,
+          "width": 103.15,
+          "height": 60.17
+        },
+        "containerSelector": "#root",
+        "text": "পুরনো",
+        "fixHint": "Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "top": 564.88
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/08-unit-price.html",
+        "bbox": {
+          "x": 1080.46,
+          "y": -564.88,
+          "width": 103.15,
+          "height": 60.17
+        },
+        "firstSeen": 89.522,
+        "lastSeen": 89.522,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 89.522,
+        "selector": "#f08-laser-plus",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": 178,
+          "top": 701,
+          "right": 186,
+          "bottom": 885,
+          "width": 8,
+          "height": 184
+        },
+        "containerSelector": "div.f08-laser-clip",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 190,
+          "top": 701,
+          "right": 654,
+          "bottom": 885,
+          "width": 464,
+          "height": 184
+        },
+        "overflow": {
+          "left": 12
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/08-unit-price.html",
+        "bbox": {
+          "x": 178,
+          "y": 701,
+          "width": 8,
+          "height": 184
+        },
+        "firstSeen": 89.522,
+        "lastSeen": 89.522,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "panel_out_of_canvas",
+        "severity": "info",
+        "time": 89.522,
+        "selector": "#f08-plank",
+        "message": "Painted panel extends outside the composition canvas.",
+        "rect": {
+          "left": -40,
+          "top": 642,
+          "right": 1960,
+          "bottom": 710,
+          "width": 2000,
+          "height": 68
+        },
+        "containerSelector": "#root",
+        "text": "",
+        "fixHint": "Move the panel inward, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "left": 40,
+          "right": 40
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/08-unit-price.html",
+        "bbox": {
+          "x": -40,
+          "y": 642,
+          "width": 2000,
+          "height": 68
+        },
+        "firstSeen": 89.522,
+        "lastSeen": 89.522,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 140.678,
+        "selector": "div.f12-stripe.f12-stripe-a",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -95.71,
+          "top": 363.99,
+          "right": 345.79,
+          "bottom": 535.51,
+          "width": 441.5,
+          "height": 171.52
+        },
+        "containerSelector": "#f12-ground",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "left": 95.71
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/12-models-cheaper.html",
+        "bbox": {
+          "x": -95.71,
+          "y": 363.99,
+          "width": 441.5,
+          "height": 171.52
+        },
+        "firstSeen": 140.678,
+        "lastSeen": 140.678,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 140.678,
+        "selector": "div.f12-stripe.f12-stripe-b",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": 1535.91,
+          "top": 429.39,
+          "right": 2004.54,
+          "bottom": 579.15,
+          "width": 468.63,
+          "height": 149.76
+        },
+        "containerSelector": "#f12-ground",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "right": 84.54
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/12-models-cheaper.html",
+        "bbox": {
+          "x": 1535.91,
+          "y": 429.39,
+          "width": 468.63,
+          "height": 149.76
+        },
+        "firstSeen": 140.678,
+        "lastSeen": 140.678,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "panel_out_of_canvas",
+        "severity": "info",
+        "time": 140.678,
+        "selector": "div.f12-stripe.f12-stripe-a",
+        "message": "Painted panel extends outside the composition canvas.",
+        "rect": {
+          "left": -95.71,
+          "top": 363.99,
+          "right": 345.79,
+          "bottom": 535.51,
+          "width": 441.5,
+          "height": 171.52
+        },
+        "containerSelector": "#root",
+        "text": "",
+        "fixHint": "Move the panel inward, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "left": 95.71
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/12-models-cheaper.html",
+        "bbox": {
+          "x": -95.71,
+          "y": 363.99,
+          "width": 441.5,
+          "height": 171.52
+        },
+        "firstSeen": 140.678,
+        "lastSeen": 140.678,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "panel_out_of_canvas",
+        "severity": "info",
+        "time": 140.678,
+        "selector": "div.f12-stripe.f12-stripe-b",
+        "message": "Painted panel extends outside the composition canvas.",
+        "rect": {
+          "left": 1535.91,
+          "top": 429.39,
+          "right": 2004.54,
+          "bottom": 579.15,
+          "width": 468.63,
+          "height": 149.76
+        },
+        "containerSelector": "#root",
+        "text": "",
+        "fixHint": "Move the panel inward, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "right": 84.54
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/12-models-cheaper.html",
+        "bbox": {
+          "x": 1535.91,
+          "y": 429.39,
+          "width": 468.63,
+          "height": 149.76
+        },
+        "firstSeen": 140.678,
+        "lastSeen": 140.678,
+        "occurrences": 1,
+        "heldMs": 0
+      }
+    ],
+    "duration": 230.2,
+    "samples": [
+      12.789,
+      38.367,
+      63.944,
+      89.522,
+      115.1,
+      140.678,
+      166.256,
+      191.833,
+      217.411
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 16,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      12.789,
+      63.944,
+      115.1,
+      166.256,
+      217.411
+    ],
+    "checked": 33,
+    "passed": 33
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  },
+  "_meta": {
+    "version": "0.8.111",
+    "updateAvailable": false
+  }
+}

@@ -601,3 +601,8 @@ This is the FINAL frame: a gentle 0.4s fade to black at the very end is allowed.
 
 Scene 1 (0.0–0.9s): black ground; the close-frame (white 4px border, 12px yellow shadow, x 16–84%, y 18–78%) springs in from scale 0.92; inside, a white label-pill "THE FULL BREAKDOWN + SOURCES".
 Scene 2 (0.9–3.0s): at 0.5s the post title "CHATGPT PRO $200 IS BACK, WITH HALF THE USAGE" (heading-md, white) reveals per word; at 1.1s "saidulbadhon.com" (close-title, yellow) slams in beneath it, and a pink star-burst punctures the frame's top-right corner. Hold; from 2.6s fade the whole frame to black.
+
+## 2026-10-02 — Bangla version
+
+Same 19-frame plan, localized: see `../chatgpt-pro-200-but-wait-theres-less-bn/STORYBOARD.md`
+(Bangla script, Bangla on-screen copy deck, shot timings re-cued to the Bangla voice track).

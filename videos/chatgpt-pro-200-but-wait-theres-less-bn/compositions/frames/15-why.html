@@ -1,0 +1,735 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Permanent Marker"; src: url("assets/fonts/permanent-marker-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+    #root *,
+    #root *::before,
+    #root *::after { box-sizing: border-box; }
+
+    /* ───────── track 0 · the paused-tape stage (static from t=0) ───────── */
+    #f15-stage { position: absolute; inset: 0; container-type: size; }
+    .f15-ground { position: absolute; inset: 0; background: #1B1B1F; }
+    .f15-ghost { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    .f15-scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 4px);
+    }
+    .f15-osd {
+      position: absolute;
+      left: 60px;
+      top: 46px;
+      display: flex;
+      align-items: center;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-transform: uppercase;
+    }
+    .f15-osd-icon { display: flex; gap: 7px; margin-right: 14px; }
+    .f15-osd-icon i { display: block; width: 9px; height: 26px; background: #FFFFFF; }
+    .f15-osd-word { font-size: 33px; line-height: 1; letter-spacing: 0.06em; }
+    .f15-osd-sp { font-size: 21px; line-height: 1; letter-spacing: 0.1em; margin-left: 22px; }
+    .f15-fc-pill {
+      position: absolute;
+      right: 60px;
+      top: 44px;
+      padding: 6px 24px 7px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+
+    /* ───────── track 1 · the shot ───────── */
+    #f15-scene { position: absolute; inset: 0; container-type: size; }
+
+    /* tag + notes group — big (Scene 1) and the 40% corner copy (Scenes 2–4) */
+    .f15-grp {
+      position: absolute;
+      width: 1160px;
+      height: 330px;
+      transform-origin: 0% 0%;
+    }
+    #f15-grp-big { left: 170px; top: 290px; z-index: 2; }
+    #f15-grp-mini { left: 60px; top: 124px; z-index: 3; }
+    .f15-shelf-in { position: absolute; inset: 0; }
+
+    /* the shelf — a short plank stub */
+    .f15-plank {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 800px;
+      height: 60px;
+      background: #FFFDF5;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+
+    /* shelf tag — the recurring prop, drawn at 1.3× (3px→4px border, 4px→5px shadow) */
+    .f15-tag {
+      position: absolute;
+      left: 90px;
+      top: 48px;
+      width: 610px;
+      height: 266px;
+      transform-origin: 50% -6px;
+    }
+    .f15-tag-hanger {
+      position: absolute;
+      left: 50%;
+      top: -21px;
+      width: 88px;
+      height: 29px;
+      margin-left: -44px;
+      background: #000000;
+    }
+    .f15-tag-body {
+      position: absolute;
+      inset: 0;
+      padding: 16px 28px;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 5px 5px 0 #000000;
+    }
+    .f15-tag-top {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .f15-tag-label {
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .f15-tag-plan {
+      display: block;
+      padding: 3px 10px 2px;
+      background: #F7CB46;
+      border: 3px solid #000000;
+      font-weight: 900;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .f15-barcode {
+      display: block;
+      width: 130px;
+      height: 26px;
+      background: repeating-linear-gradient(90deg, #000000 0px, #000000 4px, #FFFFFF 4px, #FFFFFF 6px, #000000 6px, #000000 8px, #FFFFFF 8px, #FFFFFF 12px, #000000 12px, #000000 17px, #FFFFFF 17px, #FFFFFF 20px);
+    }
+    .f15-tag-price {
+      position: relative;
+      margin-top: 8px;
+      height: 125px;
+      display: flex;
+      align-items: flex-end;
+      font-weight: 900;
+      transform-origin: 0% 50%;
+    }
+    .f15-price-host {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      height: 125px;
+      font-size: 125px;
+    }
+    .f15-cur { display: block; height: 1em; line-height: 1em; letter-spacing: -0.02em; }
+    .f15-digits { display: block; height: 1em; line-height: 1em; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .f15-per {
+      display: block;
+      height: 1em;
+      font-size: 65px;
+      line-height: 1em;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-left: 18px;
+      margin-bottom: 8px; /* 0.136 × (125 − 65): baseline matches the big digits */
+    }
+    .f15-tag-sub {
+      margin-top: 18px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 35px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    /* number-wheel (compositions/components/number-wheel.html), f15-scoped, double spin */
+    .f15-wheel {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .f15-wheel-digit { display: block; height: 1em; overflow: hidden; }
+    .f15-wheel-strip { display: flex; flex-direction: column; }
+    .f15-wheel-strip span { display: block; height: 1em; line-height: 1em; }
+
+    /* red marker — strokes only */
+    .f15-mark path {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .f15-uline {
+      position: absolute;
+      left: -6px;
+      top: 125px;
+      width: 420px;
+      height: 26px;
+      overflow: visible;
+    }
+
+    /* fact-checker handwriting */
+    .f15-note {
+      position: absolute;
+      transform: rotate(-4deg);
+      transform-origin: 0% 50%;
+    }
+    .f15-note-1 { left: 740px; top: 90px; }
+    .f15-note-2 { left: 780px; top: 178px; }
+    .f15-note-text {
+      display: block;
+      padding: 4px 14px;
+      font-family: "Permanent Marker", "Atma", cursive;
+      font-weight: 600;
+      font-synthesis: none;
+      font-size: 56px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      color: #E5322D;
+      white-space: nowrap;
+    }
+
+    /* hero word */
+    #f15-cap {
+      position: absolute;
+      left: 0;
+      top: 92px;
+      width: 1920px;
+      text-align: center;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 156px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    /* GPU rack exhibit card */
+    #f15-rack {
+      position: absolute;
+      left: 60px;
+      top: 316px;
+      width: 470px;
+      height: 564px;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+    .f15-rack-svg {
+      position: absolute;
+      left: 31px;
+      top: 18px;
+      width: 400px;
+      height: 520px;
+      overflow: visible;
+    }
+    .f15-heat {
+      fill: none;
+      stroke: #000000;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* chips (card-small: 3px border ↔ 4px shadow) */
+    .f15-chip {
+      position: absolute;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      white-space: nowrap;
+    }
+    #f15-quote {
+      left: 586px;
+      top: 548px;
+      padding: 14px 24px 16px;
+      background: #F7CB46;
+      z-index: 3;
+    }
+    .f15-quote-big {
+      display: block;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 64px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .f15-quote-small {
+      display: block;
+      margin-top: 4px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 42px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    #f15-allow {
+      left: 1010px;
+      top: 322px;
+      padding: 10px 26px 12px;
+      background: #FE90E8;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 58px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      z-index: 3;
+    }
+    #f15-gpu {
+      left: 1470px;
+      top: 744px;
+      padding: 10px 24px 12px;
+      background: #FFFFFF;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 54px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      z-index: 3;
+    }
+    .f15-strike {
+      position: absolute;
+      left: -14px;
+      top: 24px;
+      width: calc(100% + 28px);
+      height: 44px;
+      overflow: visible;
+    }
+
+    /* hanging door sign — 3D card flip বন্ধ → খোলা */
+    #f15-sign {
+      position: absolute;
+      left: 1370px;
+      top: 430px;
+      width: 460px;
+      height: 270px;
+      transform-origin: 50% 0%;
+      z-index: 2;
+    }
+    .f15-sign-strings {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 460px;
+      height: 80px;
+      overflow: visible;
+    }
+    .f15-sign-strings path { fill: none; stroke: #FFFDF5; stroke-width: 4; stroke-linecap: round; }
+    .f15-peg {
+      position: absolute;
+      left: 200px;
+      top: 0;
+      width: 60px;
+      height: 26px;
+      background: #FFFDF5;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    .f15-sign-persp {
+      position: absolute;
+      left: 0;
+      top: 70px;
+      width: 460px;
+      height: 200px;
+      perspective: 1400px;
+    }
+    #f15-sign-flip {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+    }
+    .f15-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .f15-face-front { background: #FFFFFF; }
+    .f15-face-back { background: #99E885; transform: rotateY(180deg); }
+    .f15-sign-label {
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .f15-sign-word {
+      margin-top: 4px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 96px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+  </style>
+
+  <div id="root" data-composition-id="15-why" data-start="0" data-duration="17.933" data-width="1920" data-height="1080">
+
+    <!-- track 0 · paused-tape stage: freeze ground, ghost echo, scanlines, VHS chrome (static from t=0) -->
+    <div id="f15-stage" class="clip" data-start="0" data-duration="17.933" data-track-index="0">
+      <div class="f15-ground"></div>
+      <svg class="f15-ghost" viewBox="0 0 1920 1080" aria-hidden="true" data-layout-ignore>
+        <defs>
+          <pattern id="f15-ghost-stripes" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect x="0" y="0" width="14" height="28" fill="#FFFFFF"></rect>
+          </pattern>
+        </defs>
+        <g opacity="0.08">
+          <g transform="rotate(-6 1700 811)">
+            <rect x="1440" y="772" width="520" height="78" fill="url(#f15-ghost-stripes)" stroke="#FFFFFF" stroke-width="5"></rect>
+          </g>
+          <polygon fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="miter"
+            points="1760,510 1801.7,571.6 1871.7,546.3 1869.2,620.6 1940.7,641.3 1895,700 1940.7,758.7 1869.2,779.4 1871.7,853.7 1801.7,828.4 1760,890 1718.3,828.4 1648.3,853.7 1650.8,779.4 1579.3,758.7 1625,700 1579.3,641.3 1650.8,620.6 1648.3,546.3 1718.3,571.6"></polygon>
+        </g>
+      </svg>
+      <div class="f15-scanlines" data-layout-ignore></div>
+      <div class="f15-osd">
+        <span class="f15-osd-icon"><i></i><i></i></span>
+        <span class="f15-osd-word">PAUSE</span>
+        <span class="f15-osd-sp">SP</span>
+      </div>
+      <div class="f15-fc-pill">ফ্যাক্ট চেক</div>
+    </div>
+
+    <!-- track 1 · the shot -->
+    <div id="f15-scene" class="clip" data-start="0" data-duration="17.933" data-track-index="1">
+
+      <!-- Scene 1 · the PRO $500 shelf tag + the fact-checker's notes (big) -->
+      <div id="f15-grp-big" class="f15-grp">
+        <div id="f15-shelf-in" class="f15-shelf-in">
+          <div class="f15-plank"></div>
+          <div id="f15-tag" class="f15-tag">
+            <div class="f15-tag-hanger"></div>
+            <div class="f15-tag-body">
+              <div class="f15-tag-top">
+                <span class="f15-tag-label">ইউনিট দাম</span>
+                <span class="f15-tag-plan">PRO $500</span>
+                <span class="f15-barcode"></span>
+              </div>
+              <div id="f15-price" class="f15-tag-price">
+                <span class="f15-price-host"><span class="f15-cur">$</span><span class="f15-wheel" data-value="20"></span></span>
+                <span class="f15-per">/ 1x</span>
+                <svg class="f15-uline f15-mark" viewBox="0 0 420 26" aria-hidden="true">
+                  <path id="f15-uline-path" d="M 8 13 C 70 6, 150 19, 232 11 S 360 7, 410 15"></path>
+                </svg>
+              </div>
+              <div class="f15-tag-sub">$500/মাস · 25x PLUS</div>
+            </div>
+          </div>
+        </div>
+        <div class="f15-note f15-note-1"><span id="f15-note-1" class="f15-note-text">= স্পিড,</span></div>
+        <div class="f15-note f15-note-2"><span id="f15-note-2" class="f15-note-text">ভ্যালু না</span></div>
+      </div>
+
+      <!-- Scenes 2–4 · the same tag + notes, parked upper-left at 40% (scale-swap incoming) -->
+      <div id="f15-grp-mini" class="f15-grp">
+        <div class="f15-shelf-in">
+          <div class="f15-plank"></div>
+          <div class="f15-tag">
+            <div class="f15-tag-hanger"></div>
+            <div class="f15-tag-body">
+              <div class="f15-tag-top">
+                <span class="f15-tag-label">ইউনিট দাম</span>
+                <span class="f15-tag-plan">PRO $500</span>
+                <span class="f15-barcode"></span>
+              </div>
+              <div class="f15-tag-price">
+                <span class="f15-price-host"><span class="f15-cur">$</span><span class="f15-digits">20</span></span>
+                <span class="f15-per">/ 1x</span>
+                <svg class="f15-uline f15-mark" viewBox="0 0 420 26" aria-hidden="true">
+                  <path d="M 8 13 C 70 6, 150 19, 232 11 S 360 7, 410 15"></path>
+                </svg>
+              </div>
+              <div class="f15-tag-sub">$500/মাস · 25x PLUS</div>
+            </div>
+          </div>
+        </div>
+        <div class="f15-note f15-note-1"><span class="f15-note-text">= স্পিড,</span></div>
+        <div class="f15-note f15-note-2"><span class="f15-note-text">ভ্যালু না</span></div>
+      </div>
+
+      <!-- Scene 2 · hero word -->
+      <div id="f15-cap">ক্যাপাসিটি।</div>
+
+      <!-- Scene 3 · overheating GPU rack -->
+      <div id="f15-rack">
+        <svg class="f15-rack-svg" viewBox="0 0 400 520" aria-hidden="true">
+          <path id="f15-heat-1" class="f15-heat" d="M 120 150 C 96 128, 144 110, 120 88 S 96 46, 120 22"></path>
+          <path id="f15-heat-2" class="f15-heat" d="M 200 150 C 176 126, 224 104, 200 80 S 176 36, 200 12"></path>
+          <path id="f15-heat-3" class="f15-heat" d="M 280 150 C 256 128, 304 110, 280 88 S 256 46, 280 22"></path>
+          <rect x="58" y="178" width="300" height="320" fill="#000000"></rect>
+          <rect x="50" y="170" width="300" height="320" fill="#FFFFFF" stroke="#000000" stroke-width="6"></rect>
+          <rect x="50" y="170" width="300" height="22" fill="#000000"></rect>
+          <g>
+            <rect x="72" y="206" width="256" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="4"></rect>
+            <rect x="88" y="227" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="114" y="227" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="140" y="227" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="166" y="227" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="192" y="227" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="246" y="220" width="8" height="30" fill="#000000"></rect>
+            <rect x="264" y="220" width="8" height="30" fill="#000000"></rect>
+            <rect x="282" y="220" width="8" height="30" fill="#000000"></rect>
+            <rect x="300" y="220" width="8" height="30" fill="#000000"></rect>
+          </g>
+          <g>
+            <rect x="72" y="274" width="256" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="4"></rect>
+            <rect x="88" y="295" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="114" y="295" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="140" y="295" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="166" y="295" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="192" y="295" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="246" y="288" width="8" height="30" fill="#000000"></rect>
+            <rect x="264" y="288" width="8" height="30" fill="#000000"></rect>
+            <rect x="282" y="288" width="8" height="30" fill="#000000"></rect>
+            <rect x="300" y="288" width="8" height="30" fill="#000000"></rect>
+          </g>
+          <g>
+            <rect x="72" y="342" width="256" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="4"></rect>
+            <rect x="88" y="363" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="114" y="363" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="140" y="363" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="166" y="363" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="192" y="363" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="246" y="356" width="8" height="30" fill="#000000"></rect>
+            <rect x="264" y="356" width="8" height="30" fill="#000000"></rect>
+            <rect x="282" y="356" width="8" height="30" fill="#000000"></rect>
+            <rect x="300" y="356" width="8" height="30" fill="#000000"></rect>
+          </g>
+          <g>
+            <rect x="72" y="410" width="256" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="4"></rect>
+            <rect x="88" y="431" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="114" y="431" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="140" y="431" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="166" y="431" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="192" y="431" width="16" height="16" fill="#F7CB46" stroke="#000000" stroke-width="3"></rect>
+            <rect x="246" y="424" width="8" height="30" fill="#000000"></rect>
+            <rect x="264" y="424" width="8" height="30" fill="#000000"></rect>
+            <rect x="282" y="424" width="8" height="30" fill="#000000"></rect>
+            <rect x="300" y="424" width="8" height="30" fill="#000000"></rect>
+          </g>
+          <rect x="72" y="492" width="44" height="18" fill="#000000"></rect>
+          <rect x="284" y="492" width="44" height="18" fill="#000000"></rect>
+        </svg>
+      </div>
+
+      <!-- Scene 3 · quote chip -->
+      <div id="f15-quote" class="f15-chip">
+        <span class="f15-quote-big">“অভূতপূর্ব”</span>
+        <span class="f15-quote-small">চাহিদা</span>
+      </div>
+
+      <!-- Scene 4 · the lever -->
+      <div id="f15-allow" class="f15-chip">ইউসেজ ÷ 2</div>
+
+      <!-- Scene 4 · hanging door sign -->
+      <div id="f15-sign">
+        <svg class="f15-sign-strings" viewBox="0 0 460 80" aria-hidden="true">
+          <path d="M 230 20 L 80 74"></path>
+          <path d="M 230 20 L 380 74"></path>
+        </svg>
+        <div class="f15-peg"></div>
+        <div class="f15-sign-persp">
+          <div data-layout-allow-overlap id="f15-sign-flip">
+            <div data-layout-allow-overlap class="f15-face f15-face-front">
+              <span data-layout-allow-overlap class="f15-sign-label">সাইন-আপ:</span>
+              <span data-layout-allow-overlap class="f15-sign-word">বন্ধ</span>
+            </div>
+            <div data-layout-allow-overlap class="f15-face f15-face-back">
+              <span data-layout-allow-overlap class="f15-sign-label">সাইন-আপ:</span>
+              <span data-layout-allow-overlap class="f15-sign-word">খোলা</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 4 · the thing they didn't buy -->
+      <div id="f15-gpu" class="f15-chip">
+        2× GPU
+        <svg class="f15-strike f15-mark" viewBox="0 0 300 44" preserveAspectRatio="none" aria-hidden="true">
+          <path id="f15-strike-path" d="M 8 34 C 70 29, 140 24, 206 18 S 276 10, 292 8"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      // ── number-wheel build (pasted from compositions/components/number-wheel.html, f15-scoped) ──
+      // spin = double: one extra 0→9 revolution so every column (even a "0") visibly rolls.
+      document.querySelectorAll(".f15-wheel").forEach(function (el) {
+        if (el.dataset.f15WheelReady === "1") return;
+        var value = el.dataset.value || "0";
+        el.textContent = "";
+        for (var c = 0; c < value.length; c++) {
+          var ch = value.charAt(c);
+          if (!/\d/.test(ch)) {
+            el.appendChild(document.createTextNode(ch));
+            continue;
+          }
+          var stops = 10 + Number(ch);
+          var frame = document.createElement("span");
+          frame.className = "f15-wheel-digit";
+          var strip = document.createElement("span");
+          strip.className = "f15-wheel-strip";
+          // strip is (stops + 1) em tall; landing on its own digit = -stops em = this yPercent
+          strip.dataset.targetPct = String((-100 * stops) / (stops + 1));
+          for (var i = 0; i <= stops; i++) {
+            var step = document.createElement("span");
+            step.textContent = String(i % 10);
+            strip.appendChild(step);
+          }
+          frame.appendChild(strip);
+          el.appendChild(frame);
+        }
+        el.dataset.f15WheelReady = "1";
+      });
+
+      // ── svg-path-draw setup: measured length → dasharray / hidden dashoffset ──
+      function prepDraw(id) {
+        var p = document.getElementById(id);
+        var len = 0;
+        try { len = p.getTotalLength(); } catch (e) { len = 0; }
+        if (!(len > 0)) { p.setAttribute("pathLength", "100"); len = 100; }
+        p.style.strokeDasharray = len + " " + (len + 40);
+        p.style.strokeDashoffset = String(len + 20);
+        return len + 20;
+      }
+      var ulineOff = prepDraw("f15-uline-path");
+      var heat1Off = prepDraw("f15-heat-1");
+      var heat2Off = prepDraw("f15-heat-2");
+      var heat3Off = prepDraw("f15-heat-3");
+      var strikeOff = prepDraw("f15-strike-path");
+
+      var tl = gsap.timeline({ paused: true });
+
+      function drawOn(sel, off, at, dur) {
+        tl.fromTo(sel, { strokeDashoffset: off }, { strokeDashoffset: 0, duration: dur, ease: "power2.out" }, at);
+      }
+      function writeOn(sel, at, dur) {
+        tl.fromTo(sel, { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: dur, ease: "none" }, at);
+      }
+      // checker-register pop: scale up from half, long-tail settle, no overshoot
+      function pop(sel, at, fromRot, toRot) {
+        tl.fromTo(sel, { scale: 0.5, rotation: fromRot, opacity: 0 }, { scale: 1, rotation: toRot, opacity: 1, duration: 0.45, ease: "power4.out" }, at);
+      }
+
+      // ── Scene 1 · the PRO $500 shelf tag ──
+      // "সেটাও" 0.05 — plank stub slides in, the tag swings down off its black clip
+      tl.fromTo("#f15-shelf-in", { x: -220 }, { x: 0, duration: 0.55, ease: "power3.out" }, 0.05);
+      tl.fromTo("#f15-shelf-in", { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "power1.out" }, 0.05);
+      tl.fromTo("#f15-tag", { rotation: -14, y: -18 }, { rotation: 0, y: 0, duration: 0.85, ease: "power3.out" }, 0.05);
+      // "বিশ" 1.96 — unit price rolls in (number-wheel)
+      tl.fromTo("#f15-price", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" }, 1.96);
+      document.querySelectorAll("#f15-price .f15-wheel-strip").forEach(function (strip, i) {
+        tl.fromTo(strip, { yPercent: 0 }, { yPercent: Number(strip.dataset.targetPct), duration: 0.9, ease: "power3.out" }, 1.96 + i * 0.07);
+      });
+      // "ডলার।" 2.32 — red marker underlines the unit price
+      drawOn("#f15-uline-path", ulineOff, 2.32, 0.45);
+      // "স্পিড," 4.08 — "= স্পিড," writes on
+      writeOn("#f15-note-1", 4.08, 0.55);
+      // "ভ্যালু" 4.94 — "ভ্যালু না" completes it beneath
+      writeOn("#f15-note-2", 4.94, 0.6);
+
+      // ── Scene 2 · scale-swap the tag + notes to the upper-left corner at 40% ──
+      // "তাহলে" 6.00 — outgoing: shrink + fade fast toward the corner (power2.in)
+      tl.fromTo("#f15-grp-big", { scale: 1, x: 0, y: 0, opacity: 1 }, { scale: 0.6, x: -110, y: -166, opacity: 0, duration: 0.38, ease: "power2.in", immediateRender: false }, 6.0);
+      // incoming: the parked 40% copy arrives with weight, overlapping the exit tail by 0.15s (z above)
+      tl.fromTo("#f15-grp-mini", { scale: 0.3, opacity: 0 }, { scale: 0.4, opacity: 1, duration: 0.55, ease: "back.out(1.4)" }, 6.0 + 0.38 - 0.15);
+      // "ক্যাপাসিটি।" 7.99 — the hero word slams in, top-center
+      tl.fromTo("#f15-cap", { scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.34, ease: "power4.out" }, 7.99);
+
+      // ── Scene 3 · the overheating GPU rack ──
+      // "Astra-র" 9.17 — rack exhibit rises in at the lower-left
+      tl.fromTo("#f15-rack", { y: 150, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 9.17);
+      // heat lines draw on, each starting at ~70% of the previous one's draw
+      drawOn("#f15-heat-1", heat1Off, 9.48, 0.42);
+      drawOn("#f15-heat-2", heat2Off, 9.78, 0.42);
+      drawOn("#f15-heat-3", heat3Off, 10.08, 0.42);
+      // "অভূতপূর্ব," 10.79 — yellow quote chip pops beside the rack
+      pop("#f15-quote", 10.79, -10, -3);
+
+      // ── Scene 4 · halve the allowance → reopen sign-ups ──
+      // "অর্ধেক" 12.78 — pink lever chip pops center-right
+      pop("#f15-allow", 12.78, 10, 3);
+      // "দ্বিগুণ" 13.74 — "2× GPU" chip pops under the sign's spot
+      pop("#f15-gpu", 13.74, 6, -2);
+      // "না কিনেই" 14.70 — red marker strikes it through
+      drawOn("#f15-strike-path", strikeOff, 14.7, 0.3);
+      // "সাইন-আপ" 15.10 — the বন্ধ door sign swings in
+      tl.fromTo("#f15-sign", { rotation: -12, y: -40, opacity: 0 }, { rotation: 0, y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 15.1);
+      // "খোলা" 16.46 — the sign flips on its Y axis: বন্ধ → খোলা; hold
+      tl.fromTo("#f15-sign-flip", { rotationY: 0 }, { rotationY: 180, duration: 0.42, ease: "power2.inOut" }, 16.46);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["15-why"] = tl;
+    })();
+  </script>
+</template>

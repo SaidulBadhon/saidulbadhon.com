@@ -50,3 +50,9 @@ recurring prop is a supermarket shelf **unit-price tag** (price per 1x of Plus) 
   assembly; `.hyperframes/mix.mjs bed` after transitions — music full under HOST frames, dead stop
   on the freeze, muffled low-pass bed under CHECKER frames, open on the end card.
 - Added a silent 3s end card (frame 19) with the blog URL, since the outro line ends on its last word.
+
+## 2026-10-02 — Bangla version (follow-on)
+
+The user asked for "the same video but in bangla". It is built as a sibling project,
+`../chatgpt-pro-200-but-wait-theres-less-bn/` (its own BRIEF.md has the answers: Gemini TTS
+voices, Bangla on-screen text, everyday Bangladeshi register). Same story, frames and look.
