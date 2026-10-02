@@ -225,6 +225,11 @@
 
   --viz-good: #0ca30c;
   --viz-caution: #ec835a;
+
+  /* Kinds of event, when a chart sorts news rather than models. */
+  --viz-agents: var(--viz-accent);
+  --viz-money: var(--viz-gpt-6-astra);
+  --viz-product: var(--viz-sonnet-5-5);
 }
 
 .dark .viz {
