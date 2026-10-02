@@ -1,0 +1,640 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Permanent Marker"; src: url("assets/fonts/permanent-marker-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+
+    /* ---------- CHECKER stage (paused tape) — static, full duration ---------- */
+    #f13-stage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #1b1b1f;
+    }
+    .f13-scan {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+    .f13-ghost-star {
+      position: absolute;
+      left: 1690px;
+      top: 560px;
+      width: 300px;
+      height: 300px;
+      opacity: 0.08;
+      transform: rotate(12deg);
+      overflow: visible;
+    }
+    .f13-ghost-star polygon {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 4;
+      stroke-linejoin: miter;
+    }
+    .f13-ghost-stripe {
+      position: absolute;
+      left: 1700px;
+      top: 430px;
+      width: 300px;
+      height: 84px;
+      box-sizing: border-box;
+      border: 3px solid #ffffff;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #ffffff 0px,
+        #ffffff 12px,
+        transparent 12px,
+        transparent 24px
+      );
+      opacity: 0.08;
+      transform: rotate(-9deg);
+    }
+    .f13-osd {
+      position: absolute;
+      left: 60px;
+      top: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 33px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+    }
+    .f13-pause-ico {
+      display: flex;
+      gap: 7px;
+    }
+    .f13-pause-ico i {
+      display: block;
+      width: 10px;
+      height: 30px;
+      background: #ffffff;
+    }
+    .f13-sp {
+      margin-left: 18px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+    }
+    .f13-fc-pill {
+      position: absolute;
+      right: 60px;
+      top: 44px;
+      padding: 6px 24px 7px;
+      background: #ffffff;
+      color: #000000;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    /* ---------- content layer ---------- */
+    #f13-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    /* White chart card: x 154–1766, y 136–884 (+8px shadow → 892, above the 896 keep-out).
+       Children are positioned in card-inner px (1604 × 740). */
+    #f13-card {
+      position: absolute;
+      left: 154px;
+      top: 136px;
+      width: 1612px;
+      height: 748px;
+      box-sizing: border-box;
+      background: #ffffff;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+
+    .f13-pill {
+      position: absolute;
+      box-sizing: border-box;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+    #f13-title {
+      left: 44px;
+      top: 34px;
+      height: 54px;
+      padding: 0 26px;
+      line-height: 48px;
+      font-size: 28px;
+      background: #f7cb46;
+      transform-origin: 0% 50%;
+      z-index: 5;
+    }
+    #f13-nochange {
+      left: 1070px;
+      top: 44px;
+      width: 240px;
+      height: 46px;
+      line-height: 40px;
+      font-size: 24px;
+      text-align: center;
+      background: #c0f7fe;
+      transform-origin: 50% 100%;
+      z-index: 5;
+    }
+
+    /* chart scaffolding: x0 = 470px = 0%, 7.2px per 1% → 100% at 1190, 130% at 1406 */
+    .f13-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1604px;
+      height: 740px;
+      overflow: visible;
+    }
+    .f13-gridsvg {
+      z-index: 1;
+    }
+    .f13-linesvg {
+      z-index: 3;
+    }
+    .f13-markersvg {
+      z-index: 7;
+    }
+    .f13-markersvg path {
+      fill: none;
+      stroke: #e5322d;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .f13-tick {
+      position: absolute;
+      top: 662px;
+      width: 80px;
+      text-align: center;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      color: rgba(0, 0, 0, 0.55);
+      z-index: 1;
+    }
+    .f13-tick-hero {
+      font-weight: 700;
+      color: #000000;
+    }
+
+    /* row labels */
+    .f13-name {
+      position: absolute;
+      left: 44px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 36px;
+      line-height: 36px;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+      z-index: 2;
+    }
+    .f13-namesub {
+      margin-left: 10px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 25px;
+      letter-spacing: 0;
+      vertical-align: 3px;
+    }
+    .f13-detail {
+      position: absolute;
+      left: 44px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 26px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: rgba(0, 0, 0, 0.55);
+      z-index: 2;
+    }
+    .f13-detail-bn {
+      line-height: 30px;
+      letter-spacing: 0;
+    }
+    .f13-larr {
+      display: inline-block;
+      width: 24px;
+      height: 15px;
+      margin: 0 6px;
+      vertical-align: 0px;
+      overflow: visible;
+    }
+    .f13-larr path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* bars: 3px border + 4px hard shadow, square, grow from the 0% baseline */
+    .f13-bar {
+      position: absolute;
+      left: 470px;
+      height: 68px;
+      box-sizing: border-box;
+      background: #fe90e8;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      transform-origin: 0% 50%;
+      z-index: 2;
+    }
+    .f13-val {
+      position: absolute;
+      left: 470px;
+      height: 68px;
+      line-height: 68px;
+      text-align: right;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+      color: #000000;
+      z-index: 2;
+    }
+    .f13-dim {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1604px;
+      height: 740px;
+      opacity: 0.6;
+      z-index: 2;
+    }
+
+    /* tags pop out of the bar ends */
+    .f13-tag {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 8px 16px;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 30px;
+      line-height: 30px;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+      transform-origin: 0% 50%;
+      z-index: 4;
+    }
+    .f13-tag-bn {
+      padding: 6px 18px;
+      line-height: 36px;
+      letter-spacing: 0;
+    }
+
+    /* fact-checker handwriting — red ink, never a fill/border */
+    .f13-note {
+      position: absolute;
+      left: 1150px;
+      top: 470px;
+      width: 434px;
+      text-align: right;
+      transform: rotate(-3deg);
+      transform-origin: 100% 0%;
+      font-family: "Permanent Marker", "Atma", cursive;
+      font-weight: 600;
+      font-synthesis: none;
+      font-size: 46px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      color: #e5322d;
+      white-space: nowrap;
+      z-index: 7;
+    }
+    .f13-noteline {
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      padding: 4px 10px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="13-model-math" data-start="0" data-duration="19.785" data-width="1920" data-height="1080">
+    <!-- Track 0: the paused-tape stage (static chrome, present from t=0) -->
+    <div
+      id="f13-stage"
+      class="clip"
+      data-start="0"
+      data-duration="19.785"
+      data-track-index="0"
+    >
+      <div class="f13-scan"></div>
+      <div class="f13-ghost-stripe"></div>
+      <svg class="f13-ghost-star" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <polygon
+          points="150,10 180.9,54.9 232.3,36.7 230.9,91.2 283.2,106.7 250,150 283.2,193.3 230.9,208.8 232.3,263.3 180.9,245.1 150,290 119.1,245.1 67.7,263.3 69.1,208.8 16.8,193.3 50,150 16.8,106.7 69.1,91.2 67.7,36.7 119.1,54.9"
+        />
+      </svg>
+      <div class="f13-osd">
+        <span class="f13-pause-ico"><i></i><i></i></span>
+        <span>PAUSE</span>
+        <span class="f13-sp">SP 0:08:31</span>
+      </div>
+      <div class="f13-fc-pill">ফ্যাক্ট চেক</div>
+    </div>
+
+    <!-- Track 1: the chart card (foreground subject) -->
+    <div
+      id="f13-content"
+      class="clip"
+      data-start="0"
+      data-duration="19.785"
+      data-track-index="1"
+    >
+      <div id="f13-card">
+        <div id="f13-title" class="f13-pill">পুরনো Pro $200-এর তুলনায় কত টোকেন পাবেন</div>
+
+        <!-- gridlines + axes (behind the bars) -->
+        <svg class="f13-svg f13-gridsvg" viewBox="0 0 1604 740" xmlns="http://www.w3.org/2000/svg">
+          <g stroke="rgba(0,0,0,0.1)" stroke-width="2">
+            <line x1="650" y1="104" x2="650" y2="640" />
+            <line x1="830" y1="104" x2="830" y2="640" />
+            <line x1="1010" y1="104" x2="1010" y2="640" />
+            <line x1="1370" y1="104" x2="1370" y2="640" />
+          </g>
+          <g stroke="#000000" stroke-width="3" stroke-linecap="square">
+            <line x1="470" y1="104" x2="470" y2="640" />
+            <line x1="470" y1="640" x2="1406" y2="640" />
+            <line x1="470" y1="640" x2="470" y2="652" />
+            <line x1="650" y1="640" x2="650" y2="652" />
+            <line x1="830" y1="640" x2="830" y2="652" />
+            <line x1="1010" y1="640" x2="1010" y2="652" />
+            <line x1="1190" y1="640" x2="1190" y2="652" />
+            <line x1="1370" y1="640" x2="1370" y2="652" />
+          </g>
+        </svg>
+        <div class="f13-tick" style="left: 430px">0%</div>
+        <div class="f13-tick" style="left: 610px">25%</div>
+        <div class="f13-tick" style="left: 790px">50%</div>
+        <div class="f13-tick" style="left: 970px">75%</div>
+        <div class="f13-tick f13-tick-hero" style="left: 1150px">100%</div>
+        <div class="f13-tick" style="left: 1330px">125%</div>
+
+        <!-- Row 1 — GPT-6 SOL (center y 172) -->
+        <div id="f13-name1" class="f13-name" style="top: 137px">GPT-6 Sol</div>
+        <div id="f13-detail1" class="f13-detail" style="top: 181px">
+          $2 / $10<svg class="f13-larr" viewBox="0 0 24 15" aria-hidden="true"><path d="M22 7.5H3M9 1.5 3 7.5l6 6" /></svg>$4 / $20
+        </div>
+        <div id="f13-bar1" class="f13-bar" style="top: 138px; width: 720px"></div>
+        <div id="f13-val1" class="f13-val" style="top: 138px; width: 704px">100%</div>
+
+        <!-- Row 2 — GPT-6 LUNA · আউটপুট (center y 304) -->
+        <div id="f13-name2" class="f13-name" style="top: 269px">
+          GPT-6 Luna<span class="f13-namesub">· আউটপুট</span>
+        </div>
+        <div id="f13-detail2" class="f13-detail" style="top: 313px">
+          $0.50<svg class="f13-larr" viewBox="0 0 24 15" aria-hidden="true"><path d="M22 7.5H3M9 1.5 3 7.5l6 6" /></svg>$1.20
+        </div>
+        <div id="f13-bar2" class="f13-bar" style="top: 270px; width: 864px"></div>
+        <div id="f13-val2" class="f13-val" style="top: 270px; width: 848px">120%</div>
+
+        <!-- Row 3 — GPT-6 ASTRA (center y 436) — the focal row -->
+        <div id="f13-name3" class="f13-name" style="top: 401px">GPT-6 Astra</div>
+        <div id="f13-detail3" class="f13-detail f13-detail-bn" style="top: 443px">$10 / $50 · অপরিবর্তিত</div>
+        <div id="f13-bar3" class="f13-bar" style="top: 402px; width: 360px"></div>
+        <div id="f13-val3" class="f13-val" style="top: 402px; width: 344px">50%</div>
+
+        <!-- Row 4 — GPT-5.6 SOL (center y 568) — supporting, dimmed to 60% -->
+        <div class="f13-dim">
+          <div id="f13-name4" class="f13-name" style="top: 533px">GPT-5.6 Sol</div>
+          <div id="f13-detail4" class="f13-detail f13-detail-bn" style="top: 575px">$4 / $20 · এখনও বিক্রি হচ্ছে</div>
+          <div id="f13-bar4" class="f13-bar" style="top: 534px; width: 360px"></div>
+          <div id="f13-val4" class="f13-val" style="top: 534px; width: 344px">50%</div>
+        </div>
+
+        <!-- 100% "কোনো বদল নেই" reference line (dashed, revealed by a drawn mask) -->
+        <svg class="f13-svg f13-linesvg" viewBox="0 0 1604 740" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <mask id="f13-ncmask" maskUnits="userSpaceOnUse" x="0" y="0" width="1604" height="740">
+              <path
+                id="f13-ncreveal"
+                d="M 1190 94 L 1190 642"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="14"
+                stroke-linecap="butt"
+              />
+            </mask>
+          </defs>
+          <path
+            d="M 1190 96 L 1190 640"
+            fill="none"
+            stroke="#000000"
+            stroke-width="4"
+            stroke-dasharray="16 11"
+            mask="url(#f13-ncmask)"
+          />
+        </svg>
+        <div id="f13-nochange" class="f13-pill">কোনো বদল নেই</div>
+
+        <!-- tags -->
+        <div id="f13-tag1" class="f13-tag f13-tag-bn" style="left: 1214px; top: 145px; background: #ffffff">সমান-সমান</div>
+        <div id="f13-tag2" class="f13-tag" style="left: 1358px; top: 278px; background: #99e885">+20%</div>
+        <div
+          id="f13-tag3"
+          class="f13-tag f13-tag-bn"
+          style="left: 852px; top: 407px; background: #fe90e8; font-size: 34px; line-height: 40px"
+        >
+          অর্ধেক
+        </div>
+
+        <!-- red marker: loop around the Astra row + arrow from the right margin -->
+        <svg class="f13-svg f13-markersvg" viewBox="0 0 1604 740" xmlns="http://www.w3.org/2000/svg">
+          <path
+            id="f13-loop"
+            d="M 800 376 C 600 368, 280 372, 90 380 C 40 383, 18 410, 20 436 C 22 466, 44 494, 100 496 C 360 504, 720 502, 960 496 C 1006 494, 1030 468, 1028 436 C 1026 404, 1002 380, 950 378 C 890 375, 790 372, 660 381"
+          />
+          <path id="f13-arrow" d="M 1572 446 C 1430 412, 1220 462, 1046 438" />
+          <path id="f13-arrowhead" d="M 1083 419 L 1047 438 L 1074 467" />
+        </svg>
+        <div class="f13-note">
+          <span id="f13-note1" class="f13-noteline">যেটার জন্য</span>
+          <span id="f13-note2" class="f13-noteline">টাকা দিয়েছিলেন</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      // svg-path-draw: measured length; dash slightly longer gap so no round-cap dot shows at rest
+      function draw(id, at, dur, ease, fallback) {
+        var p = document.getElementById(id);
+        var len = p && p.getTotalLength ? p.getTotalLength() : 0;
+        if (!len || !isFinite(len)) len = fallback;
+        p.style.strokeDasharray = len + " " + (len + 6);
+        tl.fromTo(
+          p,
+          { strokeDashoffset: len + 3 },
+          { strokeDashoffset: 0, duration: dur, ease: ease },
+          at,
+        );
+      }
+      function rowIn(nameSel, detailSel, at, detailLag) {
+        tl.fromTo(
+          nameSel,
+          { x: -36, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
+          at,
+        );
+        tl.fromTo(
+          detailSel,
+          { x: -24, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" },
+          at + detailLag,
+        );
+      }
+      // stat-bars-and-fills: scaleX from the left origin; final widths authored in CSS (7.2px per 1%)
+      function barGrow(sel, at, dur) {
+        tl.fromTo(sel, { scaleX: 0 }, { scaleX: 1, duration: dur, ease: "power3.out" }, at);
+      }
+      function valIn(sel, at) {
+        tl.fromTo(
+          sel,
+          { x: -10, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.3, ease: "power3.out" },
+          at,
+        );
+      }
+      // spring-pop-entrance (CHECKER register → power3, no overshoot), anchored at the bar end
+      function tagPop(sel, at, rot) {
+        tl.fromTo(
+          sel,
+          { scale: 0, opacity: 0, rotation: rot },
+          { scale: 1, opacity: 1, rotation: rot, duration: 0.45, ease: "power3.out" },
+          at,
+        );
+      }
+
+      // Scene 1 — "অর্ধেক সত্যি।" 0.05: chart card slides up onto the paused stage
+      tl.fromTo(
+        "#f13-card",
+        { y: 110, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+        0.05,
+      );
+      tl.fromTo(
+        "#f13-title",
+        { scale: 0.5, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.45, ease: "power3.out" },
+        0.23,
+      );
+      // 0.60: the 100% "কোনো বদল নেই" line draws top → bottom
+      draw("f13-ncreveal", 0.6, 0.6, "power2.out", 548);
+      tl.fromTo(
+        "#f13-nochange",
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" },
+        0.7,
+      );
+
+      // Scene 2 — "GPT-6" 1.43: Sol row; "অর্ধেক," 2.77: bar to 100%; "সমান-সমান।" 5.61: tag
+      rowIn("#f13-name1", "#f13-detail1", 1.43, 0.12);
+      barGrow("#f13-bar1", 2.77, 0.9);
+      valIn("#f13-val1", 3.5);
+      tagPop("#f13-tag1", 5.61, -3);
+
+      // Scene 3 — "Luna" 6.71: Luna row; "বিশ" 9.54: bar past the line to 120% + tag
+      rowIn("#f13-name2", "#f13-detail2", 6.71, 0.12);
+      barGrow("#f13-bar2", 9.54, 0.85);
+      tagPop("#f13-tag2", 10.0, 3);
+      valIn("#f13-val2", 10.25);
+
+      // Scene 4 — "Astra" 11.67: Astra row; "অর্ধেক।" 14.53: bar stops at 50% + অর্ধেক tag,
+      // GPT-5.6 Sol (dimmed, supporting) fills to 50% at the same moment
+      rowIn("#f13-name3", "#f13-detail3", 11.67, 0.2);
+      barGrow("#f13-bar3", 14.53, 0.8);
+      rowIn("#f13-name4", "#f13-detail4", 14.53, 0.1);
+      barGrow("#f13-bar4", 14.58, 0.8);
+      tagPop("#f13-tag3", 14.88, -4);
+      valIn("#f13-val3", 15.13);
+      valIn("#f13-val4", 15.2);
+
+      // Scene 5 — "বেশিরভাগ" 15.61: red marker loops the Astra row
+      draw("f13-loop", 15.61, 0.7, "none", 2300);
+      // "Astra-র" 18.39: arrow from the right margin to the loop, then the note
+      draw("f13-arrow", 18.39, 0.4, "power2.out", 540);
+      draw("f13-arrowhead", 18.75, 0.16, "power2.out", 80);
+      tl.fromTo(
+        "#f13-note1",
+        { clipPath: "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.28, ease: "none" },
+        18.83,
+      );
+      tl.fromTo(
+        "#f13-note2",
+        { clipPath: "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.4, ease: "none" },
+        19.09,
+      );
+      // hold to 19.785 (non-final frame: no exit)
+
+      window.__timelines["13-model-math"] = tl;
+    })();
+  </script>
+</template>

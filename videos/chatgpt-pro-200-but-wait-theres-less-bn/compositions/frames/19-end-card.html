@@ -1,0 +1,316 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Inter";
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/inter-700.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Inter";
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/inter-800.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Inter";
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/inter-900.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/space-grotesk-700.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Noto Sans Bengali";
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Noto Sans Bengali";
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/noto-sans-bengali-800.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Noto Sans Bengali";
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2");
+    }
+
+    /* Root: styled by #root only (never a class). Container law: all units cqw/cqh. */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #ffffff;
+    }
+
+    /* Full-bleed black ground — the closing plate surface (clip layer, not #root). */
+    #f19-bg {
+      position: absolute;
+      inset: 0;
+      background: #000000;
+    }
+
+    #f19-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* close-frame: x 16–84%, y 18–78% (bottom edge 842px + shadow, well above the 896px keep-out) */
+    #f19-plate {
+      position: absolute;
+      left: 16cqw;
+      top: 18cqh;
+      width: 68cqw;
+      height: 60cqh;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+    /* The yellow 1.2cqw hard offset shadow, built as a block so it can "drop" via transform. */
+    #f19-shadow {
+      position: absolute;
+      inset: 0;
+      background: #f7cb46;
+      will-change: transform;
+    }
+    #f19-frame {
+      position: absolute;
+      inset: 0;
+      box-sizing: border-box;
+      background: #000000;
+      border: 0.4cqw solid #ffffff;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3.1cqw;
+    }
+
+    /* label-pill, inverted for the closer (Bangla: no tracking, roomier line box for vowel signs) */
+    #f19-pill {
+      display: inline-block;
+      box-sizing: border-box;
+      padding: 0.55cqw 1.9cqw 0.6cqw;
+      background: #ffffff;
+      color: #000000;
+      border: 0.3cqw solid #000000;
+      border-radius: 9999px;
+      box-shadow: 0.4cqw 0.4cqw 0 #f7cb46;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 1.75cqw;
+      line-height: 1.35;
+      letter-spacing: 0;
+      white-space: nowrap;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+
+    /* post title — heading-md, white (Bangla: weight 800, letter-spacing 0, line-height >= 1.2) */
+    #f19-title {
+      margin-top: 4.2cqh;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 2.9cqw;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-align: center;
+    }
+    .f19-line {
+      display: flex;
+      justify-content: center;
+      gap: 0.3em;
+    }
+    /* Mask padding is generous so Bengali vowel signs / conjuncts are never clipped. */
+    .f19-wm {
+      display: inline-block;
+      overflow: hidden;
+      padding: 0.22em 0.06em 0.28em;
+      margin: -0.22em -0.06em -0.28em;
+    }
+    .f19-w {
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+
+    /* the URL — close-title, yellow (focal). Latin only, keeps its tight display tracking. */
+    #f19-url {
+      margin-top: 4.2cqh;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 4.2cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: #f7cb46;
+      white-space: nowrap;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity, filter;
+    }
+
+    /* pink star-burst puncturing the top-right corner */
+    #f19-star {
+      position: absolute;
+      left: 77.5cqw;
+      top: 8cqh;
+      width: 11cqw;
+      height: 11cqw;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+    #f19-star svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+  </style>
+
+  <div id="root" data-composition-id="19-end-card" data-width="1920" data-height="1080">
+    <div id="f19-bg" class="clip" data-start="0" data-duration="3" data-track-index="0"></div>
+
+    <div id="f19-stage">
+      <div id="f19-plate">
+        <div id="f19-shadow"></div>
+        <div id="f19-frame">
+          <div id="f19-pill">পুরো বিশ্লেষণ + সব সোর্স</div>
+
+          <div id="f19-title">
+            <div class="f19-line">
+              <span class="f19-wm"><span class="f19-w">ChatGPT</span></span>
+              <span class="f19-wm"><span class="f19-w">Pro</span></span>
+              <span class="f19-wm"><span class="f19-w">$200</span></span>
+              <span class="f19-wm"><span class="f19-w">ফিরেছে,</span></span>
+            </div>
+            <div class="f19-line">
+              <span class="f19-wm"><span class="f19-w">ইউসেজ</span></span>
+              <span class="f19-wm"><span class="f19-w">অর্ধেক</span></span>
+            </div>
+          </div>
+
+          <div id="f19-url">saidulbadhon.com</div>
+        </div>
+      </div>
+
+      <div id="f19-star" aria-hidden="true">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <polygon
+            points="100.0,6.0 121.6,33.4 155.3,24.0 156.6,58.9 189.4,71.0 170.0,100.0 189.4,129.0 156.6,141.1 155.3,176.0 121.6,166.6 100.0,194.0 78.4,166.6 44.7,176.0 43.4,141.1 10.6,129.0 30.0,100.0 10.6,71.0 43.4,58.9 44.7,24.0 78.4,33.4"
+            fill="#FE90E8"
+            stroke="#000000"
+            stroke-width="5.5"
+            stroke-linejoin="miter"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Shot beats (seconds from frame start). Silent frame — one beat array drives every reveal.
+      // Timing unchanged from the English frame (3.0s).
+      const BEAT = {
+        plate: 0.0, // close-frame springs in from 0.92
+        shadow: 0.18, // yellow hard shadow drops out from behind it
+        pill: 0.22, // label-pill pops inside
+        title: 0.5, // post title, per word (masked rise)
+        url: 1.1, // URL slams in
+        star: 1.22, // pink star-burst punctures the top-right corner
+        fade: 2.6, // final frame: fade to black
+      };
+      const END = 3.0;
+
+      // Scene 1 — close-frame springs in (smooth long-tail settle, no overshoot).
+      tl.fromTo(
+        "#f19-plate",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.2, ease: "power1.out" },
+        BEAT.plate,
+      );
+      tl.fromTo(
+        "#f19-plate",
+        { scale: 0.92 },
+        { scale: 1, duration: 0.6, ease: "power3.out" },
+        BEAT.plate,
+      );
+
+      // The 1.2cqw yellow offset shadow slides out from under the frame (1.2/68 of width, 1.2cqw/60cqh of height).
+      tl.fromTo(
+        "#f19-shadow",
+        { xPercent: 0, yPercent: 0 },
+        { xPercent: 1.7647, yPercent: 3.5556, duration: 0.45, ease: "power3.out" },
+        BEAT.shadow,
+      );
+
+      // White label-pill pops in, landing slightly crooked.
+      tl.fromTo(
+        "#f19-pill",
+        { scale: 0.6, opacity: 0, y: 12, rotation: -6 },
+        { scale: 1, opacity: 1, y: 0, rotation: -2, duration: 0.42, ease: "power3.out" },
+        BEAT.pill,
+      );
+
+      // Scene 2 — post title reveals per word (bottom-up masked slide).
+      gsap.utils.toArray("#f19-title .f19-w").forEach(function (el, i) {
+        tl.fromTo(
+          el,
+          { yPercent: 130, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 0.45, ease: "power3.out" },
+          BEAT.title + i * 0.06,
+        );
+      });
+
+      // The URL slams in beneath it (scale-down slam, blur resolves sharp).
+      tl.fromTo(
+        "#f19-url",
+        { scale: 1.6, opacity: 0, filter: "blur(12px)" },
+        { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power4.out" },
+        BEAT.url,
+      );
+
+      // Pink star-burst punctures the top-right corner and settles tilted.
+      tl.fromTo(
+        "#f19-star",
+        { scale: 0, opacity: 0, rotation: -40 },
+        { scale: 1, opacity: 1, rotation: 12, duration: 0.5, ease: "expo.out" },
+        BEAT.star,
+      );
+
+      // Hold (still) — then the final frame fades the whole plate to black.
+      tl.fromTo(
+        "#f19-stage",
+        { opacity: 1 },
+        { opacity: 0, duration: END - BEAT.fade, ease: "power1.inOut" },
+        BEAT.fade,
+      );
+
+      window.__timelines["19-end-card"] = tl;
+    })();
+  </script>
+</template>

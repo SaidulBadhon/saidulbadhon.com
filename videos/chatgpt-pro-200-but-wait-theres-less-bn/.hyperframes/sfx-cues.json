@@ -1,0 +1,320 @@
+{
+  "_note": "Frame-relative SFX cues aligned to the Bangla voice track (see .hyperframes/cue-maps-bn.md). Applied by .hyperframes/mix.mjs cues.",
+  "cues": [
+    {
+      "frame": 1,
+      "name": "game-show-fanfare",
+      "at": 0,
+      "dur": 3,
+      "vol": 0.22
+    },
+    {
+      "frame": 1,
+      "name": "sparkle-shimmer",
+      "at": 6.78,
+      "dur": 1.4,
+      "vol": 0.3
+    },
+    {
+      "frame": 2,
+      "name": "record-scratch",
+      "at": 0,
+      "dur": 1.4,
+      "vol": 0.6
+    },
+    {
+      "frame": 3,
+      "name": "marker-squeak",
+      "at": 14.6,
+      "dur": 0.6,
+      "vol": 0.28
+    },
+    {
+      "frame": 3,
+      "name": "marker-squeak",
+      "at": 19.92,
+      "dur": 0.6,
+      "vol": 0.28
+    },
+    {
+      "frame": 3,
+      "name": "pop",
+      "at": 20.75,
+      "dur": 0.31,
+      "vol": 0.35
+    },
+    {
+      "frame": 4,
+      "name": "orchestra-hit",
+      "at": 1.71,
+      "dur": 1.7,
+      "vol": 0.42
+    },
+    {
+      "frame": 5,
+      "name": "whoosh",
+      "at": 9.75,
+      "dur": 0.9,
+      "vol": 0.28
+    },
+    {
+      "frame": 5,
+      "name": "rubber-stamp",
+      "at": 11.38,
+      "dur": 0.94,
+      "vol": 0.45
+    },
+    {
+      "frame": 5,
+      "name": "whoosh",
+      "at": 16.85,
+      "dur": 0.9,
+      "vol": 0.28
+    },
+    {
+      "frame": 5,
+      "name": "marker-squeak",
+      "at": 20.38,
+      "dur": 0.7,
+      "vol": 0.28
+    },
+    {
+      "frame": 6,
+      "name": "ding-bell",
+      "at": 2.38,
+      "dur": 0.98,
+      "vol": 0.3
+    },
+    {
+      "frame": 6,
+      "name": "ding-bell",
+      "at": 4.21,
+      "dur": 0.98,
+      "vol": 0.3
+    },
+    {
+      "frame": 6,
+      "name": "ding-bell",
+      "at": 7.44,
+      "dur": 0.98,
+      "vol": 0.3
+    },
+    {
+      "frame": 7,
+      "name": "marker-squeak",
+      "at": 3.37,
+      "dur": 0.6,
+      "vol": 0.28
+    },
+    {
+      "frame": 7,
+      "name": "marker-squeak",
+      "at": 5.24,
+      "dur": 0.6,
+      "vol": 0.28
+    },
+    {
+      "frame": 7,
+      "name": "marker-squeak",
+      "at": 14.49,
+      "dur": 0.7,
+      "vol": 0.28
+    },
+    {
+      "frame": 7,
+      "name": "stamp-thud",
+      "at": 15.65,
+      "dur": 0.86,
+      "vol": 0.45
+    },
+    {
+      "frame": 8,
+      "name": "barcode-scanner-beep",
+      "at": 9.06,
+      "dur": 0.15,
+      "vol": 0.45
+    },
+    {
+      "frame": 8,
+      "name": "barcode-scanner-beep",
+      "at": 15.68,
+      "dur": 0.15,
+      "vol": 0.45
+    },
+    {
+      "frame": 8,
+      "name": "marker-squeak",
+      "at": 16.77,
+      "dur": 0.7,
+      "vol": 0.28
+    },
+    {
+      "frame": 9,
+      "name": "barcode-scanner-beep",
+      "at": 2.7,
+      "dur": 0.15,
+      "vol": 0.45
+    },
+    {
+      "frame": 9,
+      "name": "sad-trombone",
+      "at": 6,
+      "dur": 1.73,
+      "vol": 0.38
+    },
+    {
+      "frame": 10,
+      "name": "marker-squeak",
+      "at": 10.89,
+      "dur": 0.7,
+      "vol": 0.28
+    },
+    {
+      "frame": 10,
+      "name": "stamp-thud",
+      "at": 12.71,
+      "dur": 0.86,
+      "vol": 0.45
+    },
+    {
+      "frame": 11,
+      "name": "whoosh",
+      "at": 0.05,
+      "dur": 1,
+      "vol": 0.25
+    },
+    {
+      "frame": 11,
+      "name": "barcode-scanner-beep",
+      "at": 8.62,
+      "dur": 0.15,
+      "vol": 0.45
+    },
+    {
+      "frame": 11,
+      "name": "pop",
+      "at": 13.11,
+      "dur": 0.31,
+      "vol": 0.35
+    },
+    {
+      "frame": 11,
+      "name": "pop",
+      "at": 13.86,
+      "dur": 0.31,
+      "vol": 0.35
+    },
+    {
+      "frame": 12,
+      "name": "cash-register-ka-ching",
+      "at": 1.48,
+      "dur": 1.24,
+      "vol": 0.38
+    },
+    {
+      "frame": 12,
+      "name": "crickets-chirping",
+      "at": 4.97,
+      "dur": 1.7,
+      "vol": 0.4
+    },
+    {
+      "frame": 13,
+      "name": "marker-squeak",
+      "at": 15.61,
+      "dur": 0.8,
+      "vol": 0.28
+    },
+    {
+      "frame": 14,
+      "name": "whoosh",
+      "at": 0.79,
+      "dur": 1,
+      "vol": 0.3
+    },
+    {
+      "frame": 14,
+      "name": "heavy-impact",
+      "at": 1.94,
+      "dur": 1.5,
+      "vol": 0.42
+    },
+    {
+      "frame": 14,
+      "name": "telephone-ring",
+      "at": 5.89,
+      "dur": 1.2,
+      "vol": 0.3
+    },
+    {
+      "frame": 15,
+      "name": "marker-squeak",
+      "at": 2.32,
+      "dur": 0.6,
+      "vol": 0.28
+    },
+    {
+      "frame": 15,
+      "name": "marker-squeak",
+      "at": 14.7,
+      "dur": 0.6,
+      "vol": 0.28
+    },
+    {
+      "frame": 15,
+      "name": "sign-flip",
+      "at": 16.46,
+      "dur": 1,
+      "vol": 0.35
+    },
+    {
+      "frame": 16,
+      "name": "pop",
+      "at": 2.3,
+      "dur": 0.31,
+      "vol": 0.35
+    },
+    {
+      "frame": 16,
+      "name": "pop",
+      "at": 6.7,
+      "dur": 0.31,
+      "vol": 0.35
+    },
+    {
+      "frame": 16,
+      "name": "pop",
+      "at": 15.67,
+      "dur": 0.31,
+      "vol": 0.35
+    },
+    {
+      "frame": 17,
+      "name": "marker-squeak",
+      "at": 5.17,
+      "dur": 0.6,
+      "vol": 0.28
+    },
+    {
+      "frame": 17,
+      "name": "metal-clang",
+      "at": 12.85,
+      "dur": 1.18,
+      "vol": 0.4
+    },
+    {
+      "frame": 18,
+      "name": "game-show-fanfare",
+      "at": 1.16,
+      "dur": 2.5,
+      "vol": 0.26
+    },
+    {
+      "frame": 19,
+      "name": "chime",
+      "at": 1.1,
+      "dur": 0.72,
+      "vol": 0.4
+    }
+  ]
+}

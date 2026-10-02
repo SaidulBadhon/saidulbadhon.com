@@ -1,0 +1,604 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Permanent Marker"; src: url("assets/fonts/permanent-marker-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+    #root *,
+    #root *::before,
+    #root *::after { box-sizing: border-box; }
+
+    /* ───────── track 0 · the paused-tape stage (static) ───────── */
+    #f08-stage { position: absolute; inset: 0; container-type: size; }
+    .f08-ground { position: absolute; inset: 0; background: #1B1B1F; }
+    .f08-ghost { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    .f08-scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 4px);
+    }
+    .f08-osd {
+      position: absolute;
+      left: 60px;
+      top: 46px;
+      display: flex;
+      align-items: center;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-transform: uppercase;
+    }
+    .f08-osd-icon { display: flex; gap: 7px; margin-right: 14px; }
+    .f08-osd-icon i { display: block; width: 9px; height: 26px; background: #FFFFFF; }
+    .f08-osd-word { font-size: 33px; line-height: 1; letter-spacing: 0.06em; }
+    .f08-osd-sp { font-size: 21px; line-height: 1; letter-spacing: 0.1em; margin-left: 22px; }
+    .f08-fc-pill {
+      position: absolute;
+      right: 60px;
+      top: 44px;
+      padding: 6px 24px 7px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+
+    /* ───────── track 1 · the shelf ───────── */
+    #f08-scene { position: absolute; inset: 0; container-type: size; }
+
+    .f08-plank {
+      position: absolute;
+      left: -40px;
+      top: 642px;
+      width: 2000px;
+      height: 68px;
+      background: #FFFDF5;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      z-index: 1;
+    }
+
+    /* the PRO-box prop: sized in em so 4px/8px atoms stay fixed while the box scales */
+    .f08-box {
+      position: absolute;
+      bottom: 438px; /* rests on the plank top (y = 642) */
+      width: 22em;
+      height: 29.33em;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      transform-origin: 50% 100%;
+      z-index: 2;
+    }
+    .f08-box--plus { font-size: 10.25px; left: 309px; }
+    .f08-box--pro { font-size: 16.4px; left: 1087px; }
+    .f08-box-band {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 4.6em;
+      border-bottom: 4px solid #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .f08-box--plus .f08-box-band { background: #C0F7FE; }
+    .f08-box--pro .f08-box-band { background: #FE90E8; }
+    .f08-box-band span {
+      font-weight: 900;
+      font-size: 2.9em;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .f08-box-front {
+      position: absolute;
+      left: 0;
+      right: 4.6em;
+      top: 4.6em;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2em;
+    }
+    .f08-box-price {
+      font-weight: 900;
+      font-size: 4.6em;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .f08-face { display: block; width: 9em; height: 5.4em; overflow: visible; }
+    .f08-gauge {
+      position: absolute;
+      right: 1.2em;
+      top: 6em;
+      bottom: 1.4em;
+      width: 2.2em;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      overflow: hidden;
+    }
+    .f08-gauge-fill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 100%; /* FULL */
+      background: repeating-linear-gradient(45deg, #000000 0em, #000000 0.45em, #FE90E8 0.45em, #FE90E8 0.9em);
+    }
+    .f08-sticker {
+      position: absolute;
+      left: -1.6em;
+      top: 5.5em;
+      padding: 3px 16px 5px;
+      background: #FFDC8B;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      transform: rotate(-10deg);
+    }
+    .f08-sticker span {
+      display: block;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 36px;
+      line-height: 1.35;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* shelf tags — hang from the plank edge, pivot on the black clip */
+    .f08-tag {
+      position: absolute;
+      top: 698px;
+      width: 470px;
+      height: 190px;
+      transform-origin: 50% -5px;
+      z-index: 3;
+    }
+    .f08-tag-hanger {
+      position: absolute;
+      left: 50%;
+      top: -16px;
+      width: 68px;
+      height: 22px;
+      margin-left: -34px;
+      background: #000000;
+    }
+    .f08-tag-body {
+      position: absolute;
+      inset: 0;
+      padding: 12px 22px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    .f08-tag-top {
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .f08-tag-label {
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 21px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .f08-barcode {
+      display: block;
+      width: 118px;
+      height: 20px;
+      background: repeating-linear-gradient(90deg, #000000 0px, #000000 3px, #FFFFFF 3px, #FFFFFF 5px, #000000 5px, #000000 6px, #FFFFFF 6px, #FFFFFF 9px, #000000 9px, #000000 13px, #FFFFFF 13px, #FFFFFF 15px);
+    }
+    .f08-tag-price {
+      position: relative;
+      margin-top: 6px;
+      height: 96px;
+      display: flex;
+      align-items: flex-end;
+      font-weight: 900;
+      transform-origin: 0% 50%;
+    }
+    .f08-circ-host {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      height: 96px;
+      font-size: 96px;
+    }
+    .f08-cur { display: block; height: 1em; line-height: 1em; letter-spacing: -0.02em; }
+    .f08-per {
+      display: block;
+      height: 1em;
+      font-size: 50px;
+      line-height: 1em;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-left: 14px;
+      margin-bottom: 6px; /* 0.136 × (96 − 50): lines its baseline up with the big digits */
+    }
+    .f08-tag-sub {
+      margin-top: 4px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 27px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .f08-laser-clip { position: absolute; inset: 0; overflow: hidden; }
+    .f08-laser { position: absolute; left: 0; top: 0; width: 8px; height: 184px; overflow: visible; }
+    .f08-laser line { stroke: #E5322D; stroke-width: 3; stroke-linecap: round; }
+
+    /* number-wheel (compositions/components/number-wheel.html), f08-scoped, double spin */
+    .f08-wheel {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .f08-wheel-digit { display: block; height: 1em; overflow: hidden; }
+    .f08-wheel-strip { display: flex; flex-direction: column; }
+    .f08-wheel-strip span { display: block; height: 1em; line-height: 1em; }
+
+    /* red marker — strokes only */
+    .f08-mark path {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .f08-circle-svg {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 320px;
+      height: 150px;
+      margin-left: -160px;
+      margin-top: -75px;
+      overflow: visible;
+    }
+
+    /* top-center formula chip */
+    .f08-chip-row {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 40px;
+      display: flex;
+      justify-content: center;
+      z-index: 4;
+    }
+    .f08-chip {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 28px 10px 14px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      transform-origin: 50% 50%;
+    }
+    .f08-chip-pill {
+      padding: 5px 18px 6px;
+      background: #FFDC8B;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .f08-chip-eq {
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 38px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* handwritten note beside the circled $10 */
+    .f08-note {
+      position: absolute;
+      left: 1530px;
+      top: 742px;
+      width: 350px;
+      height: 64px;
+      transform: rotate(-6deg);
+      transform-origin: 50% 50%;
+      z-index: 5;
+    }
+    .f08-note-text {
+      width: fit-content;
+      font-family: "Permanent Marker", "Atma", cursive;
+      font-weight: 600;
+      font-synthesis: none;
+      font-size: 50px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      color: #E5322D;
+      white-space: nowrap;
+    }
+    .f08-note-under {
+      position: absolute;
+      left: 0;
+      top: 70px;
+      width: 350px;
+      height: 44px;
+      overflow: visible;
+    }
+  </style>
+
+  <div id="root" data-composition-id="08-unit-price" data-start="0" data-duration="20.063" data-width="1920" data-height="1080">
+
+    <!-- track 0 · paused-tape stage: freeze ground, ghost echo, scanlines, VHS chrome (static from t=0) -->
+    <div id="f08-stage" class="clip" data-start="0" data-duration="20.063" data-track-index="0">
+      <div class="f08-ground"></div>
+      <svg class="f08-ghost" viewBox="0 0 1920 1080" aria-hidden="true">
+        <defs>
+          <pattern id="f08-ghost-stripes" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect x="0" y="0" width="14" height="28" fill="#FFFFFF"></rect>
+          </pattern>
+        </defs>
+        <g opacity="0.08">
+          <g transform="rotate(-6 1700 811)">
+            <rect x="1440" y="772" width="520" height="78" fill="url(#f08-ghost-stripes)" stroke="#FFFFFF" stroke-width="5"></rect>
+          </g>
+          <polygon fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="miter"
+            points="1760,510 1801.7,571.6 1871.7,546.3 1869.2,620.6 1940.7,641.3 1895,700 1940.7,758.7 1869.2,779.4 1871.7,853.7 1801.7,828.4 1760,890 1718.3,828.4 1648.3,853.7 1650.8,779.4 1579.3,758.7 1625,700 1579.3,641.3 1650.8,620.6 1648.3,546.3 1718.3,571.6"></polygon>
+        </g>
+      </svg>
+      <div class="f08-scanlines"></div>
+      <div class="f08-osd">
+        <span class="f08-osd-icon"><i></i><i></i></span>
+        <span class="f08-osd-word">PAUSE</span>
+        <span class="f08-osd-sp">SP</span>
+      </div>
+      <div class="f08-fc-pill">ফ্যাক্ট চেক</div>
+    </div>
+
+    <!-- track 1 · the supermarket shelf -->
+    <div id="f08-scene" class="clip" data-start="0" data-duration="20.063" data-track-index="1">
+
+      <div id="f08-plank" class="f08-plank"></div>
+
+      <!-- PLUS box (small, blue band, neutral smile, gauge full) -->
+      <div id="f08-box-plus" class="f08-box f08-box--plus">
+        <div class="f08-box-band"><span>PLUS</span></div>
+        <div class="f08-box-front">
+          <div class="f08-box-price">$20</div>
+          <svg class="f08-face" viewBox="0 0 100 60" aria-hidden="true">
+            <ellipse cx="32" cy="20" rx="7" ry="10" fill="#000000"></ellipse>
+            <ellipse cx="68" cy="20" rx="7" ry="10" fill="#000000"></ellipse>
+            <circle cx="34.5" cy="15.5" r="2.6" fill="#FFFFFF"></circle>
+            <circle cx="70.5" cy="15.5" r="2.6" fill="#FFFFFF"></circle>
+            <path d="M 36 45 Q 50 51 64 45" fill="none" stroke="#000000" stroke-width="5" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <div class="f08-gauge"><div class="f08-gauge-fill"></div></div>
+      </div>
+
+      <!-- OLD PRO box (1.6x, pink band, grin, gauge full, পুরনো sticker) -->
+      <div id="f08-box-pro" class="f08-box f08-box--pro">
+        <div class="f08-box-band"><span>PRO</span></div>
+        <div class="f08-box-front">
+          <div class="f08-box-price">$200</div>
+          <svg class="f08-face" viewBox="0 0 100 60" aria-hidden="true">
+            <ellipse cx="32" cy="18" rx="7" ry="10" fill="#000000"></ellipse>
+            <ellipse cx="68" cy="18" rx="7" ry="10" fill="#000000"></ellipse>
+            <circle cx="34.5" cy="13.5" r="2.6" fill="#FFFFFF"></circle>
+            <circle cx="70.5" cy="13.5" r="2.6" fill="#FFFFFF"></circle>
+            <path d="M 18 35 Q 50 72 82 35 Q 50 45 18 35 Z" fill="#000000" stroke="#000000" stroke-width="3" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div class="f08-gauge"><div class="f08-gauge-fill"></div></div>
+        <div class="f08-sticker"><span>পুরনো</span></div>
+      </div>
+
+      <!-- PLUS shelf tag -->
+      <div id="f08-tag-plus" class="f08-tag" style="left: 187px;">
+        <div class="f08-tag-hanger"></div>
+        <div class="f08-tag-body">
+          <div class="f08-tag-top"><span class="f08-tag-label">ইউনিট দাম</span><span class="f08-barcode"></span></div>
+          <div id="f08-price-plus" class="f08-tag-price">
+            <span class="f08-circ-host"><span class="f08-cur">$</span><span class="f08-wheel" data-value="20"></span></span>
+            <span class="f08-per">/ 1x</span>
+          </div>
+          <div class="f08-tag-sub">$20/মাস · 1x PLUS</div>
+          <div class="f08-laser-clip">
+            <svg id="f08-laser-plus" class="f08-laser" viewBox="0 0 8 184" aria-hidden="true"><line x1="4" y1="2" x2="4" y2="182"></line></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- OLD PRO shelf tag -->
+      <div id="f08-tag-pro" class="f08-tag" style="left: 1032px;">
+        <div class="f08-tag-hanger"></div>
+        <div class="f08-tag-body">
+          <div class="f08-tag-top"><span class="f08-tag-label">ইউনিট দাম</span><span class="f08-barcode"></span></div>
+          <div id="f08-price-pro" class="f08-tag-price">
+            <span class="f08-circ-host">
+              <span class="f08-cur">$</span><span class="f08-wheel" data-value="10"></span>
+              <svg class="f08-circle-svg f08-mark" viewBox="0 0 320 150" aria-hidden="true">
+                <path id="f08-circle" d="M 252 24 C 200 4, 92 6, 46 30 C 10 50, 12 106, 64 126 C 124 146, 250 140, 290 106 C 316 80, 302 38, 230 22 C 210 18, 186 16, 168 18"></path>
+              </svg>
+            </span>
+            <span class="f08-per">/ 1x</span>
+          </div>
+          <div class="f08-tag-sub">$200/মাস · 20x PLUS</div>
+          <div class="f08-laser-clip">
+            <svg id="f08-laser-pro" class="f08-laser" viewBox="0 0 8 184" aria-hidden="true"><line x1="4" y1="2" x2="4" y2="182"></line></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- formula chip, top-center -->
+      <div class="f08-chip-row">
+        <div id="f08-chip" class="f08-chip">
+          <span class="f08-chip-pill">ইউনিট দাম</span>
+          <span class="f08-chip-eq">= দাম ÷ ইউসেজ</span>
+        </div>
+      </div>
+
+      <!-- fact-checker handwriting + double underline -->
+      <div class="f08-note">
+        <div id="f08-note-text" class="f08-note-text">অর্ধেক দাম!</div>
+        <svg class="f08-note-under f08-mark" viewBox="0 0 350 44" aria-hidden="true">
+          <path id="f08-under-1" d="M 4 12 C 80 6, 190 16, 344 8"></path>
+          <path id="f08-under-2" d="M 18 34 C 110 27, 230 37, 336 29"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      // ── number-wheel build (pasted from compositions/components/number-wheel.html, f08-scoped) ──
+      // spin = double: one extra 0→9 revolution so every column (even a "0") visibly rolls.
+      var CYCLES = 1;
+      document.querySelectorAll(".f08-wheel").forEach(function (el) {
+        if (el.dataset.f08WheelReady === "1") return;
+        var value = el.dataset.value || "0";
+        el.textContent = "";
+        for (var k = 0; k < value.length; k++) {
+          var ch = value.charAt(k);
+          if (!/\d/.test(ch)) {
+            el.appendChild(document.createTextNode(ch));
+            continue;
+          }
+          var stops = CYCLES * 10 + Number(ch);
+          var frame = document.createElement("span");
+          frame.className = "f08-wheel-digit";
+          var strip = document.createElement("span");
+          strip.className = "f08-wheel-strip";
+          // land on its own digit: strip is (stops + 1) cells tall, move up `stops` cells
+          strip.dataset.targetPct = String((-100 * stops) / (stops + 1));
+          for (var i = 0; i <= stops; i++) {
+            var cell = document.createElement("span");
+            cell.textContent = String(i % 10);
+            strip.appendChild(cell);
+          }
+          frame.appendChild(strip);
+          el.appendChild(frame);
+        }
+        el.dataset.f08WheelReady = "1";
+      });
+
+      // ── svg-path-draw setup: measured lengths, dash parked fully off the path (round caps hidden) ──
+      function prepDraw(id) {
+        var p = document.getElementById(id);
+        var len = p.getTotalLength();
+        p.style.strokeDasharray = len + " " + (len + 40);
+        p.style.strokeDashoffset = String(len + 20);
+        return len + 20;
+      }
+      var circleOff = prepDraw("f08-circle");
+      var under1Off = prepDraw("f08-under-1");
+      var under2Off = prepDraw("f08-under-2");
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 — "এবার" (0.05): shelf plank slides in from the left
+      tl.fromTo("#f08-plank", { x: -2100 }, { x: 0, duration: 0.95, ease: "power3.out" }, 0.05);
+      // "ট্যাগের" (1.65): formula chip pops top-center (smooth settle — checker register, no overshoot)
+      tl.fromTo("#f08-chip", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" }, 1.65);
+
+      // box drop: falls onto the plank, lands with a short squash and a long-tail settle (no bounce)
+      function dropBox(sel, at, fromY, fall) {
+        tl.fromTo(sel, { y: fromY }, { y: 0, duration: fall, ease: "power2.in" }, at);
+        tl.fromTo(sel, { scaleX: 1, scaleY: 1 }, { scaleX: 1.05, scaleY: 0.93, duration: 0.06, ease: "power1.out" }, at + fall);
+        tl.to(sel, { scaleX: 1, scaleY: 1, duration: 0.45, ease: "power3.out" }, at + fall + 0.06);
+      }
+      // tag swing: hangs from the black clip, rotate −12° → 0 on power3
+      function swingTag(sel, at) {
+        tl.fromTo(sel, { rotation: -12, y: -18 }, { rotation: 0, y: 0, duration: 0.8, ease: "power3.out" }, at);
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "power1.out" }, at);
+      }
+      // scanner pass: one red laser line sweeps across the tag (clipped to the tag face)
+      function laser(sel, at) {
+        tl.fromTo(sel, { x: -12 }, { x: 476, duration: 0.42, ease: "power1.inOut" }, at);
+      }
+      // unit price rolls in: row settles in, every digit column rolls to its value (number-wheel)
+      function rollPrice(rowSel, at, dur) {
+        tl.fromTo(rowSel, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, at);
+        document.querySelectorAll(rowSel + " .f08-wheel-strip").forEach(function (strip, i) {
+          tl.fromTo(strip, { yPercent: 0 }, { yPercent: Number(strip.dataset.targetPct), duration: dur, ease: "power3.out" }, at + i * 0.07);
+        });
+      }
+
+      // Scene 2 — PLUS
+      dropBox("#f08-box-plus", 3.6, -700, 0.34);        // "Plus:" 3.66 — lands ~3.94
+      swingTag("#f08-tag-plus", 5.0);                    // "বিশ" 5.00
+      laser("#f08-laser-plus", 9.06);                    // "বিশ (ডলার।)" 9.06
+      rollPrice("#f08-price-plus", 9.11, 0.85);
+
+      // Scene 3 — OLD PRO
+      dropBox("#f08-box-pro", 10.14, -820, 0.36);       // "পুরনো" 10.25 — lands ~10.50
+      swingTag("#f08-tag-pro", 12.26);                   // "দুইশো" 12.26
+      laser("#f08-laser-pro", 15.68);                    // "দশ" 15.68
+      rollPrice("#f08-price-pro", 15.73, 0.8);
+
+      // "অর্ধেক" (16.77): red marker circles $10
+      tl.fromTo("#f08-circle", { strokeDashoffset: circleOff }, { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" }, 16.77);
+      // "দাম।" (17.66): অর্ধেক দাম! writes on, left → right
+      tl.fromTo(
+        "#f08-note-text",
+        { clipPath: "inset(-30% 100% -30% -6%)" },
+        { clipPath: "inset(-30% -6% -30% -6%)", duration: 0.72, ease: "power1.inOut" },
+        17.66
+      );
+
+      // Scene 4 — "মজাটাই" (18.67): double underline, then a still held read
+      tl.fromTo("#f08-under-1", { strokeDashoffset: under1Off }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 18.67);
+      tl.fromTo("#f08-under-2", { strokeDashoffset: under2Off }, { strokeDashoffset: 0, duration: 0.27, ease: "power2.out" }, 18.9);
+
+      // pin the timeline to the frame's fixed duration (held read to the end)
+      tl.set({}, {}, 20.063);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["08-unit-price"] = tl;
+    })();
+  </script>
+</template>
