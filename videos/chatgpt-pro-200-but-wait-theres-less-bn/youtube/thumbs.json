@@ -1,8 +1,0 @@
-{
-  "headline": ["একই দাম", "অর্ধেক ইউসেজ!"],
-  "kicker": "ChatGPT Pro $200",
-  "old": "20x", "new": "10x",
-  "number": "−50%",
-  "box": { "label": "CHATGPT PRO", "price": "$200", "gauge": 0.5 },
-  "labels": { "before": "আগে", "after": "এখন" }
-}

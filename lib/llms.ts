@@ -10,6 +10,7 @@ import {
   getStats,
 } from "@/content/fiverr";
 import { projects, toImage, type Project } from "@/content/projects";
+import { channel, episodes } from "@/content/shorto-projojjo";
 import { skillGroups } from "@/content/skills";
 import { SITE_URL, absoluteUrl, site } from "./site";
 
@@ -62,6 +63,10 @@ ${projectLinks.join("\n")}
 ## Freelance work
 
 - [Fiverr work history](${absoluteUrl("/fiverr")}): ${fiverrSummary()}
+
+## Video
+
+- [${channel.name} (${channel.nameBn})](${absoluteUrl("/shortoprojojjo")}): ${channel.name} ("${channel.meaning.toLowerCase()}") is ${site.name}'s Bangla video channel on YouTube and Facebook, where tech hype gets fact-checked. ${episodes.length} episodes so far, each made from a post on this blog.
 
 ## Blog
 
