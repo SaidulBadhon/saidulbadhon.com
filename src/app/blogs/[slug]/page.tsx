@@ -56,7 +56,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blogs/[slug]"
   return (
     <main className="px-4 pb-28 sm:px-6">
       <JsonLd data={structuredData} />
-      <article className="mx-auto max-w-3xl">
+      <article className="mx-auto max-w-6xl">
         <Link
           href="/blogs"
           className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-gray-950 dark:text-slate-400 dark:hover:text-white"
@@ -82,7 +82,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blogs/[slug]"
       </article>
 
       {(older || newer) && (
-        <nav aria-label="More posts" className="mx-auto mt-20 grid max-w-3xl gap-4 sm:grid-cols-2">
+        <nav aria-label="More posts" className="mx-auto mt-20 grid max-w-6xl gap-4 sm:grid-cols-2">
           {older && <AdjacentPost post={older} label="Previous post" />}
           {newer && <AdjacentPost post={newer} label="Next post" next />}
         </nav>

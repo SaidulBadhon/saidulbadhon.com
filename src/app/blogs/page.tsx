@@ -51,7 +51,8 @@ export default async function BlogPage() {
   );
 
   return (
-    <main className="mx-auto max-w-6xl px-4 pb-28 sm:px-6 lg:px-8">
+    <main className="px-4 pb-28 sm:px-6">
+      <div className="mx-auto max-w-6xl">
       <JsonLd data={structuredData} />
       <header
         className={`${rise} flex flex-col gap-6 border-b border-gray-200 pb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-16 dark:border-white/10`}
@@ -105,6 +106,7 @@ export default async function BlogPage() {
           No posts yet. Check back soon.
         </p>
       )}
+      </div>
     </main>
   );
 }
