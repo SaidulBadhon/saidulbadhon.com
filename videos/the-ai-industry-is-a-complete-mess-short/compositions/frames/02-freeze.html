@@ -1,0 +1,708 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+
+    /* Root: styled by #root only (never a class). No background here. */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+    #root * { box-sizing: border-box; }
+
+    /* =====================================================================
+       Frame 1's FINAL state, re-drawn statically (no entrance animation).
+       #s02-set is the full-bleed yellow HOST ground clip AND the wrapper the
+       freeze grayscales / punches in on. Everything inside is the Short's
+       frame 1 at its exact positions and sizes (gauge at 30%, wide grin,
+       "$730B" burst, banner tilted -5deg, sticker +6deg, burst -10deg).
+       ===================================================================== */
+    #s02-set {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      background: #F7CB46;
+      overflow: visible;
+      isolation: isolate;
+      z-index: 0;
+    }
+
+    /* ---------- background decorations (dot-grid + stripe-blocks) ---------- */
+    #s02-dots {
+      position: absolute;
+      left: 620px;
+      top: 0;
+      width: 460px;
+      height: 380px;
+      background-image: radial-gradient(circle, #000000 2px, transparent 2.6px);
+      background-size: 24px 24px;
+      background-position: 6px 6px;
+      opacity: 0.3;
+      z-index: 1;
+    }
+    .s02-stripe {
+      position: absolute;
+      background-image: repeating-linear-gradient(45deg, #000000 0 14px, #FE90E8 14px 30px);
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      z-index: 2;
+    }
+    #s02-stripe-left { left: -200px; top: 1250px; width: 520px; height: 150px; transform: rotate(9deg); }
+    #s02-stripe-right { left: 780px; top: 1330px; width: 420px; height: 150px; transform: rotate(-8deg); }
+
+    /* ---------- star-bursts (10-point, 4px border, 8px hard shadow) ---------- */
+    .s02-burst {
+      position: absolute;
+      transform-origin: 50% 50%;
+    }
+    .s02-burst-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(8px 8px 0 #000000);
+    }
+    .s02-burst-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* "একদম নতুন!" burst — centre (190, 330), 270 x 270, tilt -10deg */
+    #s02-allnew { left: 55px; top: 195px; width: 270px; height: 270px; z-index: 6; transform: rotate(-10deg); }
+    .s02-allnew-word {
+      font-weight: 900;
+      font-size: 58px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* "$730B" burst — centre (540, 1350), 460 x 460, tilt +6deg */
+    #s02-price-burst { left: 310px; top: 1120px; width: 460px; height: 460px; z-index: 3; transform: rotate(6deg); }
+    #s02-price-burst .s02-burst-content { gap: 10px; padding-top: 28px; }
+    .s02-price-num {
+      font-weight: 900;
+      font-size: 108px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .s02-peryear {
+      display: block;
+      font-weight: 900;
+      font-size: 44px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    /* "$730B" as frame 1's number-wheel left it (landed): same box model, no strip */
+    .s02-wheel {
+      display: inline-flex;
+      align-items: flex-start;
+      font-variant-numeric: tabular-nums;
+    }
+    .s02-wheel-sym,
+    .s02-wheel-digit {
+      display: inline-block;
+      height: 1em;
+      line-height: 1em;
+    }
+    .s02-wheel-digit { overflow: hidden; }
+
+    /* ---------- "আরও স্মার্ট! ↑" sticker (card-small, blue) — x 560–880 / y 270–362, tilt +6deg ---------- */
+    #s02-sticker {
+      position: absolute;
+      left: 560px;
+      top: 270px;
+      width: 320px;
+      height: 92px;
+      background: #C0F7FE;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transform-origin: 50% 50%;
+      transform: rotate(6deg);
+      z-index: 5;
+    }
+    .s02-sticker-word {
+      font-weight: 900;
+      font-size: 48px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    #s02-sticker-arrow { display: block; width: 32px; height: 42px; flex: 0 0 32px; }
+
+    /* ---------- payoff banner — x 70–1010 / y 1030–1220, tilt -5deg, two lines ---------- */
+    #s02-banner {
+      position: absolute;
+      left: 70px;
+      top: 1030px;
+      width: 940px;
+      height: 190px;
+      background: #FE90E8;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+      transform: rotate(-5deg);
+      z-index: 7;
+    }
+    .s02-banner-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    .s02-banner-word {
+      font-weight: 900;
+      font-size: 74px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    #s02-na {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      transform-origin: 50% 50%;
+      transform: rotate(3deg);
+    }
+
+    /* =====================================================================
+       MASCOT BOX — COPY BLOCK (CSS) — start
+       The "AI 2026" product box (VERTICAL 1080x1920 layout): white box, pink top
+       band, face (eyes + grin + "দাম" label over the price), diagonal trim,
+       vertical gauge on the right edge with its label pill above it. Copied
+       verbatim from frame 1 (s01- -> s02-). Box layout: x 300–780 /
+       y 400–1000 -> left 300 / top 400 / 480 x 600. Gauge protrudes 26px past
+       the right edge; its pill sits above it (right edge x ≈ 892). Also
+       carries the shared .s02-pill (label-pill) base.
+       ===================================================================== */
+    .s02-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    #s02-box {
+      position: absolute;
+      left: 300px;
+      top: 400px;
+      width: 480px;
+      height: 600px;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      transform-origin: 50% 100%;
+      z-index: 4;
+    }
+    .s02-band {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 150px;
+      background: #FE90E8;
+      border-bottom: 4px solid #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .s02-band-name {
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 112px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    #s02-eyes {
+      position: absolute;
+      left: 126px;
+      top: 172px;
+      width: 220px;
+      height: 94px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .s02-eye {
+      position: relative;
+      width: 68px;
+      height: 94px;
+      background: #000000;
+      border-radius: 50%;
+      transform-origin: 50% 50%;
+    }
+    .s02-glint {
+      position: absolute;
+      left: 32px;
+      top: 14px;
+      width: 22px;
+      height: 22px;
+      background: #FFFFFF;
+      border-radius: 50%;
+    }
+    #s02-grin {
+      position: absolute;
+      left: 136px;
+      top: 284px;
+      width: 200px;
+      height: 72px;
+      background: #000000;
+      border-radius: 0 0 100px 100px / 0 0 72px 72px;
+      overflow: hidden;
+      transform-origin: 50% 0%;
+    }
+    .s02-tongue {
+      position: absolute;
+      left: 55px;
+      bottom: -14px;
+      width: 90px;
+      height: 44px;
+      background: #FE90E8;
+      border-radius: 50%;
+    }
+    .s02-box-sub {
+      position: absolute;
+      left: 0;
+      top: 372px;
+      width: 472px;
+      display: flex;
+      justify-content: center;
+    }
+    .s02-box-sub .s02-pill {
+      background: #F7CB46;
+      font-size: 26px;
+      padding: 3px 22px;
+    }
+    .s02-box-price {
+      position: absolute;
+      left: 0;
+      top: 424px;
+      width: 472px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 96px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .s02-box-trim {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 60px;
+      background-image: repeating-linear-gradient(45deg, #000000 0 12px, #FE90E8 12px 26px);
+      border-top: 4px solid #000000;
+    }
+    /* vertical gauge riding the box's right edge */
+    #s02-gauge {
+      position: absolute;
+      right: -26px;
+      top: 236px;
+      width: 56px;
+      height: 270px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    #s02-gauge-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-image: repeating-linear-gradient(45deg, #000000 0 8px, #FE90E8 8px 18px);
+      clip-path: inset(0% 0% 0% 0%);
+    }
+    .s02-tick {
+      position: absolute;
+      left: -17px;
+      width: 14px;
+      height: 3px;
+      background: #000000;
+    }
+    .s02-tick-25 { top: 25%; }
+    .s02-tick-50 { top: 50%; left: -25px; width: 22px; height: 4px; }
+    .s02-tick-75 { top: 75%; }
+    #s02-gauge-tag {
+      position: absolute;
+      right: -116px;
+      top: 178px;
+      font-size: 26px;
+      padding: 4px 16px;
+      background: #99E885;
+    }
+    /* MASCOT BOX — COPY BLOCK (CSS) — end */
+
+    /* frame 1's FINAL mascot state (static): gauge drained to 30%, tag pink, wide grin,
+       wide-eyed glance up-right */
+    #s02-gauge-fill { clip-path: inset(70% 0% 0% 0%); }
+    #s02-gauge-tag { background: #FE90E8; }
+    #s02-grin { transform: scale(1.3, 1.25); }
+    #s02-eyes { transform: translate(14px, -10px); }
+    .s02-eye { transform: scale(1.15); }
+
+    /* "মাত্র" pill inside the price burst */
+    #s02-only { font-size: 34px; padding: 4px 24px; }
+
+    /* =====================================================================
+       FREEZE overlays (above the set)
+       ===================================================================== */
+    #s02-scrim {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      background: #1B1B1F;
+    }
+    #s02-scan {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05) 0 1px,
+        transparent 1px 4px
+      );
+    }
+    #s02-track {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 80px;
+      background: #FFFFFF;
+      opacity: 0.07;
+    }
+
+    /* Red-marker ink layer (outside the grayscaled set so the marker stays red). The ghost
+       mirrors the banner's border box — same position, same -5deg tilt about its centre — so the
+       oval is authored in banner-local coordinates. Measured on the Short's two-line banner
+       (banner-local px, 74px type): the 'না' box = x 540–705 / y 3–98; "শোনে না!" = x 325–615 /
+       y 98–187. Their union is centred at (515, 95), 380 x 184 — the oval rings exactly that pair
+       (it only grazes the first letters of the line above). */
+    #s02-ink {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: visible;
+    }
+    #s02-ghost {
+      position: absolute;
+      left: 70px;
+      top: 1030px;
+      width: 940px;
+      height: 190px;
+      transform-origin: 50% 50%;
+      transform: rotate(-5deg);
+    }
+    #s02-ink-svg {
+      position: absolute;
+      left: 215px;
+      top: -65px;
+      width: 600px;
+      height: 320px;
+      overflow: visible;
+    }
+    #s02-circle {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* VHS OSD, top-left (stays English, like a real VCR) — y 230–270 */
+    #s02-osd {
+      position: absolute;
+      left: 60px;
+      top: 230px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      line-height: 1;
+      white-space: nowrap;
+      text-shadow:
+        3px 0 0 #000000,
+        -3px 0 0 #000000,
+        0 3px 0 #000000,
+        0 -3px 0 #000000,
+        2px 2px 0 #000000,
+        -2px -2px 0 #000000,
+        2px -2px 0 #000000,
+        -2px 2px 0 #000000;
+    }
+    .s02-osd-icon { display: flex; gap: 7px; }
+    .s02-osd-icon i {
+      display: block;
+      width: 14px;
+      height: 38px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+    }
+    .s02-osd-word { font-size: 40px; letter-spacing: 0.08em; }
+    .s02-osd-sp { margin-left: 14px; font-size: 26px; letter-spacing: 0.08em; }
+    .s02-osd-count { font-size: 26px; letter-spacing: 0.08em; }
+
+    /* ফ্যাক্ট চেক label-pill, top-right (right edge x = 900) */
+    #s02-fc {
+      position: absolute;
+      right: 180px;
+      top: 204px;
+      padding: 12px 32px;
+      font-size: 34px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="02-freeze" data-width="1080" data-height="1920" data-duration="1.4">
+    <!-- Full-bleed ground: frame 1's final infomercial set, re-drawn statically (freezes at 0.12s) -->
+    <div id="s02-set" class="clip" data-start="0" data-duration="1.4" data-track-index="0">
+      <div id="s02-dots"></div>
+      <div id="s02-stripe-left" class="s02-stripe"></div>
+      <div id="s02-stripe-right" class="s02-stripe"></div>
+
+      <!-- "$730B" price star-burst -->
+      <div id="s02-price-burst" class="s02-burst">
+        <svg class="s02-burst-svg" viewBox="0 0 200 200" aria-hidden="true">
+          <polygon
+            points="100.00,4.00 123.49,27.72 156.43,22.33 161.49,55.33 191.30,70.33 176.00,100.00 191.30,129.67 161.49,144.67 156.43,177.67 123.49,172.28 100.00,196.00 76.51,172.28 43.57,177.67 38.51,144.67 8.70,129.67 24.00,100.00 8.70,70.33 38.51,55.33 43.57,22.33 76.51,27.72"
+            fill="#C0F7FE"
+            stroke="#000000"
+            stroke-width="4"
+            stroke-linejoin="miter"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
+        <div class="s02-burst-content">
+          <span id="s02-only" class="s02-pill">মাত্র</span>
+          <div class="s02-price-num"><span class="s02-wheel"><span class="s02-wheel-sym">$</span><span class="s02-wheel-digit">7</span><span class="s02-wheel-digit">3</span><span class="s02-wheel-digit">0</span><span class="s02-wheel-sym">B</span></span></div>
+          <span class="s02-peryear">/ বছর</span>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           MASCOT BOX — COPY BLOCK (HTML) — start
+           Self-contained: the AI 2026 product box mascot (vertical layout). Pair
+           with the "MASCOT BOX — COPY BLOCK (CSS)" block in <style>.
+           ===================================================================== -->
+      <div id="s02-box">
+        <div class="s02-band">
+          <span class="s02-band-name">AI 2026</span>
+        </div>
+        <div id="s02-eyes">
+          <div class="s02-eye"><span class="s02-glint"></span></div>
+          <div class="s02-eye"><span class="s02-glint"></span></div>
+        </div>
+        <div id="s02-grin"><span class="s02-tongue"></span></div>
+        <div class="s02-box-sub"><span class="s02-pill">দাম</span></div>
+        <div class="s02-box-price">$730B</div>
+        <div class="s02-box-trim"></div>
+        <div id="s02-gauge">
+          <div id="s02-gauge-fill"></div>
+          <span class="s02-tick s02-tick-25"></span>
+          <span class="s02-tick s02-tick-50"></span>
+          <span class="s02-tick s02-tick-75"></span>
+        </div>
+        <div id="s02-gauge-tag" class="s02-pill">নিয়ন্ত্রণ</div>
+      </div>
+      <!-- MASCOT BOX — COPY BLOCK (HTML) — end -->
+
+      <!-- "আরও স্মার্ট! ↑" sticker -->
+      <div id="s02-sticker">
+        <span class="s02-sticker-word">আরও স্মার্ট!</span>
+        <svg id="s02-sticker-arrow" viewBox="0 0 38 50" aria-hidden="true">
+          <polygon points="19,2 36,22 25,22 25,48 13,48 13,22 2,22" fill="#000000" />
+        </svg>
+      </div>
+
+      <!-- "একদম নতুন!" star-burst -->
+      <div id="s02-allnew" data-layout-allow-overlap class="s02-burst">
+        <svg class="s02-burst-svg" viewBox="0 0 200 200" aria-hidden="true">
+          <polygon
+            points="100.00,4.00 123.49,27.72 156.43,22.33 161.49,55.33 191.30,70.33 176.00,100.00 191.30,129.67 161.49,144.67 156.43,177.67 123.49,172.28 100.00,196.00 76.51,172.28 43.57,177.67 38.51,144.67 8.70,129.67 24.00,100.00 8.70,70.33 38.51,55.33 43.57,22.33 76.51,27.72"
+            fill="#FE90E8"
+            stroke="#000000"
+            stroke-width="4"
+            stroke-linejoin="miter"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
+        <div data-layout-allow-overlap class="s02-burst-content">
+          <span data-layout-allow-overlap class="s02-allnew-word">একদম</span>
+          <span data-layout-allow-overlap class="s02-allnew-word">নতুন!</span>
+        </div>
+      </div>
+
+      <!-- "এজেন্টরা 'না' শোনে না!" banner, two lines -->
+      <div id="s02-banner">
+        <div class="s02-banner-row">
+          <span class="s02-banner-word">এজেন্টরা</span>
+          <span id="s02-na" class="s02-banner-word">'না'</span>
+        </div>
+        <div class="s02-banner-row">
+          <span class="s02-banner-word">শোনে না!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Freeze overlays -->
+    <div id="s02-scrim"></div>
+    <div id="s02-scan"></div>
+    <div id="s02-track"></div>
+
+    <!-- Red marker: a ghost of the banner's box carries the oval around "'না' শোনে না" -->
+    <div id="s02-ink">
+      <div id="s02-ghost">
+        <svg id="s02-ink-svg" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path
+            id="s02-circle"
+            d="M 400 36 C 360 33, 330 32, 300 33 C 150 32, 40 92, 37 160 C 36 228, 150 289, 300 288 C 450 287, 565 226, 563 158 C 562 92, 480 42, 400 46 C 365 48, 335 54, 300 62"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <!-- VHS OSD -->
+    <div id="s02-osd" data-layout-allow-overlap>
+      <span data-layout-allow-overlap class="s02-osd-icon"><i></i><i></i></span>
+      <span data-layout-allow-overlap class="s02-osd-word">Pause</span>
+      <span data-layout-allow-overlap class="s02-osd-sp">SP</span>
+      <span data-layout-allow-overlap class="s02-osd-count">0:00:11</span>
+    </div>
+
+    <!-- ফ্যাক্ট চেক label-pill -->
+    <div id="s02-fc" data-layout-allow-overlap class="s02-pill">ফ্যাক্ট চেক</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+
+      var scope = document.querySelector('[data-composition-id="02-freeze"]') || document;
+      function q(sel) {
+        return scope.querySelector(sel) || document.querySelector(sel);
+      }
+
+      var set = q("#s02-set");
+      var ink = q("#s02-ink");
+      var scrim = q("#s02-scrim");
+      var scan = q("#s02-scan");
+      var track = q("#s02-track");
+      var osd = q("#s02-osd");
+      var pill = q("#s02-fc");
+      var circle = q("#s02-circle");
+
+      // The punch-in pivots on one shared screen point so set + ink stay registered. It sits low
+      // on the canvas so the 3% growth never pushes the bottom of the set (price burst, stripes)
+      // past the 83% keep-out line (y = 1600).
+      var ORIGIN = "540px 1400px";
+      var FREEZE_AT = 0.12;
+
+      // svg-path-draw setup: one dash the length of the measured path, offset fully out of view.
+      var len = 0;
+      try {
+        len = circle.getTotalLength();
+      } catch (e) {
+        len = 0;
+      }
+      if (!(len > 0) || !isFinite(len)) len = 1400; // approx. length of this path
+      len = Math.ceil(len) + 2;
+      circle.style.strokeDasharray = len + " " + len;
+      circle.style.strokeDashoffset = String(len);
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0.00-0.12): frame 1's final set, full colour, perfectly still.
+      tl.set(set, { scale: 1, filter: "grayscale(0)", transformOrigin: ORIGIN, immediateRender: true }, 0);
+      tl.set(ink, { scale: 1, transformOrigin: ORIGIN, immediateRender: true }, 0);
+      tl.set(scan, { opacity: 0, immediateRender: true }, 0);
+      tl.set(osd, { opacity: 0, immediateRender: true }, 0);
+      tl.set(circle, { opacity: 0, immediateRender: true }, 0);
+
+      // Scene 2 (0.12-0.45): FREEZE. Hard set: grayscale + 1.03 punch-in; scanlines + PAUSE OSD cut on.
+      tl.set(set, { scale: 1.03, filter: "grayscale(0.9)" }, FREEZE_AT);
+      tl.set(ink, { scale: 1.03 }, FREEZE_AT);
+      tl.set(scan, { opacity: 1 }, FREEZE_AT);
+      tl.set(osd, { opacity: 1 }, FREEZE_AT);
+      // Dark scrim fades 0 -> 45% over 0.2s.
+      tl.fromTo(scrim, { opacity: 0 }, { opacity: 0.45, duration: 0.2, ease: "power1.out" }, FREEZE_AT);
+      // One VHS tracking band sweeps top -> bottom, once.
+      tl.fromTo(track, { y: -90 }, { y: 1930, duration: 0.3, ease: "none" }, FREEZE_AT);
+
+      // Scene 3 (0.45-1.40): "ফ্যাক্ট চেক" pill drops into the top-right with a playful spring.
+      tl.fromTo(
+        pill,
+        { y: -320, rotation: -8 },
+        { y: 0, rotation: 0, duration: 0.42, ease: "back.out(2.2)" },
+        0.45
+      );
+
+      // From 0.6s the red marker draws a rough, overshooting oval around "'না' শোনে না" (svg-path-draw, ~0.35s).
+      tl.set(circle, { opacity: 1 }, 0.6);
+      tl.fromTo(
+        circle,
+        { strokeDashoffset: len },
+        { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" },
+        0.6
+      );
+
+      // Hold still to the end — no exits; pin the timeline length to the frame duration.
+      tl.set({}, {}, 1.4);
+
+      window.__timelines["02-freeze"] = tl;
+    })();
+  </script>
+</template>

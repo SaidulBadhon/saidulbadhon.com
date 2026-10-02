@@ -1,0 +1,831 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Permanent Marker"; src: url("assets/fonts/permanent-marker-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+
+    /* ---------- layers (each a full-duration clip) ---------- */
+    #f08-ground,
+    #f08-chrome,
+    #f08-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      box-sizing: border-box;
+    }
+    #f08-ground *,
+    #f08-chrome *,
+    #f08-content * {
+      box-sizing: border-box;
+    }
+    #f08-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: 50% 45%;
+    }
+
+    /* ---------- paused-tape stage ---------- */
+    #f08-ground {
+      background-color: #1B1B1F;
+      overflow: hidden;
+    }
+    .f08-scanlines {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+    .f08-ghost {
+      position: absolute;
+      opacity: 0.08;
+    }
+    #f08-ghost-star {
+      left: 1560px;
+      top: 516px;
+      width: 360px;
+      height: 360px;
+      transform: rotate(12deg);
+      overflow: visible;
+    }
+    #f08-ghost-star polygon {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 6;
+      stroke-linejoin: miter;
+    }
+    #f08-ghost-stripe {
+      left: 1612px;
+      top: 742px;
+      width: 380px;
+      height: 112px;
+      transform: rotate(-9deg);
+      border: 0.3cqw solid #FFFFFF;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #FFFFFF 0px,
+        #FFFFFF 14px,
+        transparent 14px,
+        transparent 28px
+      );
+    }
+
+    /* ---------- static chrome: VHS OSD + ফ্যাক্ট চেক pill ---------- */
+    #f08-osd {
+      position: absolute;
+      left: 60px;
+      top: 50px;
+      display: flex;
+      align-items: center;
+      gap: 0.75cqw;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 1.7cqw;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-shadow: 3px 3px 0 #000000;
+    }
+    .f08-pause-icon {
+      display: flex;
+      gap: 0.3cqw;
+    }
+    .f08-pause-icon i {
+      display: block;
+      width: 0.45cqw;
+      height: 1.35cqw;
+      background-color: #FFFFFF;
+      box-shadow: 3px 3px 0 #000000;
+    }
+    .f08-osd-sp {
+      margin-left: 1.1cqw;
+      font-size: 1.05cqw;
+      letter-spacing: 0.1em;
+    }
+    #f08-factcheck {
+      position: absolute;
+      right: 60px;
+      top: 46px;
+      background-color: #FFFFFF;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      border-radius: 9999px;
+      padding: 0.42cqw 1.3cqw 0.4cqw;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 1.2cqw;
+      line-height: 1.2;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+
+    /* ---------- shared bits ---------- */
+    .f08-pill {
+      display: inline-block;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      border-radius: 9999px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 1.1cqw;
+      line-height: 1.2;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding: 0.4cqw 1.1cqw 0.38cqw;
+      color: #000000;
+    }
+    .f08-ink {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ---------- the case-file card (left) ---------- */
+    #f08-card {
+      position: absolute;
+      left: 115px;
+      top: 162px;
+      width: 768px;
+      height: 702px;
+      background-color: #FFFFFF;
+      border: 0.4cqw solid #000000;
+      box-shadow: 0.8cqw 0.8cqw 0 #000000;
+      padding: 46px 40px 0 40px;
+    }
+    #f08-tab-pos {
+      position: absolute;
+      left: 40px;
+      top: -34px;
+      transform: rotate(-2deg);
+    }
+    #f08-tab {
+      background-color: #FE90E8;
+      font-size: 1.25cqw;
+      transform-origin: 0% 50%;
+    }
+    #f08-tape-pos {
+      position: absolute;
+      left: 410px;
+      top: -24px;
+      width: 124px;
+      height: 38px;
+      transform: rotate(4deg);
+      border: 0.3cqw solid #000000;
+      background-color: #F7CB46;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #000000 0px,
+        #000000 9px,
+        transparent 9px,
+        transparent 20px
+      );
+    }
+    #f08-title {
+      margin: 0 0 16px 0;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 3.3cqw;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .f08-w {
+      display: inline-block;
+    }
+    #f08-stamp-pos {
+      position: absolute;
+      left: 622px;
+      top: 26px;
+    }
+    #f08-stamp {
+      background-color: #FFFFFF;
+      border: 0.4cqw solid #000000;
+      outline: 0.14cqw solid #000000;
+      outline-offset: -0.85cqw;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      padding: 0.7cqw 1.5cqw 0.8cqw;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 3.2cqw;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+      transform-origin: 50% 50%;
+    }
+
+    /* rows */
+    .f08-row {
+      position: relative;
+      height: 174px;
+      padding-top: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .f08-rline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 0.3cqw;
+      background-color: #000000;
+      transform-origin: 0% 50%;
+    }
+    .f08-chip {
+      transform-origin: 0% 50%;
+    }
+    .f08-val {
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 3.1cqw;
+      line-height: 1.25;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .f08-ai {
+      display: inline-block;
+      margin-right: 0.12em;
+      padding: 0 0.28em;
+      background-color: #C0F7FE;
+      border: 0.25cqw solid #000000;
+      line-height: 1.1;
+    }
+    #f08-row-2 {
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      padding-top: 12px;
+    }
+    .f08-wheel {
+      display: inline-flex;
+      align-items: flex-start;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 108px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      color: #000000;
+    }
+    .f08-wheel-digit {
+      display: inline-block;
+      height: 1em;
+      overflow: hidden;
+    }
+    .f08-wheel-strip {
+      display: grid;
+    }
+    .f08-wheel-strip span {
+      display: block;
+      height: 1em;
+      line-height: 1em;
+    }
+    .f08-wheel-sep {
+      display: inline-block;
+      height: 1em;
+      line-height: 1em;
+    }
+    #f08-plus {
+      display: inline-block;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 108px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-left: -4px;
+      color: #000000;
+    }
+    #f08-chip-2 {
+      background-color: #99E885;
+      align-self: flex-end;
+      margin-bottom: 18px;
+      margin-left: 6px;
+      transform-origin: 0% 50%;
+    }
+    #f08-q-wrap {
+      position: relative;
+      display: inline-block;
+    }
+    #f08-q {
+      display: inline-block;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 4.4cqw;
+      line-height: 1.0;
+      letter-spacing: 0.02em;
+      color: #000000;
+      transform-origin: 50% 60%;
+    }
+    .f08-strike {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 230px;
+      height: 70px;
+      margin-left: -115px;
+      margin-top: -35px;
+      overflow: visible;
+    }
+    #f08-hand-pos {
+      position: absolute;
+      left: 218px;
+      top: 14px;
+      transform: rotate(-4deg);
+    }
+    .f08-hl {
+      display: block;
+      width: max-content;
+      padding: 0 0.14em;
+      font-family: "Permanent Marker", "Atma", cursive;
+      font-weight: 400;
+      font-size: 3.3cqw;
+      line-height: 1.22;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #E5322D;
+    }
+
+    /* ---------- the sandbox diagram (right) ---------- */
+    #f08-box {
+      position: absolute;
+      left: 1000px;
+      top: 205px;
+      width: 400px;
+      height: 400px;
+      overflow: visible;
+      transform-origin: 50% 50%;
+    }
+    #f08-box-line {
+      fill: rgba(255, 255, 255, 0.06);
+      stroke: #FFFFFF;
+      stroke-width: 5;
+      stroke-dasharray: 22 14;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+    }
+    #f08-test-pos {
+      position: absolute;
+      left: 1030px;
+      top: 177px;
+      transform: rotate(-3deg);
+    }
+    #f08-test {
+      background-color: #F7CB46;
+      font-size: 1.3cqw;
+      transform-origin: 0% 50%;
+    }
+    #f08-token {
+      position: absolute;
+      left: 1152px;
+      top: 360px;
+      width: 96px;
+      height: 96px;
+      transform-origin: 50% 50%;
+    }
+    #f08-token-body {
+      position: absolute;
+      inset: 0;
+      background-color: #FE90E8;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      transform-origin: 100% 50%;
+    }
+    .f08-eye {
+      position: absolute;
+      top: 28px;
+      width: 15px;
+      height: 22px;
+      background-color: #000000;
+      transform-origin: 50% 50%;
+    }
+    .f08-eye-l { left: 20px; }
+    .f08-eye-r { left: 50px; }
+    #f08-chip-pos {
+      position: absolute;
+      left: 1000px;
+      top: 676px;
+      transform: rotate(-2deg);
+    }
+    #f08-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+      background-color: #FFFFFF;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      padding: 14px 24px 14px 18px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 1.75cqw;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+    }
+    #f08-dial {
+      display: block;
+      width: 124px;
+      height: 78px;
+      overflow: visible;
+    }
+    #f08-net-pos {
+      position: absolute;
+      left: 1565px;
+      top: 273px;
+      width: 240px;
+      height: 270px;
+      transform: rotate(2deg);
+    }
+    #f08-net {
+      position: absolute;
+      inset: 0;
+      background-color: #FFFFFF;
+      border: 0.4cqw solid #000000;
+      box-shadow: 0.8cqw 0.8cqw 0 #000000;
+    }
+    .f08-net-bar {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      height: 46px;
+      padding: 0 14px;
+      background-color: #C0F7FE;
+      border-bottom: 0.3cqw solid #000000;
+    }
+    .f08-net-bar i {
+      display: block;
+      width: 13px;
+      height: 13px;
+      border: 2px solid #000000;
+      border-radius: 50%;
+    }
+    .f08-net-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      height: calc(100% - 46px);
+      padding: 0 12px 6px;
+    }
+    .f08-net-txt {
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 2.05cqw;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-align: center;
+      color: #000000;
+    }
+    .f08-net-tiles {
+      display: flex;
+      gap: 12px;
+    }
+    .f08-net-tiles i {
+      display: block;
+      width: 38px;
+      height: 38px;
+      border: 0.25cqw solid #000000;
+    }
+
+    /* marker overlay for the exit arrow */
+    #f08-marker {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: visible;
+      pointer-events: none;
+    }
+  </style>
+
+  <div id="root" data-composition-id="08-hugging-face" data-width="1920" data-height="1080" data-duration="17.628">
+    <!-- Track 0: paused-tape ground (scanlines + ghost decor) -->
+    <div id="f08-ground" class="clip" data-start="0" data-duration="17.628" data-track-index="0">
+      <div class="f08-scanlines"></div>
+      <svg id="f08-ghost-star" class="f08-ghost" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="180,10 217.7,64 280,42.5 278.7,108.3 341.7,127.5 302,180 341.7,232.5 278.7,251.7 280,317.5 217.7,296 180,350 142.3,296 80,317.5 81.3,251.7 18.3,232.5 58,180 18.3,127.5 81.3,108.3 80,42.5 142.3,64" />
+      </svg>
+      <div id="f08-ghost-stripe" class="f08-ghost"></div>
+    </div>
+
+    <!-- Track 1: static stage chrome -->
+    <div id="f08-chrome" class="clip" data-start="0" data-duration="17.628" data-track-index="1">
+      <div id="f08-osd">
+        <span class="f08-pause-icon"><i></i><i></i></span>
+        <span>PAUSE</span>
+        <span class="f08-osd-sp">SP</span>
+      </div>
+      <div id="f08-factcheck">ফ্যাক্ট চেক</div>
+    </div>
+
+    <!-- Track 2: case file (left) + sandbox diagram (right) -->
+    <div id="f08-content" class="clip" data-start="0" data-duration="17.628" data-track-index="2">
+      <div id="f08-cam">
+
+        <!-- ===== LEFT: the case-file card ===== -->
+        <div id="f08-card">
+          <div data-layout-allow-overlap id="f08-tab-pos"><span id="f08-tab" class="f08-pill">ঘটনা · জুলাই 2026</span></div>
+          <div data-layout-allow-overlap id="f08-tape-pos"></div>
+          <div data-layout-allow-overlap id="f08-stamp-pos"><div id="f08-stamp">হামলা</div></div>
+
+          <h2 id="f08-title"><span id="f08-w1" class="f08-w">Hugging</span> <span id="f08-w2" class="f08-w">Face</span></h2>
+
+          <div id="f08-row-1" class="f08-row">
+            <div id="f08-line-1" class="f08-rline"></div>
+            <span id="f08-chip-1" class="f08-pill f08-chip" style="background-color: #C0F7FE">চালিয়েছে</span>
+            <div id="f08-val-1" class="f08-val"><span class="f08-ai">AI</span>এজেন্ট · পুরোটা</div>
+          </div>
+
+          <div id="f08-row-2" class="f08-row">
+            <div id="f08-line-2" class="f08-rline"></div>
+            <span id="f08-wheel" class="f08-wheel"></span>
+            <span id="f08-plus">+</span>
+            <span id="f08-chip-2" class="f08-pill">ইভেন্ট</span>
+          </div>
+
+          <div id="f08-row-3" class="f08-row">
+            <div id="f08-line-3" class="f08-rline"></div>
+            <span id="f08-chip-3" class="f08-pill f08-chip" style="background-color: #FE90E8">হামলাকারী</span>
+            <span id="f08-q-wrap">
+              <span id="f08-q">???</span>
+              <svg data-layout-allow-overlap class="f08-strike" viewBox="0 0 230 70" xmlns="http://www.w3.org/2000/svg">
+                <path id="f08-sa" class="f08-ink" data-len="224" d="M 8 44 C 62 40, 124 34, 176 28 S 212 22, 220 20" />
+                <path id="f08-sb" class="f08-ink" data-len="206" d="M 208 31 C 156 37, 104 43, 56 47 S 26 51, 14 53" />
+              </svg>
+            </span>
+            <div data-layout-allow-overlap id="f08-hand-pos">
+              <span id="f08-hand-1" class="f08-hl">OpenAI-এর</span>
+              <span id="f08-hand-2" class="f08-hl">এজেন্ট</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== RIGHT: the sandbox diagram ===== -->
+        <svg id="f08-box" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <path id="f08-box-line" d="M 396 300 L 396 396 L 4 396 L 4 4 L 396 4 L 396 140" />
+        </svg>
+        <div data-layout-allow-overlap id="f08-test-pos"><span id="f08-test" class="f08-pill">টেস্ট</span></div>
+
+        <div data-layout-allow-overlap id="f08-net-pos">
+          <div id="f08-net">
+            <div class="f08-net-bar"><i style="background-color:#FE90E8"></i><i style="background-color:#F7CB46"></i><i style="background-color:#99E885"></i></div>
+            <div class="f08-net-body">
+              <div class="f08-net-txt">আসল<br />ইন্টারনেট</div>
+              <div class="f08-net-tiles"><i style="background-color:#FE90E8"></i><i style="background-color:#99E885"></i><i style="background-color:#F7CB46"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div data-layout-allow-overlap id="f08-chip-pos">
+          <div id="f08-chip">
+            <svg id="f08-dial" viewBox="0 0 124 78" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 14 68 A 52 52 0 0 1 28.2 31.8" fill="none" stroke="#FE90E8" stroke-width="14" />
+              <path d="M 12 68 A 52 52 0 0 1 112 68" fill="none" stroke="#000000" stroke-width="5" />
+              <line x1="62" y1="16" x2="62" y2="24" stroke="#000000" stroke-width="4" />
+              <line x1="22" y1="30" x2="28" y2="35" stroke="#000000" stroke-width="4" />
+              <line x1="102" y1="30" x2="96" y2="35" stroke="#000000" stroke-width="4" />
+              <g id="f08-needle"><line x1="62" y1="68" x2="62" y2="26" stroke="#000000" stroke-width="6" stroke-linecap="square" /></g>
+              <rect x="55" y="61" width="14" height="14" fill="#000000" />
+            </svg>
+            <span>সেফগার্ড: কমানো</span>
+          </div>
+        </div>
+
+        <div data-layout-allow-overlap id="f08-token">
+          <div id="f08-token-body">
+            <i class="f08-eye f08-eye-l"></i>
+            <i class="f08-eye f08-eye-r"></i>
+          </div>
+        </div>
+
+        <svg data-layout-allow-overlap id="f08-marker" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+          <path id="f08-arrow" class="f08-ink" data-len="322" d="M 1232 486 C 1300 478, 1380 493, 1450 483 S 1516 477, 1544 480" />
+          <path id="f08-arrow-head" class="f08-ink" data-len="80" d="M 1518 456 L 1548 480 L 1516 504" />
+        </svg>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var COMP_ID = "08-hugging-face";
+      var DURATION = 17.628;
+      var scope = document.querySelector('[data-composition-id="' + COMP_ID + '"]') || document;
+      function $(sel) { return scope.querySelector(sel); }
+      function $$(sel) { return Array.prototype.slice.call(scope.querySelectorAll(sel)); }
+
+      var tl = gsap.timeline({ paused: true });
+
+      /* ---------- svg-path-draw helper: measured length, dash shifted fully off-path ---------- */
+      function drawStroke(path, at, dur, ease) {
+        var measured = 0;
+        try { measured = path.getTotalLength(); } catch (e) { measured = 0; }
+        var len = (measured > 0 ? measured : parseFloat(path.getAttribute("data-len"))) * 1.03;
+        path.style.strokeDasharray = len + "px " + (len + 40) + "px";
+        tl.fromTo(
+          path,
+          { strokeDashoffset: len + 20 },
+          { strokeDashoffset: 0, duration: dur, ease: ease || "power2.out" },
+          at
+        );
+      }
+
+      /* ---------- number-wheel: one 0-9 reel per digit (double spin), built synchronously ---------- */
+      var WHEEL_PX = 108;
+      function buildWheel(host, str) {
+        var reels = [];
+        for (var i = 0; i < str.length; i++) {
+          var ch = str.charAt(i);
+          if (!/\d/.test(ch)) {
+            var sep = document.createElement("span");
+            sep.className = "f08-wheel-sep";
+            sep.textContent = ch;
+            host.appendChild(sep);
+            continue;
+          }
+          var stops = 10 + Number(ch);
+          var frame = document.createElement("span");
+          frame.className = "f08-wheel-digit";
+          var strip = document.createElement("span");
+          strip.className = "f08-wheel-strip";
+          for (var k = 0; k <= stops; k++) {
+            var step = document.createElement("span");
+            step.textContent = String(k % 10);
+            strip.appendChild(step);
+          }
+          frame.appendChild(strip);
+          host.appendChild(frame);
+          reels.push({ el: strip, target: -stops * WHEEL_PX });
+        }
+        return reels;
+      }
+      var reels = buildWheel($("#f08-wheel"), "17,000");
+
+      /* ---------- macro camera: slow push-in under everything ---------- */
+      tl.fromTo($("#f08-cam"), { scale: 1 }, { scale: 1.02, duration: DURATION, ease: "none" }, 0);
+
+      /* ================= Scene 1 (0.0–2.8s): the case-file card ================= */
+      tl.fromTo(
+        $("#f08-card"),
+        { x: -940, rotation: -5, opacity: 0 },
+        { x: 0, rotation: -1, opacity: 1, duration: 0.85, ease: "power3.out" },
+        0.05
+      );
+      tl.fromTo(
+        $("#f08-tab"),
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" },
+        0.4
+      );
+      // title per word on "Hugging" / "Face"
+      tl.fromTo($("#f08-w1"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, 0.70);
+      tl.fromTo($("#f08-w2"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, 0.98);
+      // white stamp slams onto the card on "হামলা।"
+      tl.fromTo(
+        $("#f08-stamp"),
+        { scale: 2.6, rotation: -16, opacity: 0 },
+        { scale: 1, rotation: -6, opacity: 1, duration: 0.18, ease: "power3.in" },
+        1.78
+      );
+      // impact shake on the card
+      tl.fromTo($("#f08-card"), { y: 0 }, { y: 6, duration: 0.05, ease: "power2.out" }, 1.96);
+      tl.fromTo($("#f08-card"), { y: 6 }, { y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, 2.01);
+
+      /* ================= Scene 2 (2.8–7.5s): row 1 + the number-wheel ================= */
+      // row 1 on "চালিয়েছে"
+      tl.fromTo($("#f08-line-1"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 3.25);
+      tl.fromTo($("#f08-chip-1"), { scale: 0.6, opacity: 0, x: -14 }, { scale: 1, opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 3.3);
+      tl.fromTo($("#f08-val-1"), { yPercent: 45, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 3.5);
+
+      // row 2 on "সতেরো": line + the reels roll in
+      tl.fromTo($("#f08-line-2"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 5.09);
+      tl.fromTo($("#f08-wheel"), { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 5.09);
+      reels.forEach(function (r, i) {
+        tl.fromTo(r.el, { y: 0 }, { y: r.target, duration: 1.1, ease: "power3.out" }, 5.09 + i * 0.07);
+      });
+      tl.fromTo($("#f08-plus"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "power3.out" }, 6.2);
+      // label on "ইভেন্ট।"
+      tl.fromTo($("#f08-chip-2"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.38, ease: "power3.out" }, 6.57);
+
+      /* ================= Scene 3 (7.5–10.8s): the attacker row — strike + handwriting ================= */
+      tl.fromTo($("#f08-line-3"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 7.54);
+      tl.fromTo($("#f08-chip-3"), { scale: 0.6, opacity: 0, x: -14 }, { scale: 1, opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 7.58);
+      tl.fromTo($("#f08-q"), { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "power3.out" }, 7.7);
+      // suspense wobble on the "???"
+      tl.fromTo($("#f08-q"), { rotation: 0 }, { rotation: -4, duration: 0.14, ease: "power2.out" }, 8.1);
+      tl.fromTo($("#f08-q"), { rotation: -4 }, { rotation: 4, duration: 0.2, ease: "power2.inOut", immediateRender: false }, 8.24);
+      tl.fromTo($("#f08-q"), { rotation: 4 }, { rotation: 0, duration: 0.2, ease: "power2.out", immediateRender: false }, 8.44);
+      // red marker strikes "???" on "OpenAI-এর"
+      drawStroke($("#f08-sa"), 8.61, 0.2);
+      drawStroke($("#f08-sb"), 8.77, 0.18);
+      tl.fromTo($("#f08-q"), { opacity: 1 }, { opacity: 0.45, duration: 0.3, ease: "power1.out", immediateRender: false }, 8.72);
+      // ...and writes the real attacker beside it (clip-reveal, done by "এজেন্ট।" 9.83s)
+      tl.fromTo($("#f08-hand-1"), { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.46, ease: "power1.inOut" }, 8.98);
+      tl.fromTo($("#f08-hand-2"), { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.4, ease: "power1.inOut" }, 9.43);
+
+      /* ================= Scene 4 (10.8–17.628s): the sandbox — an agent walks out ================= */
+      // dashed test box on "সাইবার"
+      tl.fromTo($("#f08-box"), { scale: 0.82, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" }, 10.84);
+      tl.fromTo($("#f08-test"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }, 11.0);
+      // agent token pops inside
+      tl.fromTo($("#f08-token"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.5)" }, 11.3);
+      // pacing inside the box (finite, deterministic)
+      tl.fromTo($("#f08-token"), { x: 0 }, { x: 36, duration: 0.8, ease: "power1.inOut" }, 11.75);
+      tl.fromTo($("#f08-token"), { x: 36 }, { x: -36, duration: 1.1, ease: "power1.inOut", immediateRender: false }, 12.55);
+      tl.fromTo($("#f08-token"), { x: -36 }, { x: 36, duration: 1.1, ease: "power1.inOut", immediateRender: false }, 13.65);
+      tl.fromTo($("#f08-token"), { x: 36 }, { x: 0, duration: 0.65, ease: "power1.inOut", immediateRender: false }, 14.75);
+      // blinks
+      tl.fromTo($$(".f08-eye"), { scaleY: 1 }, { scaleY: 0.12, duration: 0.07, ease: "power1.in" }, 13.25);
+      tl.fromTo($$(".f08-eye"), { scaleY: 0.12 }, { scaleY: 1, duration: 0.09, ease: "power1.out", immediateRender: false }, 13.32);
+      tl.fromTo($$(".f08-eye"), { scaleY: 1 }, { scaleY: 0.12, duration: 0.07, ease: "power1.in", immediateRender: false }, 14.5);
+      tl.fromTo($$(".f08-eye"), { scaleY: 0.12 }, { scaleY: 1, duration: 0.09, ease: "power1.out", immediateRender: false }, 14.57);
+
+      // safeguard chip on "সেফগার্ড" + the dial needle swings to low
+      tl.fromTo($("#f08-chip"), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 12.52);
+      tl.fromTo(
+        $("#f08-needle"),
+        { rotation: 62, svgOrigin: "62 68" },
+        { rotation: -72, svgOrigin: "62 68", duration: 0.6, ease: "power3.out" },
+        12.8
+      );
+      tl.fromTo(
+        $("#f08-needle"),
+        { rotation: -72, svgOrigin: "62 68" },
+        { rotation: -60, svgOrigin: "62 68", duration: 0.35, ease: "power2.inOut", immediateRender: false },
+        13.4
+      );
+
+      // the real internet card slides in at the right edge as the token leaves
+      tl.fromTo($("#f08-net"), { x: 280, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 15.25);
+
+      // on "বেরিয়ে": token slides out through the gap; marker draws the arrow along its path
+      tl.fromTo($("#f08-token"), { x: 0 }, { x: 317, duration: 0.94, ease: "power2.in", immediateRender: false }, 15.42);
+      tl.fromTo($("#f08-token"), { y: 0 }, { y: -20, duration: 0.16, ease: "power2.out" }, 15.62);
+      tl.fromTo($("#f08-token"), { y: -20 }, { y: 0, duration: 0.16, ease: "power2.in", immediateRender: false }, 15.78);
+      tl.fromTo($("#f08-token"), { y: 0 }, { y: -20, duration: 0.14, ease: "power2.out", immediateRender: false }, 15.98);
+      tl.fromTo($("#f08-token"), { y: -20 }, { y: 0, duration: 0.14, ease: "power2.in", immediateRender: false }, 16.12);
+      drawStroke($("#f08-arrow"), 15.45, 0.76, "power1.inOut");
+      drawStroke($("#f08-arrow-head"), 16.2, 0.18, "power2.out");
+
+      // on "ইন্টারনেটে": impact — card nudges, token squashes against it
+      tl.fromTo($("#f08-net"), { x: 0 }, { x: 18, duration: 0.07, ease: "power2.out", immediateRender: false }, 16.36);
+      tl.fromTo($("#f08-net"), { x: 18 }, { x: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, 16.43);
+      tl.fromTo($("#f08-token-body"), { scaleX: 1 }, { scaleX: 0.82, duration: 0.07, ease: "power2.out" }, 16.36);
+      tl.fromTo($("#f08-token-body"), { scaleX: 0.82 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 16.43);
+
+      // pin the timeline length to the frame duration (hold, no exit)
+      tl.set({}, {}, DURATION);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[COMP_ID] = tl;
+    })();
+  </script>
+</template>

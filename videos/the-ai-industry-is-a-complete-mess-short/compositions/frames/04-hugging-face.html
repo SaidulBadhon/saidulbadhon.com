@@ -1,0 +1,841 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Permanent Marker"; src: url("assets/fonts/permanent-marker-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+
+    /* ---------- layers (each a full-duration clip) ---------- */
+    #s04-ground,
+    #s04-chrome,
+    #s04-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      box-sizing: border-box;
+    }
+    #s04-ground *,
+    #s04-chrome *,
+    #s04-content * {
+      box-sizing: border-box;
+    }
+    #s04-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      transform-origin: 50% 45%;
+    }
+
+    /* ---------- paused-tape stage ---------- */
+    #s04-ground {
+      background-color: #1B1B1F;
+      overflow: hidden;
+    }
+    .s04-scanlines {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+    .s04-ghost {
+      position: absolute;
+      opacity: 0.08;
+    }
+    #s04-ghost-star {
+      left: 700px;
+      top: 1420px;
+      width: 420px;
+      height: 420px;
+      transform: rotate(12deg);
+      overflow: visible;
+    }
+    #s04-ghost-star polygon {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 6;
+      stroke-linejoin: miter;
+    }
+    #s04-ghost-stripe {
+      left: 690px;
+      top: 1700px;
+      width: 420px;
+      height: 120px;
+      transform: rotate(-9deg);
+      border: 5px solid #FFFFFF;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #FFFFFF 0px,
+        #FFFFFF 14px,
+        transparent 14px,
+        transparent 28px
+      );
+    }
+
+    /* ---------- static chrome: VHS OSD + ফ্যাক্ট চেক pill ---------- */
+    #s04-osd {
+      position: absolute;
+      left: 60px;
+      top: 234px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-shadow: 3px 3px 0 #000000;
+    }
+    .s04-pause-icon {
+      display: flex;
+      gap: 5px;
+    }
+    .s04-pause-icon i {
+      display: block;
+      width: 8px;
+      height: 26px;
+      background-color: #FFFFFF;
+      box-shadow: 3px 3px 0 #000000;
+    }
+    .s04-osd-sp {
+      margin-left: 18px;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+    }
+    #s04-factcheck {
+      position: absolute;
+      right: 188px;
+      top: 228px;
+      background-color: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 6px 6px 0 #000000;
+      border-radius: 9999px;
+      padding: 7px 24px 7px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+
+    /* ---------- shared bits ---------- */
+    .s04-pill {
+      display: inline-block;
+      border: 5px solid #000000;
+      box-shadow: 7px 7px 0 #000000;
+      border-radius: 9999px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding: 7px 20px 7px;
+      color: #000000;
+    }
+    .s04-ink {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ---------- the case-file card (top) ---------- */
+    #s04-card {
+      position: absolute;
+      left: 76px;
+      top: 320px;
+      width: 800px;
+      height: 596px;
+      background-color: #FFFFFF;
+      border: 7px solid #000000;
+      box-shadow: 12px 12px 0 #000000;
+      padding: 38px 36px 0 36px;
+    }
+    #s04-tab-pos {
+      position: absolute;
+      left: 36px;
+      top: -34px;
+      transform: rotate(-2deg);
+    }
+    #s04-tab {
+      background-color: #FE90E8;
+      font-size: 27px;
+      transform-origin: 0% 50%;
+    }
+    #s04-tape-pos {
+      position: absolute;
+      left: 470px;
+      top: -24px;
+      width: 124px;
+      height: 38px;
+      transform: rotate(4deg);
+      border: 5px solid #000000;
+      background-color: #F7CB46;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #000000 0px,
+        #000000 9px,
+        transparent 9px,
+        transparent 20px
+      );
+    }
+    #s04-title {
+      margin: 0 0 10px 0;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 64px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .s04-w {
+      display: inline-block;
+    }
+    #s04-stamp-pos {
+      position: absolute;
+      left: 572px;
+      top: 18px;
+      z-index: 3;
+    }
+    #s04-stamp {
+      background-color: #FFFFFF;
+      border: 7px solid #000000;
+      outline: 2px solid #000000;
+      outline-offset: -15px;
+      box-shadow: 7px 7px 0 #000000;
+      padding: 8px 24px 9px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 52px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+      transform-origin: 50% 50%;
+    }
+
+    /* rows */
+    .s04-row {
+      position: relative;
+      padding-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    #s04-row-1 { height: 155px; }
+    #s04-row-2 { height: 135px; }
+    #s04-row-3 { height: 165px; }
+    .s04-rline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 5px;
+      background-color: #000000;
+      transform-origin: 0% 50%;
+    }
+    .s04-chip {
+      transform-origin: 0% 50%;
+    }
+    .s04-val {
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 62px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .s04-ai {
+      display: inline-block;
+      margin-right: 0.12em;
+      padding: 0 0.28em;
+      background-color: #C0F7FE;
+      border: 4px solid #000000;
+      line-height: 1.1;
+    }
+    #s04-row-2 {
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      padding-top: 12px;
+    }
+    .s04-wheel {
+      display: inline-flex;
+      align-items: flex-start;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 112px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      color: #000000;
+    }
+    .s04-wheel-digit {
+      display: inline-block;
+      height: 1em;
+      overflow: hidden;
+    }
+    .s04-wheel-strip {
+      display: grid;
+    }
+    .s04-wheel-strip span {
+      display: block;
+      height: 1em;
+      line-height: 1em;
+    }
+    .s04-wheel-sep {
+      display: inline-block;
+      height: 1em;
+      line-height: 1em;
+    }
+    #s04-plus {
+      display: inline-block;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 112px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-left: -4px;
+      color: #000000;
+    }
+    #s04-chip-2 {
+      background-color: #99E885;
+      align-self: flex-end;
+      margin-bottom: 18px;
+      margin-left: 6px;
+      transform-origin: 0% 50%;
+    }
+    #s04-q-wrap {
+      position: relative;
+      display: inline-block;
+    }
+    #s04-q {
+      display: inline-block;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 84px;
+      line-height: 1.0;
+      letter-spacing: 0.02em;
+      color: #000000;
+      transform-origin: 50% 60%;
+    }
+    .s04-strike {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 230px;
+      height: 70px;
+      margin-left: -115px;
+      margin-top: -35px;
+      overflow: visible;
+    }
+    #s04-hand-pos {
+      position: absolute;
+      left: 232px;
+      top: 8px;
+      transform: rotate(-4deg);
+    }
+    .s04-hl {
+      display: block;
+      width: max-content;
+      padding: 0 0.14em;
+      font-family: "Permanent Marker", "Atma", cursive;
+      font-weight: 400;
+      font-size: 60px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #E5322D;
+    }
+
+    /* ---------- the sandbox diagram (bottom) ---------- */
+    #s04-box {
+      position: absolute;
+      left: 90px;
+      top: 985px;
+      width: 340px;
+      height: 320px;
+      overflow: visible;
+      transform-origin: 50% 50%;
+    }
+    #s04-box-line {
+      fill: rgba(255, 255, 255, 0.06);
+      stroke: #FFFFFF;
+      stroke-width: 5;
+      stroke-dasharray: 22 14;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+    }
+    #s04-test-pos {
+      position: absolute;
+      left: 122px;
+      top: 957px;
+      transform: rotate(-3deg);
+    }
+    #s04-test {
+      background-color: #F7CB46;
+      font-size: 29px;
+      transform-origin: 0% 50%;
+    }
+    #s04-token {
+      position: absolute;
+      left: 212px;
+      top: 1097px;
+      width: 96px;
+      height: 96px;
+      transform-origin: 50% 50%;
+    }
+    #s04-token-body {
+      position: absolute;
+      inset: 0;
+      background-color: #FE90E8;
+      border: 5px solid #000000;
+      box-shadow: 7px 7px 0 #000000;
+      transform-origin: 100% 50%;
+    }
+    .s04-eye {
+      position: absolute;
+      top: 28px;
+      width: 15px;
+      height: 22px;
+      background-color: #000000;
+      transform-origin: 50% 50%;
+    }
+    .s04-eye-l { left: 20px; }
+    .s04-eye-r { left: 50px; }
+    #s04-chip-pos {
+      position: absolute;
+      left: 90px;
+      top: 1335px;
+      transform: rotate(-2deg);
+    }
+    #s04-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      background-color: #FFFFFF;
+      border: 5px solid #000000;
+      box-shadow: 7px 7px 0 #000000;
+      padding: 12px 24px 12px 18px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 36px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+    }
+    #s04-dial {
+      display: block;
+      width: 112px;
+      height: 70px;
+      overflow: visible;
+    }
+    #s04-net-pos {
+      position: absolute;
+      left: 600px;
+      top: 990px;
+      width: 270px;
+      height: 310px;
+      transform: rotate(2deg);
+    }
+    #s04-net {
+      position: absolute;
+      inset: 0;
+      background-color: #FFFFFF;
+      border: 7px solid #000000;
+      box-shadow: 12px 12px 0 #000000;
+    }
+    .s04-net-bar {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      height: 46px;
+      padding: 0 14px;
+      background-color: #C0F7FE;
+      border-bottom: 5px solid #000000;
+    }
+    .s04-net-bar i {
+      display: block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #000000;
+      border-radius: 50%;
+    }
+    .s04-net-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      height: calc(100% - 46px);
+      padding: 0 10px 6px;
+    }
+    .s04-net-txt {
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 40px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      text-align: center;
+      color: #000000;
+    }
+    .s04-net-tiles {
+      display: flex;
+      gap: 12px;
+    }
+    .s04-net-tiles i {
+      display: block;
+      width: 42px;
+      height: 42px;
+      border: 4px solid #000000;
+    }
+
+    /* marker overlay for the exit arrow */
+    #s04-marker {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: visible;
+      pointer-events: none;
+    }
+  </style>
+
+  <div id="root" data-composition-id="04-hugging-face" data-width="1080" data-height="1920" data-duration="17.628">
+    <!-- Track 0: paused-tape ground (scanlines + ghost decor, full-bleed) -->
+    <div id="s04-ground" class="clip" data-start="0" data-duration="17.628" data-track-index="0">
+      <div class="s04-scanlines"></div>
+      <svg id="s04-ghost-star" class="s04-ghost" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="180,10 217.7,64 280,42.5 278.7,108.3 341.7,127.5 302,180 341.7,232.5 278.7,251.7 280,317.5 217.7,296 180,350 142.3,296 80,317.5 81.3,251.7 18.3,232.5 58,180 18.3,127.5 81.3,108.3 80,42.5 142.3,64" />
+      </svg>
+      <div id="s04-ghost-stripe" class="s04-ghost"></div>
+    </div>
+
+    <!-- Track 1: static stage chrome -->
+    <div id="s04-chrome" class="clip" data-start="0" data-duration="17.628" data-track-index="1">
+      <div id="s04-osd">
+        <span class="s04-pause-icon"><i></i><i></i></span>
+        <span>PAUSE</span>
+        <span class="s04-osd-sp">SP</span>
+      </div>
+      <div id="s04-factcheck">ফ্যাক্ট চেক</div>
+    </div>
+
+    <!-- Track 2: case file (top) + sandbox diagram (bottom) -->
+    <div id="s04-content" class="clip" data-start="0" data-duration="17.628" data-track-index="2">
+      <div id="s04-cam">
+
+        <!-- ===== TOP: the case-file card ===== -->
+        <div id="s04-card">
+          <div data-layout-allow-overlap id="s04-tab-pos"><span id="s04-tab" data-layout-allow-overlap class="s04-pill">ঘটনা · জুলাই 2026</span></div>
+          <div data-layout-allow-overlap id="s04-tape-pos"></div>
+          <div data-layout-allow-overlap id="s04-stamp-pos"><div id="s04-stamp">হামলা</div></div>
+
+          <h2 id="s04-title"><span id="s04-w1" class="s04-w">Hugging</span> <span id="s04-w2" class="s04-w">Face</span></h2>
+
+          <div id="s04-row-1" class="s04-row">
+            <div id="s04-line-1" class="s04-rline"></div>
+            <span id="s04-chip-1" data-layout-allow-overlap class="s04-pill s04-chip" style="background-color: #C0F7FE">চালিয়েছে</span>
+            <div id="s04-val-1" class="s04-val"><span class="s04-ai" data-layout-allow-overlap>AI</span>এজেন্ট · পুরোটা</div>
+          </div>
+
+          <div id="s04-row-2" class="s04-row">
+            <div id="s04-line-2" class="s04-rline"></div>
+            <span id="s04-wheel" class="s04-wheel"></span>
+            <span id="s04-plus">+</span>
+            <span id="s04-chip-2" class="s04-pill">ইভেন্ট</span>
+          </div>
+
+          <div id="s04-row-3" class="s04-row">
+            <div id="s04-line-3" class="s04-rline"></div>
+            <span id="s04-chip-3" class="s04-pill s04-chip" style="background-color: #FE90E8">হামলাকারী</span>
+            <span id="s04-q-wrap">
+              <span id="s04-q">???</span>
+              <svg data-layout-allow-overlap class="s04-strike" viewBox="0 0 230 70" xmlns="http://www.w3.org/2000/svg">
+                <path id="s04-sa" class="s04-ink" data-len="224" d="M 8 44 C 62 40, 124 34, 176 28 S 212 22, 220 20" />
+                <path id="s04-sb" class="s04-ink" data-len="206" d="M 208 31 C 156 37, 104 43, 56 47 S 26 51, 14 53" />
+              </svg>
+            </span>
+            <div data-layout-allow-overlap id="s04-hand-pos">
+              <span id="s04-hand-1" class="s04-hl">OpenAI-এর</span>
+              <span id="s04-hand-2" class="s04-hl">এজেন্ট</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== BOTTOM: the sandbox diagram ===== -->
+        <svg id="s04-box" viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg">
+          <path id="s04-box-line" d="M 336 245 L 336 316 L 4 316 L 4 4 L 336 4 L 336 75" />
+        </svg>
+        <div data-layout-allow-overlap id="s04-test-pos"><span id="s04-test" class="s04-pill">টেস্ট</span></div>
+
+        <div data-layout-allow-overlap id="s04-net-pos">
+          <div id="s04-net">
+            <div class="s04-net-bar"><i style="background-color:#FE90E8"></i><i style="background-color:#F7CB46"></i><i style="background-color:#99E885"></i></div>
+            <div class="s04-net-body">
+              <div class="s04-net-txt">আসল<br />ইন্টারনেট</div>
+              <div class="s04-net-tiles"><i style="background-color:#FE90E8"></i><i style="background-color:#99E885"></i><i style="background-color:#F7CB46"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div data-layout-allow-overlap id="s04-chip-pos">
+          <div id="s04-chip">
+            <svg id="s04-dial" viewBox="0 0 124 78" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 14 68 A 52 52 0 0 1 28.2 31.8" fill="none" stroke="#FE90E8" stroke-width="14" />
+              <path d="M 12 68 A 52 52 0 0 1 112 68" fill="none" stroke="#000000" stroke-width="5" />
+              <line x1="62" y1="16" x2="62" y2="24" stroke="#000000" stroke-width="4" />
+              <line x1="22" y1="30" x2="28" y2="35" stroke="#000000" stroke-width="4" />
+              <line x1="102" y1="30" x2="96" y2="35" stroke="#000000" stroke-width="4" />
+              <g id="s04-needle"><line x1="62" y1="68" x2="62" y2="26" stroke="#000000" stroke-width="6" stroke-linecap="square" /></g>
+              <rect x="55" y="61" width="14" height="14" fill="#000000" />
+            </svg>
+            <span>সেফগার্ড: কমানো</span>
+          </div>
+        </div>
+
+        <div data-layout-allow-overlap id="s04-token">
+          <div id="s04-token-body">
+            <i class="s04-eye s04-eye-l"></i>
+            <i class="s04-eye s04-eye-r"></i>
+          </div>
+        </div>
+
+        <svg data-layout-allow-overlap id="s04-marker" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <path id="s04-arrow" class="s04-ink" data-len="292" d="M 292 1208 C 354 1200, 428 1215, 492 1205 S 553 1199, 579 1202" />
+          <path id="s04-arrow-head" class="s04-ink" data-len="80" d="M 551 1178 L 581 1202 L 549 1226" />
+        </svg>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var COMP_ID = "04-hugging-face";
+      var DURATION = 17.628;
+      var scope = document.querySelector('[data-composition-id="' + COMP_ID + '"]') || document;
+      function $(sel) { return scope.querySelector(sel); }
+      function $$(sel) { return Array.prototype.slice.call(scope.querySelectorAll(sel)); }
+
+      var tl = gsap.timeline({ paused: true });
+
+      /* ---------- svg-path-draw helper: measured length, dash shifted fully off-path ---------- */
+      function drawStroke(path, at, dur, ease) {
+        var measured = 0;
+        try { measured = path.getTotalLength(); } catch (e) { measured = 0; }
+        var len = (measured > 0 ? measured : parseFloat(path.getAttribute("data-len"))) * 1.03;
+        path.style.strokeDasharray = len + "px " + (len + 40) + "px";
+        tl.fromTo(
+          path,
+          { strokeDashoffset: len + 20 },
+          { strokeDashoffset: 0, duration: dur, ease: ease || "power2.out" },
+          at
+        );
+      }
+
+      /* ---------- number-wheel: one 0-9 reel per digit (double spin), built synchronously ---------- */
+      var WHEEL_PX = 112;
+      function buildWheel(host, str) {
+        var reels = [];
+        for (var i = 0; i < str.length; i++) {
+          var ch = str.charAt(i);
+          if (!/\d/.test(ch)) {
+            var sep = document.createElement("span"); sep.setAttribute("data-layout-allow-overlap", "");
+            sep.className = "s04-wheel-sep";
+            sep.textContent = ch;
+            host.appendChild(sep);
+            continue;
+          }
+          var stops = 10 + Number(ch);
+          var frame = document.createElement("span"); frame.setAttribute("data-layout-allow-overlap", "");
+          frame.className = "s04-wheel-digit";
+          var strip = document.createElement("span"); strip.setAttribute("data-layout-allow-overlap", "");
+          strip.className = "s04-wheel-strip";
+          for (var k = 0; k <= stops; k++) {
+            var step = document.createElement("span"); step.setAttribute("data-layout-allow-overlap", "");
+            step.textContent = String(k % 10);
+            strip.appendChild(step);
+          }
+          frame.appendChild(strip);
+          host.appendChild(frame);
+          reels.push({ el: strip, target: -stops * WHEEL_PX });
+        }
+        return reels;
+      }
+      var reels = buildWheel($("#s04-wheel"), "17,000");
+
+      /* ---------- macro camera: slow push-in under everything ---------- */
+      tl.fromTo($("#s04-cam"), { scale: 1 }, { scale: 1.02, duration: DURATION, ease: "none" }, 0);
+
+      /* ================= Scene 1 (0.0–2.8s): the case-file card ================= */
+      tl.fromTo(
+        $("#s04-card"),
+        { x: -1000, rotation: -5, opacity: 0 },
+        { x: 0, rotation: -1, opacity: 1, duration: 0.85, ease: "power3.out" },
+        0.05
+      );
+      tl.fromTo(
+        $("#s04-tab"),
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" },
+        0.4
+      );
+      // title per word on "Hugging" / "Face"
+      tl.fromTo($("#s04-w1"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, 0.70);
+      tl.fromTo($("#s04-w2"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, 0.98);
+      // white stamp slams onto the card on "হামলা।"
+      tl.fromTo(
+        $("#s04-stamp"),
+        { scale: 2.6, rotation: -16, opacity: 0 },
+        { scale: 1, rotation: -6, opacity: 1, duration: 0.18, ease: "power3.in" },
+        1.78
+      );
+      // impact shake on the card
+      tl.fromTo($("#s04-card"), { y: 0 }, { y: 6, duration: 0.05, ease: "power2.out" }, 1.96);
+      tl.fromTo($("#s04-card"), { y: 6 }, { y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, 2.01);
+
+      /* ================= Scene 2 (2.8–7.5s): row 1 + the number-wheel ================= */
+      // row 1 on "চালিয়েছে"
+      tl.fromTo($("#s04-line-1"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 3.25);
+      tl.fromTo($("#s04-chip-1"), { scale: 0.6, opacity: 0, x: -14 }, { scale: 1, opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 3.3);
+      tl.fromTo($("#s04-val-1"), { yPercent: 45, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 3.5);
+
+      // row 2 on "সতেরো": line + the reels roll in
+      tl.fromTo($("#s04-line-2"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 5.09);
+      tl.fromTo($("#s04-wheel"), { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 5.09);
+      reels.forEach(function (r, i) {
+        tl.fromTo(r.el, { y: 0 }, { y: r.target, duration: 1.1, ease: "power3.out" }, 5.09 + i * 0.07);
+      });
+      // once the reels have landed, the off-window digits are dead weight: hide them so they can't
+      // sit (clipped, but still laid out) behind the tab and chip above the row
+      tl.fromTo(
+        $$(".s04-wheel-strip span:not(:last-child)"),
+        { opacity: 1 },
+        { opacity: 0, duration: 0.01, ease: "none", immediateRender: false },
+        6.75
+      );
+      tl.fromTo($("#s04-plus"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "power3.out" }, 6.2);
+      // label on "ইভেন্ট।"
+      tl.fromTo($("#s04-chip-2"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.38, ease: "power3.out" }, 6.57);
+
+      /* ================= Scene 3 (7.5–10.8s): the attacker row — strike + handwriting ================= */
+      tl.fromTo($("#s04-line-3"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 7.54);
+      tl.fromTo($("#s04-chip-3"), { scale: 0.6, opacity: 0, x: -14 }, { scale: 1, opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 7.58);
+      tl.fromTo($("#s04-q"), { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "power3.out" }, 7.7);
+      // suspense wobble on the "???"
+      tl.fromTo($("#s04-q"), { rotation: 0 }, { rotation: -4, duration: 0.14, ease: "power2.out" }, 8.1);
+      tl.fromTo($("#s04-q"), { rotation: -4 }, { rotation: 4, duration: 0.2, ease: "power2.inOut", immediateRender: false }, 8.24);
+      tl.fromTo($("#s04-q"), { rotation: 4 }, { rotation: 0, duration: 0.2, ease: "power2.out", immediateRender: false }, 8.44);
+      // red marker strikes "???" on "OpenAI-এর"
+      drawStroke($("#s04-sa"), 8.61, 0.2);
+      drawStroke($("#s04-sb"), 8.77, 0.18);
+      tl.fromTo($("#s04-q"), { opacity: 1 }, { opacity: 0.45, duration: 0.3, ease: "power1.out", immediateRender: false }, 8.72);
+      // ...and writes the real attacker beside it (clip-reveal, done by "এজেন্ট।" 9.83s)
+      tl.fromTo($("#s04-hand-1"), { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.46, ease: "power1.inOut" }, 8.98);
+      tl.fromTo($("#s04-hand-2"), { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.4, ease: "power1.inOut" }, 9.43);
+
+      /* ================= Scene 4 (10.8–17.628s): the sandbox — an agent walks out ================= */
+      // dashed test box on "সাইবার"
+      tl.fromTo($("#s04-box"), { scale: 0.82, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" }, 10.84);
+      tl.fromTo($("#s04-test"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }, 11.0);
+      // agent token pops inside
+      tl.fromTo($("#s04-token"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.5)" }, 11.3);
+      // pacing inside the box (finite, deterministic)
+      tl.fromTo($("#s04-token"), { x: 0 }, { x: 36, duration: 0.8, ease: "power1.inOut" }, 11.75);
+      tl.fromTo($("#s04-token"), { x: 36 }, { x: -36, duration: 1.1, ease: "power1.inOut", immediateRender: false }, 12.55);
+      tl.fromTo($("#s04-token"), { x: -36 }, { x: 36, duration: 1.1, ease: "power1.inOut", immediateRender: false }, 13.65);
+      tl.fromTo($("#s04-token"), { x: 36 }, { x: 0, duration: 0.65, ease: "power1.inOut", immediateRender: false }, 14.75);
+      // blinks
+      tl.fromTo($$(".s04-eye"), { scaleY: 1 }, { scaleY: 0.12, duration: 0.07, ease: "power1.in" }, 13.25);
+      tl.fromTo($$(".s04-eye"), { scaleY: 0.12 }, { scaleY: 1, duration: 0.09, ease: "power1.out", immediateRender: false }, 13.32);
+      tl.fromTo($$(".s04-eye"), { scaleY: 1 }, { scaleY: 0.12, duration: 0.07, ease: "power1.in", immediateRender: false }, 14.5);
+      tl.fromTo($$(".s04-eye"), { scaleY: 0.12 }, { scaleY: 1, duration: 0.09, ease: "power1.out", immediateRender: false }, 14.57);
+
+      // safeguard chip on "সেফগার্ড" + the dial needle swings to low
+      tl.fromTo($("#s04-chip"), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 12.52);
+      tl.fromTo(
+        $("#s04-needle"),
+        { rotation: 62, svgOrigin: "62 68" },
+        { rotation: -72, svgOrigin: "62 68", duration: 0.6, ease: "power3.out" },
+        12.8
+      );
+      tl.fromTo(
+        $("#s04-needle"),
+        { rotation: -72, svgOrigin: "62 68" },
+        { rotation: -60, svgOrigin: "62 68", duration: 0.35, ease: "power2.inOut", immediateRender: false },
+        13.4
+      );
+
+      // the real internet card slides in at the right edge as the token leaves
+      tl.fromTo($("#s04-net"), { x: 260, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 15.25);
+
+      // on "বেরিয়ে": token slides out through the gap; marker draws the arrow along its path
+      tl.fromTo($("#s04-token"), { x: 0 }, { x: 292, duration: 0.94, ease: "power2.in", immediateRender: false }, 15.42);
+      tl.fromTo($("#s04-token"), { y: 0 }, { y: -20, duration: 0.16, ease: "power2.out" }, 15.62);
+      tl.fromTo($("#s04-token"), { y: -20 }, { y: 0, duration: 0.16, ease: "power2.in", immediateRender: false }, 15.78);
+      tl.fromTo($("#s04-token"), { y: 0 }, { y: -20, duration: 0.14, ease: "power2.out", immediateRender: false }, 15.98);
+      tl.fromTo($("#s04-token"), { y: -20 }, { y: 0, duration: 0.14, ease: "power2.in", immediateRender: false }, 16.12);
+      drawStroke($("#s04-arrow"), 15.45, 0.76, "power1.inOut");
+      drawStroke($("#s04-arrow-head"), 16.2, 0.18, "power2.out");
+
+      // on "ইন্টারনেটে": impact — card nudges, token squashes against it
+      tl.fromTo($("#s04-net"), { x: 0 }, { x: 14, duration: 0.07, ease: "power2.out", immediateRender: false }, 16.36);
+      tl.fromTo($("#s04-net"), { x: 14 }, { x: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, 16.43);
+      tl.fromTo($("#s04-token-body"), { scaleX: 1 }, { scaleX: 0.82, duration: 0.07, ease: "power2.out" }, 16.36);
+      tl.fromTo($("#s04-token-body"), { scaleX: 0.82 }, { scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 16.43);
+
+      // pin the timeline length to the frame duration (hold, no exit)
+      tl.set({}, {}, DURATION);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[COMP_ID] = tl;
+    })();
+  </script>
+</template>

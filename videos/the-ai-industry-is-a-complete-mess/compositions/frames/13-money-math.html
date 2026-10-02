@@ -1,0 +1,819 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Permanent Marker"; src: url("assets/fonts/permanent-marker-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+
+    /* ---------- layers (each a full-duration clip) ---------- */
+    #f13-ground,
+    #f13-chrome,
+    #f13-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      box-sizing: border-box;
+    }
+    #f13-ground *,
+    #f13-chrome *,
+    #f13-content * {
+      box-sizing: border-box;
+    }
+
+    /* ---------- paused-tape stage ---------- */
+    #f13-ground {
+      background-color: #1B1B1F;
+      overflow: hidden;
+    }
+    .f13-scanlines {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+    .f13-ghost {
+      position: absolute;
+      opacity: 0.08;
+    }
+    #f13-ghost-star {
+      left: 1560px;
+      top: 516px;
+      width: 360px;
+      height: 360px;
+      transform: rotate(12deg);
+      overflow: visible;
+    }
+    #f13-ghost-star polygon {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 6;
+      stroke-linejoin: miter;
+    }
+    #f13-ghost-stripe {
+      left: 1612px;
+      top: 742px;
+      width: 380px;
+      height: 112px;
+      transform: rotate(-9deg);
+      border: 3px solid #FFFFFF;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #FFFFFF 0px,
+        #FFFFFF 14px,
+        transparent 14px,
+        transparent 28px
+      );
+    }
+
+    /* ---------- static chrome: VHS OSD + ফ্যাক্ট চেক pill ---------- */
+    #f13-osd {
+      position: absolute;
+      left: 60px;
+      top: 50px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-shadow: 3px 3px 0 #000000;
+    }
+    .f13-pause-icon {
+      display: flex;
+      gap: 6px;
+    }
+    .f13-pause-icon i {
+      display: block;
+      width: 9px;
+      height: 26px;
+      background-color: #FFFFFF;
+      box-shadow: 3px 3px 0 #000000;
+    }
+    .f13-osd-sp {
+      margin-left: 20px;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+    }
+    #f13-factcheck {
+      position: absolute;
+      right: 60px;
+      top: 46px;
+      background-color: #FFFFFF;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      border-radius: 9999px;
+      padding: 8px 25px 8px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 23px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+
+    /* ---------- marker ink (strokes only) ---------- */
+    .f13-ink {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .f13-overlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      overflow: visible;
+    }
+    .f13-marker-text {
+      font-family: "Permanent Marker", "Atma", cursive;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #E5322D;
+    }
+
+    /* ---------- white cards ---------- */
+    .f13-card {
+      position: absolute;
+      box-sizing: border-box;
+      background-color: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+    #f13-c1 { left: 115px; top: 151px; width: 941px; height: 713px; }
+    #f13-c2 { left: 1152px; top: 151px; width: 653px; height: 454px; }
+    #f13-c3 { left: 115px; top: 151px; width: 1690px; height: 475px; }
+    #f13-c4 { left: 115px; top: 670px; width: 1690px; height: 194px; }
+
+    .f13-pill {
+      position: absolute;
+      display: block;
+      height: 54px;
+      padding: 0 26px;
+      background-color: #F7CB46;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      border-radius: 9999px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 48px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+      transform-origin: 0% 50%;
+    }
+
+    .f13-blue { background-color: #C0F7FE; }
+    .f13-pink { background-color: #FE90E8; }
+    .f13-green { background-color: #99E885; }
+
+    .f13-axis,
+    .f13-tickmark {
+      position: absolute;
+      background-color: #000000;
+    }
+    .f13-axis { height: 4px; }
+    .f13-tickmark { width: 4px; height: 12px; }
+    .f13-ticklabel {
+      position: absolute;
+      width: 120px;
+      text-align: center;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 28px;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    /* ---------- scene 1: capex vertical bars ---------- */
+    .f13-vbar {
+      position: absolute;
+      width: 200px;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    .f13-vval {
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 100%;
+      text-align: center;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 42px;
+      line-height: 48px;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .f13-vsub {
+      position: absolute;
+      left: 0;
+      top: 68px;
+      width: 100%;
+      text-align: center;
+      font-family: "Noto Sans Bengali", "Inter", sans-serif;
+      font-weight: 800;
+      font-size: 30px;
+      line-height: 40px;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: rgba(0, 0, 0, 0.72);
+    }
+    .f13-year {
+      position: absolute;
+      top: 634px;
+      width: 200px;
+      text-align: center;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 38px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      color: #000000;
+    }
+    #f13-x3 {
+      position: absolute;
+      left: 318px;
+      top: 214px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transform: rotate(-5deg);
+      transform-origin: 0% 50%;
+    }
+    #f13-x3t {
+      display: block;
+      font-size: 108px;
+      padding-right: 8px;
+    }
+    #f13-approx {
+      display: block;
+      overflow: visible;
+    }
+
+    /* ---------- scene 2: cash flow vs spend ---------- */
+    .f13-rowlabel {
+      position: absolute;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 34px;
+      line-height: 44px;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .f13-hbar {
+      position: absolute;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    .f13-hval {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding-left: 20px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 46px;
+      line-height: 74px;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      color: #000000;
+    }
+    #f13-stamp-pos {
+      position: absolute;
+      left: 1176px;
+      top: 662px;
+      width: 610px;
+      height: 146px;
+      transform: rotate(-6deg);
+    }
+    #f13-stamp {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 60px;
+      line-height: 74px;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .f13-sword { font-family: "Noto Sans Bengali", "Inter", sans-serif; font-weight: 900; }
+    .f13-schip {
+      display: block;
+      padding: 0 14px;
+      background-color: #FE90E8;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      line-height: 68px;
+    }
+    #f13-stamp svg { display: block; flex: 0 0 auto; }
+
+    /* ---------- scene 3: revenue vs operating loss ---------- */
+    .f13-gname {
+      position: absolute;
+      left: 36px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 40px;
+      line-height: 48px;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .f13-hbar3 {
+      position: absolute;
+      left: 332px;
+      height: 62px;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    .f13-hlabel {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding-left: 18px;
+      font-family: "Noto Sans Bengali", "Inter", sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      line-height: 56px;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+    }
+    .f13-hv {
+      position: absolute;
+      height: 62px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 44px;
+      line-height: 62px;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      color: #000000;
+    }
+
+    /* ---------- scene 4: OpenAI burn strip ---------- */
+    #f13-p4 { left: 28px; top: 66px; font-size: 26px; text-transform: none; }
+    .f13-sbar {
+      position: absolute;
+      width: 46px;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      background-color: #FE90E8;
+    }
+    .f13-tb {
+      position: absolute;
+      top: 98px;
+      width: 124px;
+      white-space: nowrap;
+    }
+    .f13-tbv {
+      display: block;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 38px;
+      line-height: 40px;
+      letter-spacing: -0.01em;
+      color: #000000;
+    }
+    .f13-tby {
+      display: block;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 28px;
+      letter-spacing: 0.04em;
+      color: rgba(0, 0, 0, 0.6);
+    }
+    #f13-t218-pos {
+      position: absolute;
+      left: 1346px;
+      top: 44px;
+      transform: rotate(-3deg);
+      transform-origin: 0% 50%;
+    }
+    #f13-t218 {
+      display: block;
+      font-size: 100px;
+      padding-right: 10px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="13-money-math" data-width="1920" data-height="1080" data-duration="26.335">
+    <!-- Track 0: paused-tape ground (scanlines + ghosted star-burst + stripe-block) -->
+    <div id="f13-ground" class="clip" data-start="0" data-duration="26.335" data-track-index="0">
+      <div class="f13-scanlines"></div>
+      <svg id="f13-ghost-star" class="f13-ghost" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="180,10 217.7,64 280,42.5 278.7,108.3 341.7,127.5 302,180 341.7,232.5 278.7,251.7 280,317.5 217.7,296 180,350 142.3,296 80,317.5 81.3,251.7 18.3,232.5 58,180 18.3,127.5 81.3,108.3 80,42.5 142.3,64" />
+      </svg>
+      <div id="f13-ghost-stripe" class="f13-ghost"></div>
+    </div>
+
+    <!-- Track 1: static stage chrome -->
+    <div id="f13-chrome" class="clip" data-start="0" data-duration="26.335" data-track-index="1">
+      <div id="f13-osd">
+        <span class="f13-pause-icon"><i></i><i></i></span>
+        <span>PAUSE</span>
+        <span class="f13-osd-sp">SP</span>
+      </div>
+      <div id="f13-factcheck">ফ্যাক্ট চেক</div>
+    </div>
+
+    <!-- Track 2: the four chart scenes -->
+    <div id="f13-content" class="clip" data-start="0" data-duration="26.335" data-track-index="2">
+
+      <!-- ===== Scene 1: big-tech capex, three vertical bars (inner 933 x 705, baseline y=618, 400px = $730B) ===== -->
+      <div id="f13-c1" class="f13-card">
+        <div id="f13-p1" class="f13-pill" style="left: 32px; top: 26px;">বিগ টেক ক্যাপেক্স</div>
+        <div id="f13-axis1" class="f13-axis" style="left: 40px; top: 618px; width: 853px;"></div>
+
+        <div id="f13-b1" class="f13-vbar f13-blue" style="left: 90px; top: 475.53px; height: 142.47px;">
+          <span class="f13-vval">$260B</span>
+        </div>
+        <div id="f13-y1" class="f13-year" style="left: 90px;">2024</div>
+
+        <div id="f13-b2" class="f13-vbar f13-blue" style="left: 370px; top: 372.52px; height: 245.48px;">
+          <span class="f13-vval">$448B</span>
+        </div>
+        <div id="f13-y2" class="f13-year" style="left: 370px;">2025</div>
+
+        <div id="f13-b3" class="f13-vbar f13-pink" style="left: 650px; top: 218px; height: 400px;">
+          <span class="f13-vval">~$730B</span>
+          <span class="f13-vsub">গাইডেন্স</span>
+        </div>
+        <div id="f13-y3" class="f13-year" style="left: 650px;">2026</div>
+
+        <!-- red marker: arc arrow 2024 top -> 2026 top, then "≈3x" -->
+        <svg class="f13-overlay" width="933" height="705" viewBox="0 0 933 705" xmlns="http://www.w3.org/2000/svg" data-layout-allow-overlap>
+          <path id="f13-arc" class="f13-ink" data-len="860" d="M 190 462 C 170 170, 520 90, 750 200" />
+          <path id="f13-arrowhead" class="f13-ink" data-len="90" d="M 725 164 L 750 200 L 706 203" />
+        </svg>
+        <div id="f13-x3" data-layout-allow-overlap>
+          <svg id="f13-approx" width="88" height="70" viewBox="0 0 88 70" xmlns="http://www.w3.org/2000/svg">
+            <path id="f13-apx-a" class="f13-ink" data-len="100" d="M 8 22 C 22 6, 34 6, 44 20 S 66 34, 80 16" />
+            <path id="f13-apx-b" class="f13-ink" data-len="100" d="M 8 52 C 22 36, 34 36, 44 50 S 66 64, 80 46" />
+          </svg>
+          <span id="f13-x3t" class="f13-marker-text">3x</span>
+        </div>
+      </div>
+
+      <!-- ===== Scene 2: cash flow vs spend (inner 645 x 446), then the debt stamp ===== -->
+      <div id="f13-c2" class="f13-card">
+        <div id="f13-p2" class="f13-pill" style="left: 28px; top: 24px;">Q3 2026 · প্রজেকশন</div>
+
+        <div id="f13-l-cash" class="f13-rowlabel" style="left: 40px; top: 106px;">ক্যাশ ফ্লো</div>
+        <div id="f13-hb-cash" class="f13-hbar f13-green" style="left: 40px; top: 154px; width: 560px; height: 80px;">
+          <span class="f13-hval">$187B</span>
+        </div>
+
+        <div id="f13-l-spend" class="f13-rowlabel" style="left: 40px; top: 270px;">খরচ</div>
+        <div id="f13-hb-spend" class="f13-hbar f13-pink" style="left: 40px; top: 318px; width: 557.01px; height: 80px;">
+          <span class="f13-hval">$186B</span>
+        </div>
+
+        <!-- red marker: "]" joining the two bar ends -->
+        <svg class="f13-overlay" width="637" height="438" viewBox="0 0 637 438" xmlns="http://www.w3.org/2000/svg" data-layout-allow-overlap>
+          <path id="f13-join" class="f13-ink" data-len="260" d="M 610 162 L 624 162 L 624 390 L 610 390" />
+        </svg>
+      </div>
+
+      <div id="f13-stamp-pos" data-layout-allow-overlap>
+        <div id="f13-stamp" class="f13-card">
+          <span class="f13-sword">ধার:</span>
+          <span>9%</span>
+          <svg width="64" height="40" viewBox="0 0 64 40" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 4 20 L 56 20 M 40 6 L 58 20 L 40 34" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter" />
+          </svg>
+          <span class="f13-schip">32%</span>
+        </div>
+      </div>
+
+      <!-- ===== Scene 3: 2025 revenue vs operating loss (inner 1682 x 467, x0 = 332, 52px per $1B) ===== -->
+      <div id="f13-c3" class="f13-card">
+        <div id="f13-p3" class="f13-pill" style="left: 36px; top: 26px;">2025: আয় vs অপারেটিং লস</div>
+
+        <div id="f13-vaxis3" class="f13-axis" style="left: 330px; top: 90px; width: 4px; height: 330px;"></div>
+        <div id="f13-haxis3" class="f13-axis" style="left: 332px; top: 416px; width: 1144px;"></div>
+        <div id="f13-tm0" class="f13-tickmark" style="left: 330px; top: 420px;"></div>
+        <div id="f13-tm1" class="f13-tickmark" style="left: 590px; top: 420px;"></div>
+        <div id="f13-tm2" class="f13-tickmark" style="left: 850px; top: 420px;"></div>
+        <div id="f13-tm3" class="f13-tickmark" style="left: 1110px; top: 420px;"></div>
+        <div id="f13-tm4" class="f13-tickmark" style="left: 1370px; top: 420px;"></div>
+        <div id="f13-tl0" class="f13-ticklabel" style="left: 272px; top: 434px;">$0</div>
+        <div id="f13-tl1" class="f13-ticklabel" style="left: 532px; top: 434px;">$5B</div>
+        <div id="f13-tl2" class="f13-ticklabel" style="left: 792px; top: 434px;">$10B</div>
+        <div id="f13-tl3" class="f13-ticklabel" style="left: 1052px; top: 434px;">$15B</div>
+        <div id="f13-tl4" class="f13-ticklabel" style="left: 1312px; top: 434px;">$20B</div>
+
+        <!-- OpenAI -->
+        <div id="f13-g1" class="f13-gname" style="top: 142px;">OpenAI</div>
+        <div id="f13-rev1" class="f13-hbar3 f13-green" style="top: 98px; width: 681.2px;"><span class="f13-hlabel">আয়</span></div>
+        <div id="f13-rv1" class="f13-hv" style="left: 1029.2px; top: 98px;">$13.1B</div>
+        <div id="f13-loss1" class="f13-hbar3 f13-pink" style="top: 172px; width: 1086.8px;"><span class="f13-hlabel">লস</span></div>
+        <div id="f13-lv1" class="f13-hv" style="left: 1434.8px; top: 172px;">$20.9B</div>
+
+        <!-- Anthropic -->
+        <div id="f13-g2" class="f13-gname" style="top: 312px;">Anthropic</div>
+        <div id="f13-rev2" class="f13-hbar3 f13-green" style="top: 268px; width: 239.2px;"><span class="f13-hlabel">আয়</span></div>
+        <div id="f13-rv2" class="f13-hv" style="left: 587.2px; top: 268px;">$4.6B</div>
+        <div id="f13-loss2" class="f13-hbar3 f13-pink" style="top: 342px; width: 421.2px;"><span class="f13-hlabel">লস</span></div>
+        <div id="f13-lv2" class="f13-hv" style="left: 769.2px; top: 342px;">$8.1B</div>
+      </div>
+
+      <!-- ===== Scene 4: OpenAI projected burn strip (inner 1682 x 186, baseline y=168, 1.22px per $1B) ===== -->
+      <div id="f13-c4" class="f13-card">
+        <div id="f13-p4" class="f13-pill">OpenAI-এর প্রজেকশন · নগদ খরচ</div>
+        <div id="f13-axis4" class="f13-axis" style="left: 560px; top: 168px; width: 760px;"></div>
+
+        <div id="f13-s1" class="f13-sbar" style="left: 570px; top: 137.5px; height: 30.5px;"></div>
+        <div id="f13-st1" class="f13-tb" style="left: 630px;"><span class="f13-tbv">$25B</span><span class="f13-tby">2026</span></div>
+
+        <div id="f13-s2" class="f13-sbar" style="left: 760px; top: 98.46px; height: 69.54px;"></div>
+        <div id="f13-st2" class="f13-tb" style="left: 820px;"><span class="f13-tbv">$57B</span><span class="f13-tby">2027</span></div>
+
+        <div id="f13-s3" class="f13-sbar" style="left: 950px; top: 64.3px; height: 103.7px;"></div>
+        <div id="f13-st3" class="f13-tb" style="left: 1010px;"><span class="f13-tbv">$85B</span><span class="f13-tby">2028</span></div>
+
+        <div id="f13-s4" class="f13-sbar" style="left: 1140px; top: 105.78px; height: 62.22px;"></div>
+        <div id="f13-st4" class="f13-tb" style="left: 1200px;"><span class="f13-tbv">$51B</span><span class="f13-tby">2029</span></div>
+
+        <!-- red marker: bracket over the four bars, then the total -->
+        <svg class="f13-overlay" width="1674" height="178" viewBox="0 0 1674 178" xmlns="http://www.w3.org/2000/svg" data-layout-allow-overlap>
+          <path id="f13-bracket" class="f13-ink" data-len="800" d="M 566 56 C 566 36, 574 28, 596 28 L 912 28 C 930 28, 932 18, 936 8 C 940 18, 942 28, 960 28 L 1276 28 C 1298 28, 1306 36, 1306 56" />
+        </svg>
+        <div id="f13-t218-pos" data-layout-allow-overlap>
+          <span id="f13-t218" class="f13-marker-text">$218B</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var COMP_ID = "13-money-math";
+      var DURATION = 26.335;
+      var scope = document.querySelector('[data-composition-id="' + COMP_ID + '"]') || document;
+      function $(sel) { return scope.querySelector(sel); }
+
+      var tl = gsap.timeline({ paused: true });
+
+      /* ---------- svg-path-draw: measured length, dash shifted fully off-path ---------- */
+      function drawStroke(sel, at, dur, ease) {
+        var path = $(sel);
+        var measured = 0;
+        try { measured = path.getTotalLength(); } catch (e) { measured = 0; }
+        var len = (measured > 0 ? measured : parseFloat(path.getAttribute("data-len"))) * 1.03;
+        path.style.strokeDasharray = len + "px " + (len + 40) + "px";
+        tl.fromTo(
+          path,
+          { strokeDashoffset: len + 20 },
+          { strokeDashoffset: 0, duration: dur, ease: ease || "power2.out" },
+          at
+        );
+      }
+
+      /* ---------- bar growth = clip-path wipe from the baseline (no squashed text, shadow kept) ---------- */
+      function wipeH(sel, at, dur, ease) {
+        tl.fromTo(
+          $(sel),
+          { clipPath: "inset(-12% 100% -12% -3%)" },
+          { clipPath: "inset(-12% -3% -12% -3%)", duration: dur, ease: ease || "power3.out" },
+          at
+        );
+      }
+      function wipeV(sel, at, dur, ease) {
+        tl.fromTo(
+          $(sel),
+          { clipPath: "inset(100% -8% -8% -8%)" },
+          { clipPath: "inset(-8% -8% -8% -8%)", duration: dur, ease: ease || "power3.out" },
+          at
+        );
+      }
+      function markerWrite(sel, at, dur) {
+        tl.fromTo(
+          $(sel),
+          { clipPath: "inset(-30% 100% -30% -5%)" },
+          { clipPath: "inset(-30% -5% -30% -5%)", duration: dur, ease: "power1.inOut" },
+          at
+        );
+      }
+      function popIn(sel, at, dur) {
+        tl.fromTo(
+          $(sel),
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: dur || 0.4, ease: "power3.out" },
+          at
+        );
+      }
+      function slideIn(sel, at, dx, dur) {
+        tl.fromTo(
+          $(sel),
+          { x: dx, opacity: 0 },
+          { x: 0, opacity: 1, duration: dur || 0.4, ease: "power3.out" },
+          at
+        );
+      }
+      function riseIn(sel, at, dy, dur) {
+        tl.fromTo(
+          $(sel),
+          { y: dy, opacity: 0 },
+          { y: 0, opacity: 1, duration: dur || 0.4, ease: "power3.out" },
+          at
+        );
+      }
+
+      /* ================= Scene 1 (0.0-2.7s): capex bars, red arc, "≈3x" ================= */
+      tl.fromTo(
+        $("#f13-c1"),
+        { y: 220, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.65, ease: "power3.out" },
+        0.1
+      );
+      popIn("#f13-p1", 0.25, 0.4);
+      wipeH("#f13-axis1", 0.18, 0.45, "power2.out");
+
+      wipeV("#f13-b1", 0.15, 0.85);
+      riseIn("#f13-y1", 0.4, 14, 0.4);
+      wipeV("#f13-b2", 0.45, 0.85);
+      riseIn("#f13-y2", 0.7, 14, 0.4);
+      wipeV("#f13-b3", 0.8, 0.9);
+      riseIn("#f13-y3", 1.05, 14, 0.4);
+
+      // "তিন" 1.62 — arc from the 2024 top to the 2026 top, then "≈3x"
+      drawStroke("#f13-arc", 1.62, 0.45, "power2.out");
+      drawStroke("#f13-arrowhead", 2.03, 0.14, "power2.out");
+      drawStroke("#f13-apx-a", 2.1, 0.2, "power2.out");
+      drawStroke("#f13-apx-b", 2.22, 0.2, "power2.out");
+      markerWrite("#f13-x3t", 2.24, 0.3);
+
+      /* ================= Scene 2 (2.7-7.0s): cash flow vs spend, then the debt stamp ================= */
+      // "ক্যাশ" 3.24 — white card slides in at right
+      tl.fromTo(
+        $("#f13-c2"),
+        { x: 230, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+        3.24
+      );
+      popIn("#f13-p2", 3.48, 0.4);
+      slideIn("#f13-l-cash", 3.58, -24, 0.4);
+      wipeH("#f13-hb-cash", 3.7, 0.8);
+      slideIn("#f13-l-spend", 4.18, -24, 0.4);
+      wipeH("#f13-hb-spend", 4.3, 0.8);
+      // the bar ends nearly touch — red bracket joins them
+      drawStroke("#f13-join", 5.2, 0.4, "power2.out");
+
+      // "ধার।" 6.17 — rubber stamp slams under the card
+      tl.fromTo(
+        $("#f13-stamp"),
+        { scale: 1.7 },
+        { scale: 1, duration: 0.2, ease: "power3.in" },
+        6.17
+      );
+      tl.fromTo($("#f13-stamp"), { opacity: 0 }, { opacity: 1, duration: 0.07, ease: "none" }, 6.17);
+      tl.to($("#f13-stamp"), { scale: 1.05, duration: 0.06, ease: "power2.out" }, 6.37);
+      tl.to($("#f13-stamp"), { scale: 1, duration: 0.22, ease: "power3.out" }, 6.43);
+      // impact jolt on the card above it
+      tl.to($("#f13-c2"), { y: 6, duration: 0.05, ease: "power2.out" }, 6.37);
+      tl.to($("#f13-c2"), { y: 0, duration: 0.22, ease: "power3.out" }, 6.42);
+
+      /* ================= Scene 3 (7.0-20.2s): revenue vs operating loss ================= */
+      // "কোম্পানিগুলো?" 7.80 — both cards scale-swap out
+      function swapOut(sel) {
+        tl.fromTo(
+          $(sel),
+          { scale: 1, opacity: 1, filter: "blur(0px)" },
+          { scale: 0.9, opacity: 0, filter: "blur(10px)", duration: 0.4, ease: "power2.in", immediateRender: false },
+          7.8
+        );
+      }
+      swapOut("#f13-c1");
+      swapOut("#f13-c2");
+      swapOut("#f13-stamp");
+
+      // wide chart card slides up
+      tl.fromTo(
+        $("#f13-c3"),
+        { y: 150, scale: 0.97, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.6, ease: "power3.out" },
+        7.95
+      );
+      // slow macro push under the whole scene
+      tl.fromTo($("#f13-c3"), { scale: 1 }, { scale: 1.012, duration: 13, ease: "sine.inOut", immediateRender: false }, 8.6);
+
+      popIn("#f13-p3", 8.2, 0.4);
+      wipeH("#f13-haxis3", 8.45, 0.55, "power2.out");
+      wipeV("#f13-vaxis3", 8.45, 0.45, "power2.out");
+      popIn("#f13-tm0", 8.6, 0.25);
+      popIn("#f13-tm1", 8.72, 0.25);
+      popIn("#f13-tm2", 8.84, 0.25);
+      popIn("#f13-tm3", 8.96, 0.25);
+      popIn("#f13-tm4", 9.08, 0.25);
+      riseIn("#f13-tl0", 8.65, 10, 0.3);
+      riseIn("#f13-tl1", 8.77, 10, 0.3);
+      riseIn("#f13-tl2", 8.89, 10, 0.3);
+      riseIn("#f13-tl3", 9.01, 10, 0.3);
+      riseIn("#f13-tl4", 9.13, 10, 0.3);
+
+      slideIn("#f13-g1", 10.3, -30, 0.45);
+      // "তেরো" 11.47 — OpenAI revenue
+      wipeH("#f13-rev1", 11.47, 0.95);
+      slideIn("#f13-rv1", 12.05, -16, 0.3);
+      // "একুশ।" 14.49 — OpenAI operating loss
+      wipeH("#f13-loss1", 14.49, 1.05);
+      slideIn("#f13-lv1", 15.2, -16, 0.3);
+
+      slideIn("#f13-g2", 16.75, -30, 0.45);
+      // "সাড়ে" 17.47 — Anthropic revenue
+      wipeH("#f13-rev2", 17.47, 0.6);
+      slideIn("#f13-rv2", 17.95, -16, 0.3);
+      // "আট।" 19.24 — Anthropic operating loss
+      wipeH("#f13-loss2", 19.24, 0.7);
+      slideIn("#f13-lv2", 19.8, -16, 0.3);
+
+      /* ================= Scene 4 (20.2-26.335s): OpenAI projected burn ================= */
+      // "প্ল্যান:" 21.80 — strip card slides up below
+      tl.fromTo(
+        $("#f13-c4"),
+        { y: 190, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+        21.8
+      );
+      popIn("#f13-p4", 22.05, 0.4);
+      wipeH("#f13-axis4", 22.2, 0.5, "power2.out");
+
+      // "চার" 22.86 / "বছরে" 23.28 / "আরও" 23.62 / "দুইশো" 23.87
+      wipeV("#f13-s1", 22.86, 0.45);
+      slideIn("#f13-st1", 23.05, -14, 0.3);
+      wipeV("#f13-s2", 23.28, 0.45);
+      slideIn("#f13-st2", 23.47, -14, 0.3);
+      wipeV("#f13-s3", 23.62, 0.45);
+      slideIn("#f13-st3", 23.81, -14, 0.3);
+      wipeV("#f13-s4", 23.87, 0.45);
+      slideIn("#f13-st4", 24.06, -14, 0.3);
+
+      // "আঠারো" 24.62 — red bracket over the four bars, then the total (written by "পুড়বে।" 25.63)
+      drawStroke("#f13-bracket", 24.62, 0.32, "power2.out");
+      markerWrite("#f13-t218", 24.85, 0.42);
+
+      // pin the timeline length to the frame duration (hold, no exit)
+      tl.set({}, {}, DURATION);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[COMP_ID] = tl;
+    })();
+  </script>
+</template>

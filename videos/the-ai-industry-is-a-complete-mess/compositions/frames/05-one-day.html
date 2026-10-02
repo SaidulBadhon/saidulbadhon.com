@@ -1,0 +1,789 @@
+<template id="f05-template">
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Permanent Marker"; src: url("assets/fonts/permanent-marker-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+    #root * { box-sizing: border-box; }
+
+    /* ---------- paused-tape stage (fixed, outside the world) ---------- */
+    #f05-ground {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      background: #1B1B1F;
+    }
+    .f05-ghost { position: absolute; inset: 0; pointer-events: none; }
+    .f05-ghost-star {
+      position: absolute;
+      left: 1468px;
+      top: 520px;
+      width: 300px;
+      height: 300px;
+      opacity: 0.08;
+      transform: rotate(8deg);
+      overflow: visible;
+    }
+    .f05-ghost-star polygon { fill: none; stroke: #FFFFFF; stroke-width: 4; stroke-linejoin: miter; }
+    .f05-ghost-stripe {
+      position: absolute;
+      left: 1600px;
+      top: 770px;
+      width: 420px;
+      height: 76px;
+      border: 3px solid #FFFFFF;
+      background: repeating-linear-gradient(45deg, #FFFFFF 0 12px, transparent 12px 26px);
+      opacity: 0.08;
+      transform: rotate(-6deg);
+    }
+
+    /* ---------- the camera ---------- */
+    .f05-world {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+    .f05-linew {
+      position: absolute;
+      left: -600px;
+      top: 826px;
+      width: 8900px;
+      height: 32px;
+    }
+    .f05-bar { position: absolute; left: 0; top: 13px; width: 8900px; height: 6px; background: #FFFFFF; }
+    .f05-ticks {
+      position: absolute;
+      left: 24px;
+      top: 6px;
+      width: 8876px;
+      height: 20px;
+      background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0 3px, transparent 3px 96px);
+    }
+    .f05-station { position: absolute; top: 0; width: 1920px; height: 1080px; }
+    #f05-st1 { left: 0; }
+    #f05-st2 { left: 1920px; }
+    #f05-st3 { left: 3840px; }
+    #f05-st4 { left: 5760px; }
+
+    .f05-mk {
+      position: absolute;
+      left: 938px;
+      top: 820px;
+      width: 44px;
+      height: 44px;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    .f05-num {
+      position: absolute;
+      left: 920px;
+      top: 772px;
+      width: 80px;
+      text-align: center;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0.1em;
+      color: #FFFFFF;
+    }
+
+    /* label-pill */
+    .f05-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      padding: 7px 24px 8px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: #000000;
+    }
+
+    /* ---------- cards (stations 1-3) ---------- */
+    .f05-plate {
+      position: absolute;
+      left: 590px;
+      top: 252px;
+      width: 768px;
+      height: 480px;
+      border: 4px solid #000000;
+    }
+    .f05-card {
+      position: absolute;
+      left: 576px;
+      top: 240px;
+      width: 768px;
+      height: 480px;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+    .f05-cpill { position: absolute; left: 36px; top: 30px; }
+    .f05-ctitle {
+      position: absolute;
+      left: 36px;
+      top: 108px;
+      width: 700px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 128px;
+      line-height: 150px;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .f05-ctitle .f05-tl { display: block; }
+    .f05-star {
+      position: absolute;
+      left: 500px;
+      top: 258px;
+      width: 190px;
+      height: 190px;
+      overflow: visible;
+    }
+    .f05-star polygon { fill: #FE90E8; stroke: #000000; stroke-width: 7; stroke-linejoin: miter; }
+
+    /* station 1 annotations */
+    #f05-tick {
+      position: absolute;
+      left: 1240px;
+      top: 166px;
+      width: 220px;
+      height: 190px;
+      overflow: visible;
+      pointer-events: none;
+    }
+    #f05-tick path {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 11;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .f05-hand-wrap { position: absolute; }
+    .f05-hand {
+      display: block;
+      font-family: "Permanent Marker", "Atma", cursive;
+      font-weight: 400;
+      color: #E5322D;
+      white-space: nowrap;
+      line-height: 1.35;
+    }
+    #f05-good-wrap { left: 1384px; top: 290px; transform-origin: 0% 50%; }
+    #f05-good { font-weight: 700; font-size: 104px; padding: 6px 22px 14px 10px; }
+
+    /* station 2 */
+    .f05-ctitle2 {
+      position: absolute;
+      left: 36px;
+      top: 96px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 88px;
+      line-height: 90px;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .f05-big {
+      position: absolute;
+      left: 0;
+      top: 186px;
+      width: 760px;
+      height: 250px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 236px;
+      line-height: 250px;
+      letter-spacing: -0.04em;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .f05-strike {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 760px;
+      height: 472px;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .f05-strike path {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #f05-ten-wrap { left: 1186px; top: 290px; }
+    #f05-ten { font-size: 152px; padding: 8px 20px 4px 14px; }
+
+    /* station 3 */
+    .f05-stamp {
+      position: absolute;
+      left: 190px;
+      top: 392px;
+      width: 520px;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      padding: 8px 20px 12px;
+      text-align: center;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 100px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .f05-stripe {
+      position: absolute;
+      left: 556px;
+      top: 36px;
+      width: 160px;
+      height: 36px;
+      border: 3px solid #000000;
+      background: repeating-linear-gradient(45deg, #000000 0 8px, #D9D9D9 8px 18px);
+      transform: rotate(6deg);
+    }
+
+    /* station 4 — the keynote stage */
+    #f05-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    .f05-screen {
+      position: absolute;
+      left: 330px;
+      top: 190px;
+      width: 680px;
+      height: 380px;
+      background-color: #C0F7FE;
+      background-image: radial-gradient(rgba(0, 0, 0, 0.16) 1.5px, transparent 1.7px);
+      background-size: 24px 24px;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+    #f05-live { position: absolute; left: 24px; top: 22px; background: #F7CB46; }
+    #f05-agent {
+      position: absolute;
+      left: 36px;
+      top: 188px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 112px;
+      line-height: 112px;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+    }
+    .f05-stand {
+      position: absolute;
+      left: 625px;
+      top: 570px;
+      width: 90px;
+      height: 82px;
+      background: #FFFDF5;
+      border: 4px solid #000000;
+    }
+    .f05-plank {
+      position: absolute;
+      left: 230px;
+      top: 650px;
+      width: 1460px;
+      height: 56px;
+      background: #FFDC8B;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+    .f05-cover {
+      position: absolute;
+      left: 1470px;
+      top: 614px;
+      width: 190px;
+      height: 36px;
+      border: 3px solid #000000;
+      background: repeating-linear-gradient(45deg, #000000 0 8px, #F7CB46 8px 18px);
+      transform: rotate(-5deg);
+    }
+    .f05-bub {
+      position: absolute;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    #f05-b1 { left: 930px; top: 216px; padding: 20px 34px 22px; font-size: 48px; line-height: 1.2; box-shadow: 8px 8px 0 #000000; }
+    #f05-b2 { left: 1070px; top: 530px; padding: 14px 26px 16px; font-size: 36px; line-height: 1.2; box-shadow: 6px 6px 0 #000000; }
+    .f05-tail { position: absolute; left: -44px; width: 52px; height: 56px; overflow: visible; }
+    #f05-b1 .f05-tail { top: 24px; }
+    #f05-b2 .f05-tail { top: 10px; }
+    .f05-timer {
+      position: absolute;
+      left: 1010px;
+      top: 366px;
+      width: 340px;
+      background: #F7CB46;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      padding: 10px 22px 14px;
+    }
+    .f05-trow { display: flex; align-items: center; gap: 14px; }
+    #f05-tnum {
+      display: block;
+      width: 138px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 64px;
+      line-height: 72px;
+      letter-spacing: -0.02em;
+    }
+    .f05-tlab {
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 34px;
+      line-height: 1.4;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .f05-tbar { margin-top: 6px; height: 16px; border: 3px solid #000000; background: #FFFFFF; overflow: hidden; }
+    #f05-tfill { width: 100%; height: 100%; background: #000000; transform-origin: 0% 50%; }
+
+    /* ---------- paused-tape chrome (fixed, above the world) ---------- */
+    .f05-scan {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px);
+    }
+    .f05-osd {
+      position: absolute;
+      left: 64px;
+      top: 52px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #FFFFFF;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 1.7cqw;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .f05-osd-bars { display: flex; gap: 7px; }
+    .f05-osd-bars span { display: block; width: 10px; height: 28px; background: #FFFFFF; }
+    .f05-osd-sp { margin-left: 18px; font-size: 22px; letter-spacing: 0.1em; opacity: 0.85; }
+    #f05-fc { position: absolute; right: 64px; top: 46px; background: #FFFFFF; }
+
+    /* fixed date header (outside the world) */
+    #f05-hdr {
+      position: absolute;
+      left: 678px;
+      top: 102px;
+      width: 564px;
+      display: flex;
+      gap: 14px;
+    }
+    .f05-hp {
+      font-size: 26px;
+      padding: 8px 22px 9px;
+      height: 57px;
+    }
+    #f05-hA { width: 250px; background: #FFFFFF; text-transform: uppercase; letter-spacing: 0.06em; }
+    #f05-hB { width: 300px; background: #FE90E8; }
+    #f05-day {
+      position: absolute;
+      left: 1266px;
+      top: 100px;
+      background: #F7CB46;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      padding: 8px 22px 10px;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-one-day" data-width="1920" data-height="1080" data-start="0" data-duration="23.427">
+    <!-- full-bleed freeze ground -->
+    <div id="f05-ground" class="clip" data-start="0" data-duration="23.427" data-track-index="0"></div>
+
+    <!-- ghosted echo of the infomercial (static stage) -->
+    <div class="f05-ghost" aria-hidden="true">
+      <svg class="f05-ghost-star" viewBox="0 0 300 300" width="300" height="300">
+        <polygon points="150.0,10.0 182.1,51.1 232.3,36.7 234.1,88.9 283.1,106.7 254.0,150.0 283.1,193.3 234.1,211.1 232.3,263.3 182.1,248.9 150.0,290.0 117.9,248.9 67.7,263.3 65.9,211.1 16.9,193.3 46.0,150.0 16.9,106.7 65.9,88.9 67.7,36.7 117.9,51.1" />
+      </svg>
+      <div class="f05-ghost-stripe"></div>
+    </div>
+
+    <!-- the panning world: 4 viewport widths, one timeline -->
+    <div id="f05-world" class="f05-world">
+      <div id="f05-linew" class="f05-linew">
+        <div class="f05-ticks"></div>
+        <div class="f05-bar"></div>
+      </div>
+
+      <!-- ===== station 1 : GPT-6.1 Sol ===== -->
+      <div id="f05-st1" class="f05-station">
+        <div class="f05-mk"></div>
+        <div class="f05-num">01</div>
+
+        <div id="f05-plate1" class="f05-plate" style="background:#99E885;"></div>
+        <div id="f05-card1" class="f05-card" data-layout-allow-overlap>
+          <div id="f05-pill1" class="f05-pill f05-cpill" style="background:#F7CB46;">নতুন মডেল</div>
+          <div class="f05-ctitle"><span class="f05-tl" id="f05-t1a">GPT-6.1</span><span class="f05-tl" id="f05-t1b">Sol</span></div>
+          <svg id="f05-star1" class="f05-star" viewBox="0 0 300 300" width="190" height="190" aria-hidden="true">
+            <polygon points="150.0,10.0 182.1,51.1 232.3,36.7 234.1,88.9 283.1,106.7 254.0,150.0 283.1,193.3 234.1,211.1 232.3,263.3 182.1,248.9 150.0,290.0 117.9,248.9 67.7,263.3 65.9,211.1 16.9,193.3 46.0,150.0 16.9,106.7 65.9,88.9 67.7,36.7 117.9,51.1" />
+          </svg>
+        </div>
+
+        <!-- red marker: tick on the card corner + "দারুণ" -->
+        <svg id="f05-tick" viewBox="0 0 220 190" width="220" height="190" aria-hidden="true">
+          <path id="f05-tickp" pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1.02" d="M24 112 Q 52 140 82 168 C 110 108 156 58 204 20" />
+        </svg>
+        <div id="f05-good-wrap" class="f05-hand-wrap" data-layout-allow-overlap><div id="f05-good" class="f05-hand" data-layout-allow-overlap>দারুণ</div></div>
+      </div>
+
+      <!-- ===== station 2 : Pro $200, 20x -> 10x ===== -->
+      <div id="f05-st2" class="f05-station">
+        <div class="f05-mk"></div>
+        <div class="f05-num">02</div>
+
+        <div id="f05-plate2" class="f05-plate" style="background:#C0F7FE;"></div>
+        <div id="f05-card2" class="f05-card" data-layout-allow-overlap>
+          <div id="f05-pill2" class="f05-pill f05-cpill" style="background:#FE90E8;">ইউসেজ</div>
+          <div id="f05-t2" class="f05-ctitle2">PRO $200</div>
+          <div id="f05-big" class="f05-big" data-layout-allow-overlap>20x</div>
+          <svg class="f05-strike" viewBox="0 0 760 472" width="760" height="472" aria-hidden="true">
+            <path id="f05-strike1" pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1.02" d="M130 338 C 230 316, 340 312, 440 302 S 580 288, 640 270" />
+            <path id="f05-strike2" pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1.02" d="M150 366 C 250 346, 350 340, 450 330 S 570 318, 620 306" />
+          </svg>
+        </div>
+        <div id="f05-ten-wrap" class="f05-hand-wrap" data-layout-allow-overlap><div id="f05-ten" class="f05-hand" data-layout-allow-overlap>10x</div></div>
+      </div>
+
+      <!-- ===== station 3 : GPT-6.1 Astra, scrapped ===== -->
+      <div id="f05-st3" class="f05-station">
+        <div class="f05-mk"></div>
+        <div class="f05-num">03</div>
+
+        <div id="f05-plate3" class="f05-plate" style="background:#FE90E8;"></div>
+        <div id="f05-card3" class="f05-card" data-layout-allow-overlap>
+          <div id="f05-pill3" class="f05-pill f05-cpill" style="background:#D9D9D9;">সেফটি টেস্ট</div>
+          <div class="f05-stripe"></div>
+          <div class="f05-ctitle"><span class="f05-tl">GPT-6.1</span><span class="f05-tl">Astra</span></div>
+          <div id="f05-stamp" class="f05-stamp" data-layout-allow-overlap>বাতিল</div>
+        </div>
+      </div>
+
+      <!-- ===== station 4 : the keynote stage ===== -->
+      <div id="f05-st4" class="f05-station">
+        <div class="f05-mk"></div>
+        <div class="f05-num">04</div>
+
+        <div id="f05-stage">
+          <div class="f05-stand"></div>
+          <div id="f05-screen" class="f05-screen" data-layout-allow-overlap>
+            <div id="f05-live" class="f05-pill">LIVE</div>
+            <div id="f05-agent">AGENT</div>
+          </div>
+          <div class="f05-plank"></div>
+          <div class="f05-cover"></div>
+        </div>
+
+        <div id="f05-b1" class="f05-bub" data-layout-allow-overlap>
+          <svg class="f05-tail" viewBox="0 0 52 56" width="52" height="56" aria-hidden="true">
+            <polygon points="48,3 4,28 48,53" fill="#FFFFFF" />
+            <polyline points="48,3 4,28 48,53" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="miter" />
+          </svg>
+          Checking that now…
+        </div>
+
+        <div id="f05-timer" class="f05-timer" data-layout-allow-overlap>
+          <div class="f05-trow"><span id="f05-tnum">0s</span><span class="f05-tlab">চুপ…</span></div>
+          <div class="f05-tbar"><div id="f05-tfill"></div></div>
+        </div>
+
+        <div id="f05-b2" class="f05-bub" data-layout-allow-overlap>
+          <svg class="f05-tail" viewBox="0 0 52 56" width="52" height="56" aria-hidden="true">
+            <polygon points="48,3 4,28 48,53" fill="#FFFFFF" />
+            <polyline points="48,3 4,28 48,53" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="miter" />
+          </svg>
+          still checking
+        </div>
+      </div>
+    </div>
+
+    <!-- scanlines over the picture, under the OSD -->
+    <div class="f05-scan" aria-hidden="true"></div>
+
+    <!-- VHS OSD: PAUSE + SP (static) -->
+    <div class="f05-osd">
+      <div class="f05-osd-bars"><span></span><span></span></div>
+      <div>PAUSE</div>
+      <div class="f05-osd-sp">SP</div>
+    </div>
+
+    <!-- FACT CHECK pill (static) -->
+    <div class="f05-pill" id="f05-fc">ফ্যাক্ট চেক</div>
+
+    <!-- fixed date header: sits outside the panning world -->
+    <div id="f05-hdr">
+      <div id="f05-hA" class="f05-pill f05-hp">29 SEP 2026</div>
+      <div id="f05-hB" class="f05-pill f05-hp">OpenAI DevDay</div>
+    </div>
+    <div id="f05-day" data-layout-allow-overlap>একদিন</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var scope = document.querySelector('[data-composition-id="05-one-day"]') || document;
+      function q(sel) {
+        return scope.querySelector(sel) || document.querySelector(sel);
+      }
+      function qa(sel) {
+        var list = scope.querySelectorAll(sel);
+        if (!list.length) list = document.querySelectorAll(sel);
+        return Array.prototype.slice.call(list);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      /* ---- camera: one .world wrapper, translate(x,y) scale(S), origin = viewport centre ----
+         screen = 960 + S*(P - 960) + T. Station k centre = world x 960 + 1920k.
+         cam(k, S) keeps station k's centre (and the card row, y 480) pinned while S drifts. */
+      var VW = 1920;
+      function cam(k, S) { return { x: -S * VW * k, y: 60 * (S - 1), scale: S }; }
+      function to(c, d, e) { return { x: c.x, y: c.y, scale: c.scale, duration: d, ease: e, immediateRender: false }; }
+      var WIDE = { x: -864, y: -30.6, scale: 0.3 }; // all four markers in view (spacing 576px)
+
+      var world = q("#f05-world");
+      gsap.set(world, { x: WIDE.x, y: WIDE.y, scale: WIDE.scale, transformOrigin: "50% 50%" });
+
+      /* static tilts on elements GSAP also animates (no CSS transform on them) */
+      gsap.set(q("#f05-card1"), { rotation: -2 });
+      gsap.set(q("#f05-plate1"), { rotation: 3 });
+      gsap.set(q("#f05-card2"), { rotation: 1.5 });
+      gsap.set(q("#f05-plate2"), { rotation: -2.5 });
+      gsap.set(q("#f05-card3"), { rotation: -1.5 });
+      gsap.set(q("#f05-plate3"), { rotation: 2.5 });
+      gsap.set(q("#f05-star1"), { rotation: 12 });
+      gsap.set(q("#f05-stamp"), { rotation: -8 });
+      gsap.set(q("#f05-good-wrap"), { rotation: -8 });
+      gsap.set(q("#f05-ten-wrap"), { rotation: -9 });
+      gsap.set(q("#f05-day"), { rotation: 6 });
+      gsap.set(q("#f05-b2"), { rotation: 4 });
+      gsap.set(q("#f05-timer"), { rotation: -2 });
+      gsap.set(q("#f05-linew"), { transformOrigin: "0% 50%" });
+
+      /* ================= Scene 1 (0.0–3.6s) — the stage, the line, four markers ================= */
+      // the timeline line draws across the wide shot
+      tl.fromTo(q("#f05-linew"), { scaleX: 0 }, { scaleX: 1, duration: 1.3, ease: "power1.inOut" }, 0.15);
+
+      // four station markers pop left to right
+      var mks = qa(".f05-mk");
+      var nums = qa(".f05-num");
+      mks.forEach(function (m, i) {
+        gsap.set(m, { rotation: 45 });
+        tl.fromTo(m, { scale: 0 }, { scale: 1, duration: 0.4, ease: "expo.out" }, 0.55 + i * 0.25);
+        tl.fromTo(nums[i], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.65 + i * 0.25);
+      });
+
+      // fixed header: date pill drops at 0.1, "OpenAI DevDay" half joins on "DevDay।"
+      var hdr = q("#f05-hdr");
+      tl.fromTo(q("#f05-hA"), { y: -46, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.1);
+      tl.fromTo(hdr, { x: 158 }, { x: 0, duration: 0.5, ease: "power3.out" }, 2.62);
+      tl.fromTo(
+        q("#f05-hB"),
+        { clipPath: "inset(-12px 100% -12px 0px)" },
+        { clipPath: "inset(-12px -12px -12px 0px)", duration: 0.45, ease: "power3.out" },
+        2.62
+      );
+      // yellow "একদিন" chip pops beside it
+      tl.fromTo(
+        q("#f05-day"),
+        { scale: 0, opacity: 0, transformOrigin: "0% 50%" },
+        { scale: 1, opacity: 1, duration: 0.45, ease: "expo.out" },
+        2.72
+      );
+
+      // camera eases from the wide timeline into station 1
+      tl.fromTo(world, WIDE, to(cam(0, 1), 0.75, "power3.inOut"), 2.85);
+
+      /* ================= Scene 2 (3.6–8.6s) — station 1: GPT-6.1 Sol ================= */
+      // marker 1 lights up
+      function arrive(i, t) {
+        var m = mks[i];
+        tl.fromTo(m, { scale: 1 }, { scale: 1.35, duration: 0.14, ease: "power2.out", immediateRender: false }, t);
+        tl.fromTo(m, { scale: 1.35 }, { scale: 1, duration: 0.32, ease: "power3.out", immediateRender: false }, t + 0.14);
+        tl.fromTo(m, { backgroundColor: "#FFFFFF" }, { backgroundColor: "#F7CB46", duration: 0.2, ease: "none", immediateRender: false }, t);
+      }
+      arrive(0, 3.5);
+
+      // "দারুণ": the white product card slides up
+      tl.fromTo(q("#f05-plate1"), { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 4.82);
+      tl.fromTo(q("#f05-card1"), { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 4.88);
+      tl.fromTo(q("#f05-pill1"), { x: -22, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 5.1);
+      tl.fromTo(q("#f05-t1a"), { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 5.2);
+      tl.fromTo(q("#f05-t1b"), { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 5.4);
+      tl.fromTo(q("#f05-star1"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, 6.3);
+
+      // "Sol।": red marker draws a big tick on the card corner, then writes "দারুণ"
+      var tick = q("#f05-tickp");
+      tl.fromTo(tick, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, 7.82);
+      tl.fromTo(tick, { attr: { "stroke-dashoffset": 1.02 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.32, ease: "power2.out" }, 7.82);
+      tl.fromTo(
+        q("#f05-good"),
+        { clipPath: "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.42, ease: "power1.out" },
+        8.16
+      );
+
+      /* ================= Scene 3 (8.6–12.1s) — station 2: Pro $200, 20x -> 10x ================= */
+      // "দুইশো": pan LEFT to station 2
+      tl.fromTo(world, cam(0, 1), to(cam(0, 1.035), 8.73 - 3.6, "none"), 3.6);
+      tl.fromTo(world, cam(0, 1.035), to(cam(1, 1), 0.6, "power3.inOut"), 8.73);
+      arrive(1, 9.2);
+
+      tl.fromTo(q("#f05-plate2"), { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 9.0);
+      tl.fromTo(q("#f05-card2"), { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 9.06);
+      tl.fromTo(q("#f05-t2"), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 9.45);
+      tl.fromTo(q("#f05-pill2"), { x: -22, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 10.7);
+      // the big "20x" slams in on "ইউসেজ"
+      tl.fromTo(
+        q("#f05-big"),
+        { scale: 1.3, opacity: 0, transformOrigin: "50% 50%" },
+        { scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" },
+        10.8
+      );
+
+      // "অর্ধেক।": red marker strikes through "20x" (svg-path-draw) and writes "10x"
+      var s1 = q("#f05-strike1");
+      var s2 = q("#f05-strike2");
+      tl.fromTo(s1, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, 11.26);
+      tl.fromTo(s1, { attr: { "stroke-dashoffset": 1.02 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.26, ease: "power2.out" }, 11.26);
+      tl.fromTo(s2, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, 11.46);
+      tl.fromTo(s2, { attr: { "stroke-dashoffset": 1.02 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.22, ease: "power2.out" }, 11.46);
+      tl.fromTo(
+        q("#f05-ten"),
+        { clipPath: "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.44, ease: "power1.out" },
+        11.7
+      );
+
+      /* ================= Scene 4 (12.1–16.9s) — station 3: Astra, scrapped ================= */
+      tl.fromTo(world, cam(1, 1), to(cam(1, 1.035), 12.23 - 9.33, "none"), 9.33);
+      // "সেফটি": pan to station 3
+      tl.fromTo(world, cam(1, 1.035), to(cam(2, 1), 0.6, "power3.inOut"), 12.23);
+      arrive(2, 12.7);
+
+      tl.fromTo(q("#f05-plate3"), { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 12.45);
+      tl.fromTo(q("#f05-card3"), { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 12.5);
+      tl.fromTo(q("#f05-pill3"), { x: -22, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 12.9);
+
+      // "বাতিল।": the white stamp slams 1.4 -> 1 across the card (impact 15.75), card jolts
+      var stamp = q("#f05-stamp");
+      tl.fromTo(stamp, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 15.61);
+      tl.fromTo(stamp, { scale: 1.4 }, { scale: 0.97, duration: 0.14, ease: "power3.in" }, 15.61);
+      tl.fromTo(stamp, { scale: 0.97 }, { scale: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 15.75);
+      var card3 = q("#f05-card3");
+      tl.fromTo(card3, { x: 0 }, { x: 7, duration: 0.05, ease: "power1.out", immediateRender: false }, 15.75);
+      tl.fromTo(card3, { x: 7 }, { x: -4, duration: 0.07, ease: "power1.inOut", immediateRender: false }, 15.8);
+      tl.fromTo(card3, { x: -4 }, { x: 0, duration: 0.12, ease: "power2.out", immediateRender: false }, 15.87);
+
+      /* ================= Scene 5 (16.9–23.427s) — station 4: the keynote stage ================= */
+      tl.fromTo(world, cam(2, 1), to(cam(2, 1.035), 17.39 - 12.83, "none"), 12.83);
+      // "স্টেজে": pan to station 4
+      tl.fromTo(world, cam(2, 1.035), to(cam(3, 1), 0.65, "power3.inOut"), 17.39);
+      arrive(3, 17.9);
+
+      tl.fromTo(q("#f05-stage"), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 17.5);
+      tl.fromTo(q("#f05-live"), { scale: 0, opacity: 0, transformOrigin: "0% 50%" }, { scale: 1, opacity: 1, duration: 0.4, ease: "expo.out" }, 18.1);
+      tl.fromTo(q("#f05-agent"), { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 18.3);
+
+      // "বলল,": first speech bubble pops from the screen (origin at the tail tip)
+      tl.fromTo(
+        q("#f05-b1"),
+        { scale: 0, opacity: 0, transformOrigin: "-40px 45%" },
+        { scale: 1, opacity: 1, duration: 0.45, ease: "expo.out" },
+        18.91
+      );
+
+      // "দশ": timer chip pops under the bubble and counts 0s -> 10s fast
+      tl.fromTo(
+        q("#f05-timer"),
+        { scale: 0, opacity: 0, transformOrigin: "0% 0%" },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "expo.out" },
+        21.2
+      );
+      var cnt = { v: 0 };
+      var tnum = q("#f05-tnum");
+      tl.fromTo(
+        cnt,
+        { v: 0 },
+        {
+          v: 10,
+          duration: 0.6,
+          ease: "none",
+          onUpdate: function () { tnum.textContent = Math.round(cnt.v) + "s"; }
+        },
+        21.3
+      );
+      tl.fromTo(q("#f05-tfill"), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "none" }, 21.3);
+
+      // "still": the second bubble pops, smaller and tilted — then hold
+      tl.fromTo(
+        q("#f05-b2"),
+        { scale: 0, opacity: 0, transformOrigin: "-40px 40%" },
+        { scale: 1, opacity: 1, duration: 0.45, ease: "expo.out" },
+        22.31
+      );
+
+      // slow settle on the punchline — the camera decelerates to a stop at the end
+      tl.fromTo(world, cam(3, 1), to(cam(3, 1.03), 23.427 - 18.04, "power1.out"), 18.04);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["05-one-day"] = tl;
+    })();
+  </script>
+</template>

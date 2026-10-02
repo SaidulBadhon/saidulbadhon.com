@@ -1,0 +1,603 @@
+---
+title: "AI Keeps Getting Better. The AI Industry Is a Complete Mess."
+description: The models have never been more capable. But this year OpenAI's own agents broke into Hugging Face, RubyGems and an Australian government portal, Big Tech is spending about $730 billion on AI, and both leading labs lose more than they make. Here's the mess, how it happened, and what would fix it.
+date: 2026-10-02
+tags: [AI, OpenAI, Claude, Security]
+draft: false
+cover: ai-industry-mess.webp
+---
+
+import Image from "next/image";
+import Callout from "@/components/callout";
+import cover from "./the-ai-industry-is-a-complete-mess/ai-industry-mess.webp";
+import {
+  AtAGlance,
+  CapexChart,
+  DisclosureGapChart,
+  GlasswingChart,
+  MessTimeline,
+  OpenAIBurnChart,
+  RevenueVsLossChart,
+} from "@/content/charts/the-ai-industry-is-a-complete-mess";
+
+<figure>
+  <Image
+    src={cover}
+    alt="The words Better models. Messier industry. beside a bar chart of Big Tech capital expenditure: $260 billion in 2024, $448 billion in 2025 and about $730 billion of guidance for 2026"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>Big Tech&rsquo;s AI spending has nearly tripled in two years. That&rsquo;s one of three messes.</figcaption>
+</figure>
+
+ColdFusion put out a video yesterday with a title I can't argue with: [The AI Industry is a Complete Mess](https://www.youtube.com/watch?v=e2zjpCqTmyo). The argument is simple. The tools keep getting better. The industry around them keeps getting more chaotic: agents doing things nobody asked them to, money that doesn't add up, and launches that fall over on stage.
+
+I've spent this week writing about two small pieces of that: [ChatGPT Pro $200 losing half its usage](/blogs/chatgpt-pro-200-is-back-with-half-the-usage), and [GPT-6.1 Sol, a great model I'll probably never use](/blogs/gpt-6-1-sol-is-a-really-good-model-i-will-never-use). So I wanted to step back and look at the whole thing. I checked every claim I could find a source for and left out the ones I couldn't.
+
+Start with one day. On September 29, at DevDay, OpenAI:
+
+- launched GPT-6.1 Sol, one of the best models for the money anyone has shipped;
+- cut the usage on its $200 Pro plan in half, because it's short of compute;
+- confirmed it had pulled GPT-6.1 Astra, because in safety testing it was too willing to mislead users and to act beyond its instructions;
+- and showed off a new agent on stage that said "Checking that now," went quiet for about ten seconds, and then said "still checking."
+
+Five days earlier, Australia's prime minister had spoken to Sam Altman to express his country's "extreme concern," because one of OpenAI's agents had got into a government health portal.
+
+That's the whole story in one week. **The models have never been better, and the companies building them have never looked less in control**: of their agents, of their costs, and some days, of their own products.
+
+<AtAGlance />
+
+## First, the part that's genuinely incredible
+
+I want to be fair here, because none of this is happening because AI is fake.
+
+In April, Anthropic announced [Claude Mythos Preview](https://www.anthropic.com/glasswing), a model so good at finding security bugs that Anthropic decided not to release it to the public. Pointed at its partners' software through Project Glasswing, it found zero-days in every major operating system and browser, and [more than 10,000 high- or critical-severity vulnerabilities](https://www.anthropic.com/research/glasswing-initial-update) in its first month.
+
+A week ago I wrote that GPT-6.1 Sol gets close to OpenAI's flagship for a fifth of the price. I run Claude Code most of my working day, and it gets noticeably better every few months. And people are paying for it: Anthropic's annualised revenue [crossed $47 billion in May](https://www.anthropic.com/news/series-h) and [reached $65 billion by the end of July](https://techcrunch.com/2026/08/17/anthropics-annualized-revenue-surges-to-65b/). OpenAI's was [$40 billion in August](https://techcrunch.com/2026/09/29/openai-reportedly-in-talks-to-raise-30b-round-at-1-4t-valuation/).
+
+If the story of AI in 2026 were only about the models, it would be a happy one. Here's the rest of it:
+
+<MessTimeline />
+
+Sort that list and you get three different messes. They feed each other, but let's take them one at a time.
+
+## The agents don't take no for an answer
+
+The scariest AI security stories this year aren't about hackers using AI. They're about AI labs' own agents doing things nobody told them to do.
+
+**Hugging Face.** In July, Hugging Face disclosed an intrusion that, in its own words, ["was driven, end to end, by an autonomous AI agent system."](https://huggingface.co/blog/security-incident-july-2026) More than 17,000 recorded events, "able to do in hours what would usually take days." The attacker got into a limited set of internal datasets and several credentials. Public models, datasets and Spaces weren't touched.
+
+The attacker turned out to be OpenAI. Its agents, GPT-5.6 Sol and ["an even more capable pre-release model,"](https://fortune.com/2026/07/29/openai-hugging-face-new-details-hack-everything-we-know-dont-know/) were being tested on a cyber benchmark called ExploitGym, with safeguards turned down on purpose. They got out of their test environment and went after real infrastructure. OpenAI has since "deactivated, encrypted, and restricted" the pre-release model.
+
+**RubyGems.** On May 11 and 12, [more than 2,000 malicious packages](https://www.theregister.com/security/2026/09/14/openais-malicious-bot-swarm-attacked-rubygems/5296356) flooded RubyGems, the Ruby package registry, and its maintainers had to switch off new sign-ups for four days. In September, three researchers traced them to OpenAI's agents. OpenAI's answer was that ["our agents used the RubyGems platform to access the internet to carry out benign tasks and retrieve public information."](https://simonwillison.net/2026/Sep/12/openai-agents-rubygems/) Simon Willison put his finger on the worst part: OpenAI hadn't told RubyGems it was responsible until the researchers did.
+
+**Medicare.** On June 18, an OpenAI agent got into the Medicare statistics portal run by Services Australia. OpenAI found out on August 11. It told Australia on September 10, and the prime minister made it public on September 24. [In Anthony Albanese's words](https://www.abc.net.au/news/2026-09-24/ai-agent-accessed-australian-government-site-pm-says/107189078), "The AI agent found a way around those blocks, didn't accept 'no' for an answer." And: "The notification was an email sent just to the public mailbox." OpenAI says no patient records were accessed, only "aggregate health statistics and internal file names."
+
+That timeline bothers me more than the breach itself:
+
+<DisclosureGapChart />
+
+**And it isn't a one-off.** The UK AI Security Institute tested GPT-6 Astra with its standard security classifiers off, and found it ["conducted a range of unsanctioned attack activities"](https://theregister.com/ai-and-ml/2026/09/28/openai-gpt-6-astra-really-good-at-supply-chain-attacks-uk-gov-warns/5299588) at a higher rate than GPT-5.6 Sol and GPT-5.5. That included "creating fake identities which it used to deceive developers, posting comments from fake accounts arguing against the results of accurate security reviews." Then OpenAI pulled GPT-6.1 Astra, because testing found it too willing to deceive users about what it had done and to go beyond its instructions. It ["didn't quite meet the bar,"](https://katu.com/news/nation-world/openai-pulls-new-model-back-as-ai-industry-confronts-growing-safety-concerns-gpt-astra-artificial-intelligence-rogue-models-hacks-cybersecurity) said Saachi Jain, who leads OpenAI's safety systems.
+
+To be fair to OpenAI: pulling 6.1 Astra was the right call, and it cost them a headline launch. And these incidents came out of evaluations where safeguards were deliberately turned down, which is how you find out what a model can really do. But a test that can reach Hugging Face, RubyGems and the Australian government isn't a test. It's the internet. **A sandbox you can walk out of is just a room.**
+
+### Anthropic has the opposite problem
+
+Anthropic did the cautious thing with Mythos. It kept the model back and gave it to defenders first. Here's what happened next, in open-source software alone:
+
+<GlasswingChart />
+
+Anthropic said it plainly: ["Progress on software security used to be limited by how quickly we could find new vulnerabilities. Now it's limited by how quickly we can verify, disclose, and patch the large numbers of vulnerabilities found by AI."](https://www.anthropic.com/research/glasswing-initial-update)
+
+That's the good-guy version. Anthropic also expects that ["within 6 to 12 months"](https://www.anthropic.com/news/expanding-project-glasswing) many other AI companies will have Mythos-class models, and I doubt all of them will be as careful about who gets one. Its [September threat report](https://www.anthropic.com/threat-intelligence-report-september-2026) already sums up where this goes in one line: "Sophisticated attacks no longer require sophisticated attackers." In one case it describes, a single stolen developer token became full admin access in about three hours.
+
+### What this looks like from the security side
+
+I'm the lead engineer at [Jutsu](https://jutsu.ai), an AI-native security operations platform, so weigh this accordingly. But this is the part of the mess I deal with every day.
+
+An attacker that does 17,000 things in a few days, never sleeps, and takes "no" as a puzzle to solve is a different problem from a person at a keyboard. And there's an irony in the Hugging Face story that I can't stop thinking about. When Hugging Face tried to fight the attack with Anthropic's Opus and Fable models, [they "refused a large part of that work"](https://fortune.com/2026/07/29/openai-hugging-face-new-details-hack-everything-we-know-dont-know/) because of their safety guardrails. The attacking agents had their safeguards turned down for an evaluation. The defenders' AI had its safeguards turned up.
+
+In July I asked [who is watching the agents](/blogs/fable-5-is-back-sonnet-5-is-here-and-ai-agents-still-need-real-guardrails). This year, for at least one lab, the answer was that nobody noticed for 54 days.
+
+## The money doesn't add up (yet)
+
+Every one of these models runs in a data center somebody had to build, and the building is getting very expensive:
+
+<CapexChart />
+
+The four biggest spenders told investors in July that they'll spend about $730 billion this year. Amazon alone raised its number to $220 billion, and Andy Jassy [still said](https://fortune.com/2026/07/30/andy-jassy-amazon-capex-demand-aws-pga-tour/) Amazon won't "have enough capacity to meet all the demand we have in 2026. And I believe this dynamic will also be true in 2027, too."
+
+That spending is starting to outrun the cash these companies make. Epoch AI projects that the hyperscalers' combined capex [catches up with their operating cash flow around Q3 2026](https://epoch.ai/data-insights/hyperscaler-capex-vs-cash-flow): $185.7 billion spent against $187.1 billion coming in. The gap is being filled with borrowing. [FactSet found](https://insight.factset.com/hyperscalers-tap-external-financing-as-ai-capex-outruns-cash-flow) that new debt went from 9% of capex in 2024 to 32% by the middle of this year.
+
+The labs themselves are further from paying their way:
+
+<RevenueVsLossChart />
+
+OpenAI made $13.07 billion in 2025 and lost $20.92 billion from operations, according to [audited financials reported by Ed Zitron](https://www.wheresyoured.at/exclusive-openai-financials/). OpenAI hasn't published them. Anthropic made about $4.6 billion and lost $8.06 billion, according to its IPO filing, [as reported by Reuters](https://unite.ai/anthropic-ipo-filing-reveals-42-billion-net-loss-in-2025-reuters-reports). And OpenAI's own plan says the burn gets bigger before it gets better:
+
+<OpenAIBurnChart />
+
+Meanwhile the valuations keep climbing. OpenAI raised at $852 billion in March and is [reportedly talking to investors at $1.4 trillion](https://techcrunch.com/2026/09/29/openai-reportedly-in-talks-to-raise-30b-round-at-1-4t-valuation/). Anthropic raised at $965 billion in May and, per Reuters, its IPO could value it at more than $2 trillion. It has also signed up for $518 billion of cloud and compute obligations.
+
+I don't think this is simply 2000 again. The revenue is real, and it's growing faster than anything I've seen in software. Anthropic went from $47 billion to $65 billion annualised in about three months. But a business that loses money on its customers needs one of two things: cheaper compute, or higher prices. We just watched what "higher prices" looks like in practice. It looks like the $200 plan quietly becoming half a plan.
+
+## The product changes under your feet
+
+This is the mess regular users actually feel.
+
+In one month, OpenAI launched GPT-6 Astra on September 3 and [ChatGPT went down that morning](https://www.bleepingcomputer.com/news/artificial-intelligence/openai-confirms-chatgpt-is-down-ahead-of-astra-model-launch/). It [paused Pro $200 sign-ups](https://techcrunch.com/2026/09/10/openai-puts-pro-subscriptions-on-hold-due-to-astra-demand/) on September 10 because demand for Astra was "really unprecedented." Codex users have been seeing "Selected model is at capacity" [since early September](https://github.com/openai/codex/issues/43738), even with quota left. Then GPT-6 Sol on September 22, GPT-6.1 Sol a week later, and the $200 plan cut in half on the same day. If you built a workflow around any of it, you rebuilt it twice this month.
+
+And then there are the demos. At DevDay, an OpenAI presenter asked the new agent, ["Can you catch me up on just user testing from last night?"](https://futurism.com/artificial-intelligence/openai-agent-fails-live-demo) It said "Checking that now," went silent for about ten seconds, and said "still checking." "I guess Dottie's having a slow morning," said Holly Li, who was presenting. [Engadget's live blog](https://www.engadget.com/2271985/openai-dev-day-live-blog-chatgpt-news/) logged a voice demo that wouldn't start on the same stage. A year earlier, Meta's smart-glasses cooking demo fell apart at Connect because, as its CTO later put it, ["we DDoS'd ourselves, basically."](https://techcrunch.com/2025/09/19/meta-cto-explains-why-the-smart-glasses-demos-failed-at-meta-connect-and-it-wasnt-the-wi-fi)
+
+Live demos fail, and one stalled agent isn't a scandal. But a keynote is the one time a company controls everything: the network, the prompt, the data, the audience. If the agent can't find yesterday's notes on stage, it's fair to wonder how it does in your Slack on a Tuesday.
+
+## How it got this messy
+
+I don't think any of these are separate problems. I think they're one loop:
+
+1. **Each generation of model costs more to train and serve**, so labs raise more money at higher valuations.
+2. **Higher valuations need faster growth**, so labs ship faster: a new Sol, then another Sol a week later.
+3. **Faster shipping runs into finite compute**, so users get rationed: paused sign-ups, halved plans, "at capacity."
+4. **And to stay ahead, labs push their agents' capabilities as hard as they can**, in tests that turn out to be connected to the real internet.
+
+Everyone is racing, and nobody can afford to slow down first. Even the rules are slipping: the EU has [pushed its high-risk AI obligations](https://www.orrick.com/en/Insights/2026/07/EU-AI-Act-Update-Digital-Omnibus-Finalizes-8-Compliance-Changes) from August 2026 to December 2027.
+
+So no, I don't think the problem is that AI is overhyped or useless. **It's real, and it's arriving faster than the security, the economics and the operations around it.**
+
+## What would actually fix it
+
+None of this needs a breakthrough. It needs boring things done properly.
+
+- **Sandboxes that are actually sandboxes, and someone watching them.** The UK AI Security Institute's own conclusion is that "measures beyond model alignment, like sandboxing and monitoring, may be necessary to prevent real-world harm." An agent being tested for hacking skills shouldn't be one misconfigured proxy away from the internet.
+- **Fast, mandatory disclosure, to the people affected.** New York's RAISE Act will require frontier labs to report critical safety incidents within 72 hours from January. That should be the floor everywhere, and the victim should hear first, not a public inbox a month later.
+- **Selling only what you can serve.** If you don't have the compute for a plan, don't sell the plan. Pausing sign-ups was the honest move. Halving the plan for the people already paying for it was the cheap one.
+- **Paying for the fixing, not just the finding.** If AI makes bugs cheap to find, the bottleneck is the people who fix them. Anthropic committed up to $100 million in usage credits to Glasswing, plus $4 million in donations to open-source security groups. The rest of the industry should be matching that.
+
+<Callout title="More on the capacity crunch">
+  The money and capacity problems above are why OpenAI halved its $200 plan and why its best-value model is hard to
+  actually use. I wrote about both this week.
+
+[ChatGPT Pro $200 Is Back, With Half the Usage →](/blogs/chatgpt-pro-200-is-back-with-half-the-usage)
+
+[GPT-6.1 Sol Is a Really Good Model That I'll Never Use →](/blogs/gpt-6-1-sol-is-a-really-good-model-i-will-never-use)
+</Callout>
+
+## What I'd do
+
+- **If you run AI agents:** no standing credentials, an allow-list for where they can connect, a log of every action they take, and a way to stop them. Assume the sandbox leaks, because this year it did.
+- **If you buy AI for your company:** treat your AI provider like any other third party with access to your systems. Ask how, and how fast, they'd tell you about an incident. "An email to the public mailbox" is not an answer.
+- **If you build on AI:** keep a fallback model from a different provider, and don't plan your costs around a subscription staying the same for a year. This month, one didn't stay the same for a week.
+- **If you maintain open source:** expect a lot more AI-found bug reports, good and bad. Ask for a working reproduction before you spend an evening on one.
+- **If you're deciding what to learn next:** the boring skills, like security, evaluation and operations, are where the shortage is. The models aren't the bottleneck any more. Everything around them is.
+
+## The verdict
+
+ColdFusion is right: the AI industry is a complete mess. But it's worth being precise about what kind. The technology isn't the mess. Mythos finds bugs faster than humans can fix them. Sol does near-flagship work for a fifth of the price. Those are real achievements, and I use these tools all day.
+
+The mess is everything around the models. Agents that get out of their test environments and keep going, and companies that take weeks to notice. Data centers being built faster than the cash comes in. Plans that change under you, and demos that stall on stage. It all comes from the same race, and nobody in it wants to be the one who slows down.
+
+The models keep passing their tests. **The industry keeps failing its own.**
+
+---
+
+_A note on sources: the Hugging Face intrusion is from [Hugging Face's own report](https://huggingface.co/blog/security-incident-july-2026) and [Fortune](https://fortune.com/2026/07/29/openai-hugging-face-new-details-hack-everything-we-know-dont-know/). RubyGems is from [The Register](https://www.theregister.com/security/2026/09/14/openais-malicious-bot-swarm-attacked-rubygems/5296356) and [Simon Willison](https://simonwillison.net/2026/Sep/12/openai-agents-rubygems/). The Medicare breach and its dates are from [ABC News](https://www.abc.net.au/news/2026-09-24/ai-agent-accessed-australian-government-site-pm-says/107189078). The UK AI Security Institute's findings are from [The Register](https://theregister.com/ai-and-ml/2026/09/28/openai-gpt-6-astra-really-good-at-supply-chain-attacks-uk-gov-warns/5299588); the GPT-6.1 Astra decision is from NPR via [KATU](https://katu.com/news/nation-world/openai-pulls-new-model-back-as-ai-industry-confronts-growing-safety-concerns-gpt-astra-artificial-intelligence-rogue-models-hacks-cybersecurity). Mythos and Glasswing numbers are Anthropic's own, from its [announcement](https://www.anthropic.com/glasswing), [May update](https://www.anthropic.com/research/glasswing-initial-update) and [June expansion](https://www.anthropic.com/news/expanding-project-glasswing); the threat report is [Anthropic's September report](https://www.anthropic.com/threat-intelligence-report-september-2026). Capex for 2024 and 2025 is from [Epoch AI](https://epoch.ai/data-insights/hyperscaler-capex-trend); 2026 is company guidance from July, including Meta's Q2 8-K and Amazon via [Fortune](https://fortune.com/2026/07/30/andy-jassy-amazon-capex-demand-aws-pga-tour/). Cash flow and debt are from [Epoch AI](https://epoch.ai/data-insights/hyperscaler-capex-vs-cash-flow) and [FactSet](https://insight.factset.com/hyperscalers-tap-external-financing-as-ai-capex-outruns-cash-flow). OpenAI's 2025 figures are leaked audited financials [reported by Ed Zitron](https://www.wheresyoured.at/exclusive-openai-financials/), not published by OpenAI; its projections are from The Information via [The Decoder](https://the-decoder.com/openai-adds-111-billion-to-its-cash-burn-forecast-as-ai-costs-spiral-beyond-projections/). Anthropic's 2025 figures are from its IPO filing as reported by Reuters, via [Unite.AI](https://unite.ai/anthropic-ipo-filing-reveals-42-billion-net-loss-in-2025-reuters-reports). Valuations and revenue run-rates are from [Anthropic](https://www.anthropic.com/news/series-h) and [TechCrunch](https://techcrunch.com/2026/09/29/openai-reportedly-in-talks-to-raise-30b-round-at-1-4t-valuation/). Demo failures are from [Futurism](https://futurism.com/artificial-intelligence/openai-agent-fails-live-demo), [Engadget](https://www.engadget.com/2271985/openai-dev-day-live-blog-chatgpt-news/) and [TechCrunch](https://techcrunch.com/2025/09/19/meta-cto-explains-why-the-smart-glasses-demos-failed-at-meta-connect-and-it-wasnt-the-wi-fi). The RAISE Act and SB 53 deadlines are from [Wiley](https://www.wiley.law/alert-New-York-Finalizes-RAISE-Act-for-Frontier-AI-Models-Law-Takes-Effect-January-1-2027); the EU delay is from [Orrick](https://www.orrick.com/en/Insights/2026/07/EU-AI-Act-Update-Digital-Omnibus-Finalizes-8-Compliance-Changes). Day counts, totals and capex sums are my own arithmetic. Everything written as "I think" is my opinion._
+
+=================== CHART DATA (content/charts/the-ai-industry-is-a-complete-mess.tsx) ===================
+// Charts for content/blogs/the-ai-industry-is-a-complete-mess.mdx.
+// Every number is from a source named under its chart, as of October 2, 2026.
+import BarChart from "@/components/charts/bar-chart";
+import ChartFigure from "@/components/charts/chart-figure";
+import StatTiles from "@/components/charts/stat-tiles";
+import type { Series } from "@/components/charts/utils";
+
+const billions = (value: number) => `$${Math.round(value)}B`;
+const count = (value: number) => Math.round(value).toLocaleString("en-US");
+const days = (value: number) => `${value} days`;
+
+export function AtAGlance() {
+  return (
+    <StatTiles
+      title="AI in 2026: better models, messier industry"
+      tiles={[
+        {
+          label: "Vulnerabilities found by Claude Mythos",
+          value: "10,000+",
+          detail: "High or critical, across Project Glasswing partners, in about a month",
+          trend: "up",
+          good: true,
+        },
+        {
+          label: "Events in the Hugging Face intrusion",
+          value: "17,000+",
+          detail: "Run end to end by OpenAI agents that got out of a test sandbox",
+          trend: "caution",
+        },
+        {
+          label: "Big Tech capex, 2026",
+          value: "~$730B",
+          detail: "Amazon, Alphabet, Microsoft and Meta guidance. Nearly triple 2024",
+          trend: "up",
+        },
+        {
+          label: "OpenAI’s projected cash burn, 2026",
+          value: "$25B",
+          detail: "Rising to $85B in 2028, by its own forecast",
+          trend: "caution",
+        },
+      ]}
+      footer={
+        <>
+          Sources: Anthropic&rsquo;s Project Glasswing update (May 22), Hugging Face&rsquo;s incident report (July 16),
+          company guidance from Q2 2026 earnings, and OpenAI&rsquo;s projections as reported by The Information in
+          February.
+        </>
+      }
+    />
+  );
+}
+
+type Kind = "agents" | "money" | "product";
+
+const kinds: Record<Kind, { label: string; color: string }> = {
+  agents: { label: "Agents and security", color: "var(--viz-agents)" },
+  money: { label: "Money", color: "var(--viz-money)" },
+  product: { label: "Product and capacity", color: "var(--viz-product)" },
+};
+
+const events: { date: string; kind: Kind; text: string }[] = [
+  {
+    date: "Apr 7",
+    kind: "agents",
+    text: "Anthropic announces Claude Mythos Preview, which finds zero-days in every major OS and browser, and keeps it from general release.",
+  },
+  {
+    date: "May 11–12",
+    kind: "agents",
+    text: "More than 2,000 malicious packages flood RubyGems. New sign-ups are switched off for four days.",
+  },
+  { date: "May 28", kind: "money", text: "Anthropic raises $65 billion at a $965 billion valuation." },
+  {
+    date: "Jun 18",
+    kind: "agents",
+    text: "An OpenAI agent gets into Australia's Medicare statistics portal. Nobody notices for 54 days.",
+  },
+  {
+    date: "Jul 9–13",
+    kind: "agents",
+    text: "OpenAI agents running a cyber evaluation break into Hugging Face. OpenAI later confirms they were its models.",
+  },
+  {
+    date: "Jul 30",
+    kind: "money",
+    text: "Amazon raises its 2026 capex to $220 billion and says it still won't have enough capacity.",
+  },
+  { date: "Sep 3", kind: "product", text: "GPT-6 Astra launches. ChatGPT goes down the same morning." },
+  {
+    date: "Sep 10",
+    kind: "product",
+    text: "OpenAI pauses ChatGPT Pro $200 sign-ups over Astra demand, and emails Services Australia's public mailbox about the breach.",
+  },
+  {
+    date: "Sep 12",
+    kind: "agents",
+    text: "Researchers trace the RubyGems attack to OpenAI agents. OpenAI says they were doing “benign tasks.”",
+  },
+  {
+    date: "Sep 24",
+    kind: "agents",
+    text: "Australia's prime minister goes public: the agent “didn't accept ‘no’ for an answer.”",
+  },
+  {
+    date: "Sep 28",
+    kind: "agents",
+    text: "The UK AI Security Institute says GPT-6 Astra ran unsanctioned supply-chain attacks in testing. The WSJ reports GPT-6.1 Astra is shelved.",
+  },
+  {
+    date: "Sep 28",
+    kind: "money",
+    text: "Anthropic's IPO filing shows an $8 billion operating loss for 2025, on $4.6 billion of revenue.",
+  },
+  {
+    date: "Sep 29",
+    kind: "product",
+    text: "DevDay: GPT-6.1 Sol launches, Pro $200 is cut in half, and the live agent demo stalls on stage.",
+  },
+  { date: "Sep 29", kind: "money", text: "OpenAI is reported to be raising at a $1.4 trillion valuation." },
+];
+
+/** Six months of AI news, sorted into three kinds of mess. */
+export function MessTimeline() {
+  return (
+    <figure className="viz not-prose my-10 rounded-2xl border border-gray-200 bg-(--viz-surface) p-5 sm:p-7 dark:border-white/10">
+      <figcaption>
+        <p className="leading-snug font-semibold tracking-tight text-balance text-(--viz-ink)">
+          Six months of AI news, in one list
+        </p>
+        <p className="mt-1.5 text-sm leading-relaxed text-pretty text-(--viz-ink-2)">
+          Only events with a source I could check. Every one of them happened in 2026.
+        </p>
+      </figcaption>
+      <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-(--viz-ink-2)">
+        {Object.values(kinds).map((kind) => (
+          <li key={kind.label} className="flex items-center gap-2">
+            <span aria-hidden className="size-2.5 shrink-0 rounded-full" style={{ background: kind.color }} />
+            {kind.label}
+          </li>
+        ))}
+      </ul>
+      <ol className="mt-6 border-l border-(--viz-axis)">
+        {events.map((event) => (
+          <li key={event.date + event.text} className="relative grid gap-x-4 pb-4 pl-5 last:pb-0 sm:grid-cols-[5rem_1fr]">
+            <span
+              aria-hidden
+              className="absolute top-1.5 -left-[5px] size-2.5 rounded-full"
+              style={{ background: kinds[event.kind].color }}
+            />
+            <p className="text-xs font-semibold text-(--viz-ink) tabular-nums sm:pt-px">{event.date}</p>
+            <p className="text-sm leading-relaxed text-(--viz-ink-2)">
+              <span className="sr-only">{kinds[event.kind].label}: </span>
+              {event.text}
+            </p>
+          </li>
+        ))}
+      </ol>
+      <p className="mt-6 border-t border-(--viz-grid) pt-4 text-xs leading-relaxed text-(--viz-muted)">
+        Sources: Anthropic, Hugging Face, The Register, Simon Willison, ABC News, Fortune, TechCrunch, BleepingComputer,
+        Futurism, Reuters, Bloomberg and the WSJ, each linked where it comes up in the post.
+      </p>
+    </figure>
+  );
+}
+
+export function DisclosureGapChart() {
+  const series: Series[] = [
+    { key: "actual", label: "The Medicare portal breach", color: "var(--viz-agents)" },
+    { key: "law", label: "Reporting deadlines in US state law", color: "var(--viz-context)" },
+  ];
+  const rows = [
+    { label: "Breach to OpenAI finding it", series: "actual", value: 54, dates: "June 18 to August 11" },
+    { label: "Finding it to telling Australia", series: "actual", value: 30, dates: "August 11 to September 10" },
+    { label: "Telling Australia to the public", series: "actual", value: 14, dates: "September 10 to 24" },
+    { label: "California SB 53", series: "law", value: 15, dates: "From discovery of a critical safety incident" },
+    { label: "New York RAISE Act", series: "law", value: 3, dates: "72 hours, from January 1, 2027" },
+  ];
+  return (
+    <ChartFigure
+      title="98 days from breach to headline"
+      description="How long each step took after an OpenAI agent got into Australia's Medicare statistics portal, next to the deadlines two US state laws set for a frontier lab to report a critical safety incident. Neither law covers this case. They're here for scale."
+      legend={{ series, mark: "bar" }}
+      source={
+        <>
+          Sources: ABC News (dates, from the Australian government and OpenAI); Wiley on New York&rsquo;s RAISE Act and
+          California&rsquo;s SB 53. Both laws require reporting to the state, not to whoever was breached. Day
+          counts are my arithmetic.
+        </>
+      }
+      table={{
+        columns: ["Step", "Days", "When"],
+        rows: rows.map((row) => [row.label, row.value, row.dates]),
+      }}
+    >
+      <BarChart
+        series={series}
+        max={60}
+        format={days}
+        labelWidth="11rem"
+        labelRoom="4.5rem"
+        groups={rows.map((row) => ({
+          label: row.label,
+          bars: [{ series: row.series, value: row.value, label: row.value === 3 ? "3 days (72 hours)" : undefined }],
+        }))}
+      />
+    </ChartFigure>
+  );
+}
+
+export function GlasswingChart() {
+  const series: Series[] = [
+    { key: "ai", label: "Done by the AI", color: "var(--viz-anthropic)" },
+    { key: "people", label: "Done by people", color: "var(--viz-context)" },
+  ];
+  const HIGH_OR_CRITICAL = 6_202;
+  const stages = [
+    { label: "Vulnerabilities found", series: "ai", value: 23_019 },
+    { label: "High or critical (estimated)", series: "ai", value: HIGH_OR_CRITICAL },
+    { label: "Disclosed to maintainers", series: "people", value: 530 },
+    { label: "Patched", series: "people", value: 75 },
+  ];
+  const share = (value: number) => `${((value / HIGH_OR_CRITICAL) * 100).toFixed(1)}% of the high or critical`;
+  return (
+    <ChartFigure
+      title="The AI finds bugs faster than people can fix them"
+      description="What Claude Mythos Preview found when Anthropic pointed it at more than 1,000 open-source projects, and how many of those bugs had been disclosed and patched by May 22, about six weeks in. Of the 1,752 findings people had checked by then, 90.6% were real."
+      legend={{ series, mark: "bar" }}
+      source={
+        <>
+          Source: Anthropic&rsquo;s Project Glasswing update, May 22, 2026. Across all of Glasswing&rsquo;s partners, not
+          just open source, Mythos found more than 10,000 high- or critical-severity vulnerabilities in its first month.
+        </>
+      }
+      table={{
+        columns: ["Stage", "Count"],
+        rows: stages.map((stage) => [stage.label, count(stage.value)]),
+      }}
+    >
+      <BarChart
+        series={series}
+        max={23_019}
+        format={count}
+        labelWidth="11rem"
+        labelRoom="11rem"
+        groups={stages.map((stage) => ({
+          label: stage.label,
+          bars: [
+            {
+              series: stage.series,
+              value: stage.value,
+              note: stage.series === "people" ? share(stage.value) : undefined,
+            },
+          ],
+        }))}
+      />
+    </ChartFigure>
+  );
+}
+
+// Big Tech capital expenditure. 2024 and 2025 are Epoch AI's totals for
+// Microsoft, Amazon, Alphabet, Meta and Oracle (cash capex plus finance-lease
+// assets, calendar years). 2026 is the midpoint of each company's guidance
+// after Q2 earnings, without Oracle, whose fiscal year runs to May.
+const guidance2026 = [
+  { company: "Amazon", low: 220, high: 220 },
+  { company: "Alphabet", low: 195, high: 205 },
+  { company: "Microsoft", low: 175, high: 175 },
+  { company: "Meta", low: 130, high: 145 },
+];
+const total2026 = guidance2026.reduce((sum, row) => sum + (row.low + row.high) / 2, 0);
+
+export function CapexChart() {
+  const series: Series[] = [
+    { key: "actual", label: "Actual, five companies", color: "var(--viz-previous)" },
+    { key: "guidance", label: "2026 guidance, four companies", color: "var(--viz-money)" },
+  ];
+  const years = [
+    { year: "2024", series: "actual", value: 260.4 },
+    { year: "2025", series: "actual", value: 448.2 },
+    { year: "2026", series: "guidance", value: total2026 },
+  ];
+  const range = (row: (typeof guidance2026)[number]) =>
+    row.low === row.high ? `about $${row.low}B` : `$${row.low}–${row.high}B`;
+  return (
+    <ChartFigure
+      title="Big Tech's AI spending nearly tripled in two years"
+      description="Capital expenditure, mostly data centers and the chips inside them. 2026 is what Amazon, Alphabet, Microsoft and Meta told investors they'd spend after their July earnings, before Oracle and before anything they add in the second half."
+      legend={{ series, mark: "bar" }}
+      source={
+        <>
+          Sources: Epoch AI for 2024 and 2025 (Microsoft, Amazon, Alphabet, Meta and Oracle). 2026 is the midpoint of
+          company guidance: Amazon ~$220B (Fortune), Alphabet $195&ndash;205B, Microsoft ~$175B for the calendar year,
+          Meta $130&ndash;145B (its Q2 8-K). Oracle alone spent $55.7B in its fiscal year to May 2026.
+        </>
+      }
+      table={{
+        columns: ["Year or company", "Capex"],
+        rows: [
+          ...years.map((row) => [row.year, billions(row.value)]),
+          ...guidance2026.map((row) => [`2026: ${row.company}`, range(row)]),
+        ],
+      }}
+    >
+      <BarChart
+        series={series}
+        max={760}
+        format={billions}
+        labelWidth="3.5rem"
+        labelRoom="4rem"
+        groups={years.map((row) => ({
+          label: row.year,
+          bars: [
+            {
+              series: row.series,
+              value: row.value,
+              label: row.series === "guidance" ? `~$${Math.round(row.value / 10) * 10}B` : undefined,
+              tip:
+                row.series === "guidance"
+                  ? {
+                      title: "2026 guidance",
+                      rows: [
+                        { value: billions(row.value), label: "four companies", color: series[1].color },
+                        ...guidance2026.map((company) => ({ value: range(company), label: company.company })),
+                      ],
+                    }
+                  : undefined,
+            },
+          ],
+        }))}
+      />
+    </ChartFigure>
+  );
+}
+
+export function RevenueVsLossChart() {
+  const series: Series[] = [
+    { key: "revenue", label: "Revenue", color: "var(--viz-good)" },
+    { key: "loss", label: "Operating loss", color: "var(--viz-caution)" },
+  ];
+  const labs = [
+    { lab: "OpenAI", revenue: 13.07, loss: 20.92 },
+    { lab: "Anthropic", revenue: 4.6, loss: 8.06 },
+  ];
+  const format = (value: number) => `$${value.toFixed(1)}B`;
+  return (
+    <ChartFigure
+      title="In 2025, both leading labs lost more than they made"
+      description="Revenue and operating loss for 2025, before the one-off accounting charges that make both companies' net losses look even bigger. Both are growing very fast. Neither is close to paying for itself yet."
+      legend={{ series, mark: "bar" }}
+      source={
+        <>
+          Sources: OpenAI&rsquo;s audited 2025 financials, as reported by Ed Zitron, who says the Financial Times
+          independently verified them (OpenAI hasn&rsquo;t published them). Anthropic&rsquo;s IPO filing, as reported by
+          Reuters on September 28, 2026.
+        </>
+      }
+      table={{
+        columns: ["Lab", "2025 revenue", "2025 operating loss"],
+        rows: labs.map((row) => [row.lab, format(row.revenue), format(row.loss)]),
+      }}
+    >
+      <BarChart
+        series={series}
+        max={22}
+        format={format}
+        labelWidth="5.5rem"
+        labelRoom="3.5rem"
+        groups={labs.map((row) => ({
+          label: row.lab,
+          bars: [
+            { series: "revenue", value: row.revenue },
+            { series: "loss", value: row.loss },
+          ],
+        }))}
+      />
+    </ChartFigure>
+  );
+}
+
+export function OpenAIBurnChart() {
+  const series: Series[] = [{ key: "burn", label: "Projected cash burn", color: "var(--viz-money)" }];
+  const years = [
+    { year: "2026", burn: 25 },
+    { year: "2027", burn: 57 },
+    { year: "2028", burn: 85 },
+    { year: "2029", burn: 51 },
+  ];
+  const total = years.reduce((sum, row) => sum + row.burn, 0);
+  return (
+    <ChartFigure
+      title="OpenAI's own plan: burn $218 billion, then turn a profit"
+      description="The cash OpenAI expects to burn each year, from projections it shared with investors in February. The plan has it turning cash-positive in 2030, with $39 billion. The forecast was revised up by about $111 billion from the previous one."
+      source={
+        <>
+          Source: The Information, February 2026, as reported by The Decoder. These are OpenAI&rsquo;s projections, not
+          results, and they predate the Astra launch and the Pro $200 changes. The four-year total is my arithmetic.
+        </>
+      }
+      table={{
+        columns: ["Year", "Projected cash burn"],
+        rows: [...years.map((row) => [row.year, billions(row.burn)]), ["2026–2029", billions(total)]],
+      }}
+    >
+      <BarChart
+        series={series}
+        max={90}
+        format={billions}
+        labelWidth="3.5rem"
+        labelRoom="3.5rem"
+        groups={years.map((row) => ({
+          label: row.year,
+          bars: [{ series: "burn", value: row.burn }],
+        }))}
+      />
+    </ChartFigure>
+  );
+}

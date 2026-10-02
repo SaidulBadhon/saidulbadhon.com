@@ -34,7 +34,8 @@ Copy `$SKILL/assets/series/video-direction.md` to `.hyperframes/`.
 
 `STORYBOARD.md` with `format: 1080x1920`, one block per short frame (same `speaker`, voiceover and
 duration as its long-form frame; `src: compositions/frames/NN-<name>.html`), plus a final silent
-end card (`duration: 2.5s`): "পুরো ভিডিও চ্যানেলে" + "saidulbadhon.com". All transitions `cut`.
+end card (`duration: 2.5s`), built from `compositions/components/end-card-9x16.html` (the channel
+sign-off; pill "পুরো ভিডিও চ্যানেলে ▶", see `series-bible.md` § Channel), not by a worker. All transitions `cut`.
 `sfx-cues.json`: the long-form cues for the chosen frames, renumbered (times unchanged), plus a
 `chime` on the end card. Then `sync-durations`.
 

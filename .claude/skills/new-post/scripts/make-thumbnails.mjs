@@ -47,6 +47,8 @@ const [h1, h2] = [spec.headline?.[0] ?? "", spec.headline?.[1] ?? ""];
 const gauge = Math.max(0, Math.min(1, spec.box?.gauge ?? 0.5));
 // star-burst text: fit the number inside the star's inner area (~50% of its width)
 const starFont = (w) => Math.floor((w * 0.5) / (Math.max(2, [...String(spec.number ?? "")].length) * 0.62));
+// old/new values: full size for short values ("20x"), scaled down to fit their box for longer ones ("$260B")
+const valueFont = (value, max, w) => Math.min(max, Math.floor(w / (Math.max(1, [...String(value ?? "")].length) * 0.62)));
 const faces = [
   ["inter-800", "Inter", 800], ["inter-900", "Inter", 900],
   ["noto-sans-bengali-800", "Noto Sans Bengali", 800], ["noto-sans-bengali-900", "Noto Sans Bengali", 900],
@@ -106,9 +108,9 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000}
   <div class="pill" style="right:44px;top:30px">ফ্যাক্ট চেক</div>
   <div class="bn" data-fit style="position:absolute;left:60px;top:120px;width:1160px;color:#fff;font-size:96px;text-align:center">${esc(h1)} ${esc(h2)}</div>
   <div class="card" style="position:absolute;left:150px;top:330px;width:980px;height:330px;display:flex;align-items:center;justify-content:center;gap:80px">
-    <div style="position:relative;font:900 210px 'Inter';letter-spacing:-8px;color:#000">${esc(spec.old)}
+    <div style="position:relative;font:900 ${valueFont(spec.old, 210, 420)}px 'Inter';letter-spacing:-8px;color:#000">${esc(spec.old)}
       <svg viewBox="0 0 400 100" preserveAspectRatio="none" style="position:absolute;left:-20px;top:42%;width:calc(100% + 40px);height:70px;overflow:visible"><path d="M6 64 C120 40 250 52 394 24" fill="none" stroke="#E5322D" stroke-width="16" stroke-linecap="round"/></svg></div>
-    <div class="marker" style="font-size:210px;line-height:1;transform:rotate(-6deg)">${esc(spec.new)}</div>
+    <div class="marker" style="font-size:${valueFont(spec.new, 210, 400)}px;line-height:1;transform:rotate(-6deg)">${esc(spec.new)}</div>
   </div>
 </div>
 
@@ -118,11 +120,11 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000}
   <div class="bn" data-fit style="position:absolute;left:60px;top:40px;width:1160px;font-size:104px;text-align:center">${esc(h1)} <span style="background:#fff;border:6px solid #000;box-shadow:10px 10px 0 #000;padding:0 18px;display:inline-block;transform:rotate(-2deg)">${esc(h2)}</span></div>
   <div class="card" style="position:absolute;left:110px;top:300px;width:420px;height:330px;background:#C0F7FE;transform:rotate(-3deg);text-align:center">
     <div class="bn" style="font-size:52px;margin-top:22px">${esc(spec.labels?.before ?? "আগে")}</div>
-    <div style="font:900 170px 'Inter';letter-spacing:-6px;line-height:1.05">${esc(spec.old)}</div></div>
+    <div style="font:900 ${valueFont(spec.old, 170, 360)}px 'Inter';letter-spacing:-6px;line-height:1.05">${esc(spec.old)}</div></div>
   <svg viewBox="0 0 160 80" style="position:absolute;left:560px;top:420px;width:160px;height:80px"><path d="M8 40 H120 M100 14 L140 40 L100 66" fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <div class="card" style="position:absolute;left:750px;top:300px;width:420px;height:330px;background:#F7CB46;transform:rotate(3deg);text-align:center">
     <div class="bn" style="font-size:52px;margin-top:22px">${esc(spec.labels?.after ?? "এখন")}</div>
-    <div style="position:relative;display:inline-block;font:900 170px 'Inter';letter-spacing:-6px;line-height:1.05">${esc(spec.new)}
+    <div style="position:relative;display:inline-block;font:900 ${valueFont(spec.new, 170, 330)}px 'Inter';letter-spacing:-6px;line-height:1.05">${esc(spec.new)}
       <svg viewBox="0 0 300 200" preserveAspectRatio="none" style="position:absolute;left:-36px;top:-8px;width:calc(100% + 72px);height:calc(100% + 16px);overflow:visible"><path d="M150 12 C40 10 8 70 18 120 C30 180 230 196 280 130 C312 84 268 14 140 20" fill="none" stroke="#E5322D" stroke-width="10" stroke-linecap="round"/></svg></div></div>
   <div class="star" style="right:30px;top:170px;width:220px;height:220px;transform:rotate(-8deg)"><div style="background:#C0F7FE;font-size:${starFont(220)}px">${esc(spec.number)}</div></div>
 </div>
@@ -161,5 +163,10 @@ for (let i = 0; i < Math.min(3, shots.length); i++) {
   await sharp(join(THUMBS, "snapshots", shots[i])).resize(1280, 720).jpeg({ quality: 90 }).toFile(out);
   console.log(`✓ thumbnail ${names[i].toUpperCase()} → ${out}`);
 }
-rmSync(THUMBS, { recursive: true, force: true }); // scratch project, regenerated on every run
+// scratch project, regenerated on every run (on Windows the browser can still hold it open for a moment)
+try {
+  rmSync(THUMBS, { recursive: true, force: true, maxRetries: 5, retryDelay: 400 });
+} catch {
+  console.warn(`  (could not remove ${THUMBS} yet; it is regenerated on the next run)`);
+}
 if (!existsSync(join(OUT, "thumbnail-a.jpg"))) process.exit(1);

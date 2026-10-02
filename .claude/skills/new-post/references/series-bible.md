@@ -32,7 +32,7 @@ the "product box" is the claim itself (e.g. "PUSH YOUR .ENV! FREE SECRETS FOR EV
 | N-3 | CHECKER | What to do | a decision card per kind of viewer |
 | N-2 | CHECKER | Verdict | inverted black closing plate, one quotable line |
 | N-1 | HOST | Outro gag | the title gag again + "শর্ত প্রযোজ্য" speed-read + "সব সোর্স ডেসক্রিপশনে" |
-| N | silent | End card (3s) | the post title + saidulbadhon.com, fade to black |
+| N | silent | End card (3s) | the channel sign-off — not a worker frame: copy `compositions/components/end-card-16x9.html`, set `{{ID}}` and `{{PILL}}` (see § Channel) |
 
 Every HOST frame after a CHECKER frame opens with a "▶ PLAY" readout (0.0–0.5s). Mark the frames
 that start YouTube chapters with a `- chapter:` line (Bangla title) — ~8–10 chapters.
@@ -58,6 +58,17 @@ Recurring props (draw them the same way every episode):
 - **Charts** — white chart cards on the paused stage, bars with 3px borders + hard shadows; data
   colours fixed per episode (old = blue, new/hype = pink, alternative = green).
 - **Closing plate** — black ground, white-bordered frame, 12px yellow shadow.
+
+## Channel
+
+The series runs on the channel **শর্ত প্রযোজ্য** ("Shorto Projojjo", *Conditions Apply*), by Saidul
+Badhon. Every video ends on the same sign-off card: the circled-asterisk mark, the wordmark
+"শর্ত প্রযোজ্য", the byline "Shorto Projojjo · by Saidul Badhon", a call-to-action pill and
+saidulbadhon.com. Templates: `assets/series/components/end-card-16x9.html` (long-form, 3.0s) and
+`end-card-9x16.html` (Short, 2.5s). Copy to `compositions/frames/NN-end-card.html`, strip the
+leading comment, replace `{{ID}}` with the frame id and `{{PILL}}` with the pill text
+("পুরো লেখা + সব সোর্স" long-form, "পুরো ভিডিও চ্যানেলে ▶" Short). Channel art (logo, YouTube
+banner, Facebook cover) is built by `videos/channel/build.mjs`.
 
 ## Voices (Gemini TTS, `assets/series/voices.json`)
 
