@@ -33,7 +33,9 @@ template (`series-bible.md`): `scene`, `voiceover` (Bangla, same as SCRIPT), `du
 and a `zoom-through` into the verdict), `status: outline`, `src: compositions/frames/NN-<name>.html`,
 `type`, `persuasion`, `beat`, `speaker: HOST|CHECKER|none (silent)`, `chapter:` (Bangla, on chapter
 starts), `blueprint`, then `narrativeRole` / `keyMessage`. Silent frames: the freeze (2) and the
-end card (last).
+end card (last). The end card is the channel sign-off template, not a worker frame: copy
+`compositions/components/end-card-16x9.html` to its `src` (see `series-bible.md` § Channel) and skip it
+when dispatching frame workers.
 
 `SCRIPT.md` — header (voices, direction), then `## Line N — <label> (Frame N) [HOST|CHECKER]`,
 a `**Delivery:**` note, and the spoken Bangla indented 4 spaces. Write for the ear: short sentences,

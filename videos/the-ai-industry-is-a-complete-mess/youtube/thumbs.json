@@ -1,0 +1,8 @@
+{
+  "headline": ["AI আরও স্মার্ট", "ইন্ডাস্ট্রি গোলমাল!"],
+  "kicker": "AI 2026",
+  "old": "$260B", "new": "$730B",
+  "number": "2.8x",
+  "box": { "label": "AI 2026", "price": "$730B", "gauge": 0.2 },
+  "labels": { "before": "2024", "after": "2026" }
+}

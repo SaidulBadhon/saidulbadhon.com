@@ -1,0 +1,695 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+    #root * { box-sizing: border-box; }
+
+    /* ---------- background (yellow HOST ground + dot-grid + stripe-blocks) ---------- */
+    #f18-ground {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #F7CB46;
+      z-index: 0;
+    }
+    #f18-dots {
+      position: absolute;
+      left: 1460px;
+      top: 0;
+      width: 460px;
+      height: 340px;
+      background-image: radial-gradient(circle, #000000 2px, transparent 2.6px);
+      background-size: 24px 24px;
+      background-position: 6px 6px;
+      opacity: 0.3;
+    }
+    .f18-stripe {
+      position: absolute;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+    }
+    #f18-stripe-a {
+      left: -200px;
+      top: 685px;
+      width: 520px;
+      height: 150px;
+      background-image: repeating-linear-gradient(45deg, #000000 0 14px, #FE90E8 14px 30px);
+    }
+    #f18-stripe-b {
+      left: 700px;
+      top: -70px;
+      width: 440px;
+      height: 150px;
+      background-image: repeating-linear-gradient(45deg, #000000 0 14px, #C0F7FE 14px 30px);
+    }
+
+    /* ---------- VHS OSD (clip, 0.0-0.5s) ---------- */
+    #f18-osd-layer {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      z-index: 12;
+      pointer-events: none;
+    }
+    .f18-osd {
+      position: absolute;
+      left: 60px;
+      top: 54px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 33px;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-shadow: 3px 0 0 #000000, -3px 0 0 #000000, 0 3px 0 #000000, 0 -3px 0 #000000, 2.1px 2.1px 0 #000000, -2.1px 2.1px 0 #000000, 2.1px -2.1px 0 #000000, -2.1px -2.1px 0 #000000;
+    }
+    .f18-osd-tri { width: 28px; height: 28px; overflow: visible; flex: none; }
+
+    /* ---------- "$730B" star-burst (centre 78% / 22%) ---------- */
+    #f18-burst {
+      position: absolute;
+      left: 1308px;
+      top: 48px;
+      width: 380px;
+      height: 380px;
+      transform-origin: 50% 50%;
+      will-change: transform;
+      z-index: 3;
+    }
+    #f18-burst-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(8px 8px 0 #000000);
+    }
+    #f18-burst-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .f18-price-num {
+      font-weight: 900;
+      font-size: 80px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    /* ---------- banners (foreground subject) ---------- */
+    .f18-bwrap {
+      position: absolute;
+      height: 151px;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+    .f18-bin {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+    #f18-b1 { left: 768px; top: 367px; width: 922px; z-index: 6; }
+    #f18-b1-in { background: #C0F7FE; }
+    #f18-b2 { left: 806px; top: 540px; width: 960px; z-index: 7; }
+    #f18-b2-in { background: #FE90E8; }
+    .f18-bword {
+      font-weight: 900;
+      font-size: 104px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    #f18-b2 .f18-bword { font-size: 112px; }
+    #f18-b1-arrow { display: block; width: 52px; height: 68px; flex: none; }
+    #f18-gbox {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      line-height: 1.1;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    /* ---------- sparkles (supporting) ---------- */
+    .f18-spk {
+      position: absolute;
+      transform-origin: 50% 50%;
+      will-change: transform;
+      z-index: 8;
+    }
+    .f18-spk svg { display: block; width: 100%; height: 100%; }
+    #f18-spk1 { left: 716px; top: 300px; width: 64px; height: 64px; }
+    #f18-spk2 { left: 1794px; top: 440px; width: 76px; height: 76px; }
+    #f18-spk3 { left: 1236px; top: 72px; width: 52px; height: 52px; }
+
+    /* ---------- fine-print crawl ---------- */
+    #f18-crawl {
+      position: absolute;
+      left: 1920px;
+      top: 734px;
+      width: max-content;
+      z-index: 10;
+      padding: 5px 24px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 600;
+      font-size: 27px;
+      line-height: 1.3;
+      letter-spacing: 0;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    /* ---------- sources pill (foreground payoff) ---------- */
+    #f18-srcpill {
+      position: absolute;
+      left: 1267px;
+      top: 837px;
+      width: max-content;
+      z-index: 9;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 38px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 44px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      will-change: transform;
+    }
+    #f18-pill-arrow { display: block; width: 26px; height: 34px; overflow: visible; flex: none; }
+
+    /* =====================================================================
+       MASCOT BOX — COPY BLOCK (CSS) — start (re-prefixed f18-)
+       Box layout: x 10-36% / y 16-80% -> left 192 / top 173 / 499 x 691.
+       Also carries the shared .f18-pill (label-pill) base.
+       ===================================================================== */
+    .f18-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 4px 4px 0 #000000;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    #f18-box {
+      position: absolute;
+      left: 192px;
+      top: 173px;
+      width: 499px;
+      height: 691px;
+      background: #FFFFFF;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0 #000000;
+      transform-origin: 50% 100%;
+      will-change: transform;
+      z-index: 4;
+    }
+    .f18-band {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 170px;
+      background: #FE90E8;
+      border-bottom: 4px solid #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .f18-band-name {
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 116px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    #f18-eyes {
+      position: absolute;
+      left: 140px;
+      top: 208px;
+      width: 200px;
+      height: 84px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .f18-eye {
+      position: relative;
+      width: 62px;
+      height: 84px;
+      background: #000000;
+      border-radius: 50%;
+      transform-origin: 50% 50%;
+    }
+    .f18-glint {
+      position: absolute;
+      left: 30px;
+      top: 13px;
+      width: 20px;
+      height: 20px;
+      background: #FFFFFF;
+      border-radius: 50%;
+    }
+    #f18-grin {
+      position: absolute;
+      left: 140px;
+      top: 310px;
+      width: 200px;
+      height: 72px;
+      background: #000000;
+      border-radius: 0 0 100px 100px / 0 0 72px 72px;
+      overflow: hidden;
+      transform-origin: 50% 0%;
+    }
+    .f18-tongue {
+      position: absolute;
+      left: 55px;
+      bottom: -14px;
+      width: 90px;
+      height: 44px;
+      background: #FE90E8;
+      border-radius: 50%;
+    }
+    .f18-box-sub {
+      position: absolute;
+      left: 0;
+      top: 402px;
+      width: 480px;
+      display: flex;
+      justify-content: center;
+    }
+    .f18-box-sub .f18-pill {
+      background: #F7CB46;
+      font-size: 24px;
+      padding: 3px 20px;
+    }
+    .f18-box-price {
+      position: absolute;
+      left: 0;
+      top: 446px;
+      width: 480px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 108px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .f18-box-trim {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 70px;
+      background-image: repeating-linear-gradient(45deg, #000000 0 12px, #FE90E8 12px 26px);
+      border-top: 4px solid #000000;
+    }
+    #f18-gauge {
+      position: absolute;
+      left: 465px;
+      top: 196px;
+      width: 56px;
+      height: 330px;
+      background: #FFFFFF;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    #f18-gauge-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-image: repeating-linear-gradient(45deg, #000000 0 8px, #FE90E8 8px 18px);
+      clip-path: inset(90% 0% 0% 0%);
+    }
+    .f18-tick {
+      position: absolute;
+      left: -17px;
+      width: 14px;
+      height: 3px;
+      background: #000000;
+    }
+    .f18-tick-25 { top: 25%; }
+    .f18-tick-50 { top: 50%; left: -25px; width: 22px; height: 4px; }
+    .f18-tick-75 { top: 75%; }
+    #f18-gauge-tag {
+      position: absolute;
+      left: 420px;
+      top: 548px;
+      font-size: 26px;
+      padding: 4px 16px;
+      background: #FE90E8;
+    }
+    /* MASCOT BOX — COPY BLOCK (CSS) — end */
+  </style>
+
+  <div id="root" data-composition-id="18-outro" data-width="1920" data-height="1080" data-duration="6.842">
+    <!-- full-bleed HOST ground (lowest track, full duration): yellow + dot-grid + stripe-blocks -->
+    <div id="f18-ground" class="clip" data-start="0" data-duration="6.842" data-track-index="0">
+      <div id="f18-dots"></div>
+      <div id="f18-stripe-a" class="f18-stripe"></div>
+      <div id="f18-stripe-b" class="f18-stripe"></div>
+    </div>
+
+    <!-- "$730B" star-burst (supporting) -->
+    <div id="f18-burst">
+      <svg id="f18-burst-svg" viewBox="0 0 200 200" aria-hidden="true">
+        <polygon
+          points="100.00,4.00 123.49,27.72 156.43,22.33 161.49,55.33 191.30,70.33 176.00,100.00 191.30,129.67 161.49,144.67 156.43,177.67 123.49,172.28 100.00,196.00 76.51,172.28 43.57,177.67 38.51,144.67 8.70,129.67 24.00,100.00 8.70,70.33 38.51,55.33 43.57,22.33 76.51,27.72"
+          fill="#C0F7FE"
+          stroke="#000000"
+          stroke-width="4"
+          stroke-linejoin="miter"
+          vector-effect="non-scaling-stroke"
+        />
+      </svg>
+      <div id="f18-burst-content">
+        <div class="f18-price-num">$730B</div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         MASCOT BOX — COPY BLOCK (HTML) — start (re-prefixed f18-)
+         ===================================================================== -->
+    <div id="f18-box">
+      <div class="f18-band">
+        <span class="f18-band-name">AI 2026</span>
+      </div>
+      <div id="f18-eyes">
+        <div id="f18-eye-l" class="f18-eye"><span class="f18-glint"></span></div>
+        <div id="f18-eye-r" class="f18-eye"><span class="f18-glint"></span></div>
+      </div>
+      <div id="f18-grin"><span class="f18-tongue"></span></div>
+      <div class="f18-box-sub"><span class="f18-pill">দাম</span></div>
+      <div class="f18-box-price">$730B</div>
+      <div class="f18-box-trim"></div>
+      <div id="f18-gauge">
+        <div id="f18-gauge-fill"></div>
+        <span class="f18-tick f18-tick-25"></span>
+        <span class="f18-tick f18-tick-50"></span>
+        <span class="f18-tick f18-tick-75"></span>
+      </div>
+      <div id="f18-gauge-tag" class="f18-pill">নিয়ন্ত্রণ</div>
+    </div>
+    <!-- MASCOT BOX — COPY BLOCK (HTML) — end -->
+
+    <!-- banner 1: "আরও স্মার্ট!" (blue) -->
+    <div id="f18-b1" class="f18-bwrap">
+      <div id="f18-b1-in" class="f18-bin">
+        <span class="f18-bword">আরও স্মার্ট!</span>
+        <svg id="f18-b1-arrow" viewBox="0 0 38 50" aria-hidden="true">
+          <polygon points="19,2 36,22 25,22 25,48 13,48 13,22 2,22" fill="#000000" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- banner 2 (focal): "আরও গোলমাল!" (pink) -->
+    <div id="f18-b2" class="f18-bwrap">
+      <div id="f18-b2-in" class="f18-bin">
+        <span class="f18-bword">আরও</span>
+        <span id="f18-gbox" class="f18-bword">গোলমাল!</span>
+      </div>
+    </div>
+
+    <!-- sparkles -->
+    <div id="f18-spk1" class="f18-spk">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 L14.6 9.4 L24 12 L14.6 14.6 L12 24 L9.4 14.6 L0 12 L9.4 9.4 Z" fill="#000000" /></svg>
+    </div>
+    <div id="f18-spk2" class="f18-spk">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 L14.6 9.4 L24 12 L14.6 14.6 L12 24 L9.4 14.6 L0 12 L9.4 9.4 Z" fill="#000000" /></svg>
+    </div>
+    <div id="f18-spk3" class="f18-spk">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 L14.6 9.4 L24 12 L14.6 14.6 L12 24 L9.4 14.6 L0 12 L9.4 9.4 Z" fill="#000000" /></svg>
+    </div>
+
+    <!-- sources pill (foreground payoff) -->
+    <div id="f18-srcpill">
+      <span>পুরো লেখা + সব সোর্স</span>
+      <svg id="f18-pill-arrow" viewBox="0 0 20 26" aria-hidden="true">
+        <path d="M10 2 V22 M2.5 14.5 L10 22 L17.5 14.5" fill="none" stroke="#000000" stroke-width="3.6" stroke-linecap="square" stroke-linejoin="miter" />
+      </svg>
+      <span>ডেসক্রিপশনে</span>
+    </div>
+
+    <!-- fast fine-print crawl -->
+    <div id="f18-crawl">*শর্ত প্রযোজ্য · এজেন্টরা 'না' শোনে না · $730B ক্যাপেক্স · অপারেটিং লস $20.9B · প্ল্যান অর্ধেক · at capacity · 54 দিন পরে জানানো ·</div>
+
+    <!-- VHS "PLAY" readout (0.0-0.5s, then hard cut) -->
+    <div id="f18-osd-layer" class="clip" data-start="0" data-duration="0.5" data-track-index="1">
+      <div class="f18-osd">
+        <svg class="f18-osd-tri" viewBox="0 0 24 24" aria-hidden="true">
+          <polygon points="4,3 21,12 4,21" fill="#FFFFFF" stroke="#000000" stroke-width="4.4" stroke-linejoin="miter" paint-order="stroke" />
+        </svg>
+        <span>Play</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var scope = document.querySelector('[data-composition-id="18-outro"]') || document;
+      var q = function (s) { return scope.querySelector(s); };
+      var qa = function (s) { return Array.prototype.slice.call(scope.querySelectorAll(s)); };
+
+      var stripeA = q("#f18-stripe-a");
+      var stripeB = q("#f18-stripe-b");
+      var box = q("#f18-box");
+      var eyesWrap = q("#f18-eyes");
+      var eyes = qa(".f18-eye");
+      var eyeR = q("#f18-eye-r");
+      var grin = q("#f18-grin");
+      var gaugeFill = q("#f18-gauge-fill");
+      var gaugeTag = q("#f18-gauge-tag");
+      var burst = q("#f18-burst");
+      var b1 = q("#f18-b1");
+      var b1in = q("#f18-b1-in");
+      var b1arrow = q("#f18-b1-arrow");
+      var b2 = q("#f18-b2");
+      var b2in = q("#f18-b2-in");
+      var gbox = q("#f18-gbox");
+      var spk1 = q("#f18-spk1");
+      var spk2 = q("#f18-spk2");
+      var spk3 = q("#f18-spk3");
+      var crawl = q("#f18-crawl");
+      var pill = q("#f18-srcpill");
+      var pillArrow = q("#f18-pill-arrow");
+
+      var tl = gsap.timeline({ paused: true });
+
+      // mascot glance helper (eyes follow whatever just arrived)
+      var look = function (t, x, y) {
+        tl.to(eyesWrap, { x: x, y: y, duration: 0.22, ease: "power3.out" }, t);
+      };
+      // mascot hop helper (excited bounce, lands with a squash)
+      var hop = function (t, h) {
+        tl.to(box, { y: -h, duration: 0.15, ease: "power2.out" }, t);
+        tl.to(box, { y: 0, duration: 0.18, ease: "power2.in" }, t + 0.15);
+        tl.to(box, { scaleY: 0.96, scaleX: 1.03, duration: 0.05, ease: "power2.out" }, t + 0.33);
+        tl.to(box, { scaleY: 1, scaleX: 1, duration: 0.3, ease: "back.out(2)" }, t + 0.38);
+      };
+      // box shudder helper (impact reaction, x only)
+      var shudder = function (t, a) {
+        tl.to(box, { x: a, duration: 0.05, ease: "power2.out" }, t);
+        tl.to(box, { x: -a * 0.8, duration: 0.07, ease: "power2.inOut" }, t + 0.05);
+        tl.to(box, { x: a * 0.5, duration: 0.07, ease: "power2.inOut" }, t + 0.12);
+        tl.to(box, { x: 0, duration: 0.1, ease: "power2.out" }, t + 0.19);
+      };
+      // sparkle pop helper
+      var sparkle = function (el, t, rot) {
+        tl.fromTo(el, { scale: 0, rotation: rot - 90, opacity: 0 }, { scale: 1, rotation: rot, opacity: 1, duration: 0.4, ease: "back.out(2.2)" }, t);
+      };
+
+      // ---- Scene 1 (0.0-2.0s): "PLAY" OSD (clip). Ground is on screen from t=0; stripe-blocks settle in off their edges.
+      tl.fromTo(stripeA, { x: -70, rotation: 12 }, { x: 0, rotation: 9, duration: 0.6, ease: "power3.out" }, 0);
+      tl.fromTo(stripeB, { y: -60, rotation: -12 }, { y: 0, rotation: -7, duration: 0.6, ease: "power3.out" }, 0.05);
+      // 0.05s: the AI 2026 box drops in from above and lands heavy (squash -> settle).
+      tl.fromTo(box, { y: -1020 }, { y: 0, duration: 0.3, ease: "power2.in" }, 0.05);
+      tl.to(box, { scaleY: 0.94, scaleX: 1.05, duration: 0.07, ease: "power2.out" }, 0.35);
+      tl.to(box, { scaleY: 1, scaleX: 1, duration: 0.5, ease: "back.out(1.8)" }, 0.42);
+      // the contents gauge starts full and drains to almost empty (stat-bars-and-fills, clip-path).
+      tl.fromTo(
+        gaugeFill,
+        { clipPath: "inset(0% 0% 0% 0%)" },
+        { clipPath: "inset(90% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" },
+        0.5
+      );
+      tl.fromTo(gaugeTag, { backgroundColor: "#99E885" }, { backgroundColor: "#FE90E8", duration: 0.2, ease: "power2.out" }, 1.1);
+      // "ছাব্বিশ!" (1.03s): the blue $730B star-burst spring-pops upper-right, the mascot hops and looks at it.
+      tl.fromTo(
+        burst,
+        { scale: 0, opacity: 0, rotation: -30 },
+        { scale: 1, opacity: 1, rotation: 6, duration: 0.5, ease: "back.out(1.7)" },
+        1.03
+      );
+      sparkle(spk3, 1.12, 8);
+      look(1.03, 14, -10);
+      hop(1.05, 12);
+
+      // ---- Scene 2 (2.0-4.1s): "স্মার্ট!" (2.23s) the blue banner slaps in, tilted -4deg (impact lands on the word).
+      look(2.15, 14, 0);
+      tl.fromTo(b1, { opacity: 0 }, { opacity: 1, duration: 0.04, ease: "none" }, 2.14);
+      tl.fromTo(b1, { scale: 1.8, rotation: -12 }, { scale: 1, rotation: -4, duration: 0.17, ease: "power3.in" }, 2.14);
+      tl.to(
+        b1in,
+        {
+          keyframes: [
+            { scaleX: 1.06, scaleY: 0.86, duration: 0.05, ease: "power2.out" },
+            { scaleX: 1, scaleY: 1, duration: 0.32, ease: "power3.out" }
+          ]
+        },
+        2.31
+      );
+      shudder(2.31, 4);
+      sparkle(spk1, 2.33, 12);
+      tl.to(b1arrow, { y: -10, duration: 0.15, ease: "power2.out" }, 2.55);
+      tl.to(b1arrow, { y: 0, duration: 0.3, ease: "back.out(2.5)" }, 2.7);
+      // "গোলমাল!" (3.29s): the pink banner (focal) slaps in under it, harder, tilted -4deg.
+      look(3.2, 14, 12);
+      tl.fromTo(b2, { opacity: 0 }, { opacity: 1, duration: 0.04, ease: "none" }, 3.2);
+      tl.fromTo(b2, { scale: 2.1, rotation: -14 }, { scale: 1, rotation: -4, duration: 0.17, ease: "power3.in" }, 3.2);
+      tl.to(
+        b2in,
+        {
+          keyframes: [
+            { scaleX: 1.08, scaleY: 0.82, duration: 0.05, ease: "power2.out" },
+            { scaleX: 1, scaleY: 1, duration: 0.34, ease: "power3.out" }
+          ]
+        },
+        3.37
+      );
+      // the word snaps into its white box
+      tl.fromTo(
+        gbox,
+        { scale: 1.55, rotation: -9, backgroundColor: "#FE90E8", borderColor: "#FE90E8", boxShadow: "0px 0px 0px #FE90E8" },
+        { scale: 1, rotation: 3, backgroundColor: "#FFFFFF", borderColor: "#000000", boxShadow: "4px 4px 0px #000000", duration: 0.36, ease: "back.out(1.8)" },
+        3.37
+      );
+      shudder(3.37, 7);
+      sparkle(spk2, 3.4, -10);
+      tl.to(grin, { scaleX: 1.15, scaleY: 1.12, duration: 0.35, ease: "back.out(1.7)" }, 3.37);
+      tl.to(burst, { scale: 1.06, rotation: 9, duration: 0.08, ease: "power2.out" }, 3.37);
+      tl.to(burst, { scale: 1, rotation: 6, duration: 0.35, ease: "back.out(2)" }, 3.45);
+      // 3.6s: the mascot winks (right eye scaleY 1 -> 0.1 -> 1); the gauge stays almost empty.
+      tl.to(
+        eyeR,
+        {
+          keyframes: [
+            { scaleY: 0.1, duration: 0.08, ease: "power2.in" },
+            { scaleY: 0.1, duration: 0.14 },
+            { scaleY: 1, duration: 0.14, ease: "power2.out" }
+          ]
+        },
+        3.6
+      );
+
+      // ---- Scene 3 (4.1-5.2s): "শর্ত" (4.16s) the fine-print strip zips right-to-left, linear, ~1.1s.
+      look(4.1, 10, 16);
+      tl.fromTo(crawl, { x: 0, xPercent: 0 }, { x: -1920, xPercent: -100, duration: 1.1, ease: "none" }, 4.16);
+      // the burst rattles as the "$730B" line streaks past
+      tl.to(burst, { rotation: 2, duration: 0.12, ease: "power2.out" }, 4.55);
+      tl.to(burst, { rotation: 9, duration: 0.14, ease: "power2.inOut" }, 4.67);
+      tl.to(burst, { rotation: 6, duration: 0.3, ease: "back.out(2)" }, 4.81);
+
+      // ---- Scene 4 (5.2-6.842s): "সব" (5.22s) the sources pill spring-pops, then holds.
+      look(5.2, 8, 18);
+      tl.fromTo(
+        pill,
+        { xPercent: -50, yPercent: -50, scale: 0, rotation: -6, opacity: 0 },
+        { xPercent: -50, yPercent: -50, scale: 1, rotation: 1.2, opacity: 1, duration: 0.5, ease: "back.out(1.6)" },
+        5.22
+      );
+      hop(5.25, 9);
+      // hold: the pill's arrow nods down at the description (finite), the mascot blinks, the burst twitches once.
+      tl.to(
+        pillArrow,
+        {
+          keyframes: [
+            { y: 8, duration: 0.15, ease: "power2.out" },
+            { y: 0, duration: 0.2, ease: "back.out(2.5)" },
+            { y: 8, duration: 0.15, ease: "power2.out" },
+            { y: 0, duration: 0.2, ease: "back.out(2.5)" },
+            { y: 8, duration: 0.15, ease: "power2.out" },
+            { y: 0, duration: 0.2, ease: "back.out(2.5)" }
+          ]
+        },
+        5.85
+      );
+      tl.to(eyes, { scaleY: 0.1, duration: 0.08, ease: "power2.in" }, 6.2);
+      tl.to(eyes, { scaleY: 1, duration: 0.12, ease: "power2.out" }, 6.28);
+      tl.to(burst, { rotation: 3, duration: 0.12, ease: "power2.out" }, 6.05);
+      tl.to(burst, { rotation: 6, duration: 0.35, ease: "back.out(2)" }, 6.17);
+      tl.to(spk1, { scale: 0.7, rotation: 40, duration: 0.18, ease: "power2.out" }, 6.1);
+      tl.to(spk1, { scale: 1, rotation: 12, duration: 0.3, ease: "back.out(2)" }, 6.28);
+      tl.to(spk2, { scale: 0.7, rotation: 30, duration: 0.18, ease: "power2.out" }, 6.35);
+      tl.to(spk2, { scale: 1, rotation: -10, duration: 0.3, ease: "back.out(2)" }, 6.53);
+
+      // hold to the end (no exit) - pin the timeline length to the frame duration.
+      tl.set({}, {}, 6.842);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["18-outro"] = tl;
+    })();
+  </script>
+</template>

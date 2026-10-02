@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #FFFFFF;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="58.938"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div
+        id="el-01-cold-open"
+        class="scene"
+        data-composition-id="01-cold-open"
+        data-composition-src="compositions/frames/01-cold-open.html"
+        data-start="0"
+        data-duration="11.661"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-01-cold-open-voice"
+        src="assets/voice/01.wav"
+        data-start="0"
+        data-duration="11.661"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-02-freeze"
+        class="scene"
+        data-composition-id="02-freeze"
+        data-composition-src="compositions/frames/02-freeze.html"
+        data-start="11.661"
+        data-duration="1.4"
+        data-track-index="1"
+      ></div>
+
+      <div
+        id="el-03-not-lying"
+        class="scene"
+        data-composition-id="03-not-lying"
+        data-composition-src="compositions/frames/03-not-lying.html"
+        data-start="13.061"
+        data-duration="14.812"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-03-not-lying-voice"
+        src="assets/voice/03.wav"
+        data-start="13.061"
+        data-duration="14.812"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-04-hugging-face"
+        class="scene"
+        data-composition-id="04-hugging-face"
+        data-composition-src="compositions/frames/04-hugging-face.html"
+        data-start="27.872999999999998"
+        data-duration="17.628"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-04-hugging-face-voice"
+        src="assets/voice/04.wav"
+        data-start="27.872999999999998"
+        data-duration="17.628"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-05-verdict"
+        class="scene"
+        data-composition-id="05-verdict"
+        data-composition-src="compositions/frames/05-verdict.html"
+        data-start="45.501"
+        data-duration="10.937"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-05-verdict-voice"
+        src="assets/voice/05.wav"
+        data-start="45.501"
+        data-duration="10.937"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-06-end-card"
+        class="scene"
+        data-composition-id="06-end-card"
+        data-composition-src="compositions/frames/06-end-card.html"
+        data-start="56.437999999999995"
+        data-duration="2.5"
+        data-track-index="1"
+      ></div>
+
+      <!-- BGM -->
+      <audio
+        id="el-bgm"
+        src="assets/bgm/track.loop.mp3"
+        data-start="0"
+        data-duration="58.938"
+        data-track-index="11"
+        data-volume="1" data-fx-chain="{&quot;version&quot;:1,&quot;nodes&quot;:[{&quot;type&quot;:&quot;lowpass&quot;,&quot;id&quot;:&quot;n1&quot;,&quot;label&quot;:&quot;Paused-tape muffle&quot;,&quot;params&quot;:{&quot;frequency&quot;:18000,&quot;q&quot;:0.707,&quot;poles&quot;:&quot;2&quot;}}]}" data-automation="{&quot;version&quot;:1,&quot;lanes&quot;:[{&quot;target&quot;:&quot;volume&quot;,&quot;points&quot;:[{&quot;t&quot;:0,&quot;v&quot;:0.16},{&quot;t&quot;:0.12,&quot;v&quot;:0.16},{&quot;t&quot;:11.661,&quot;v&quot;:0.16},{&quot;t&quot;:11.761,&quot;v&quot;:0},{&quot;t&quot;:13.061,&quot;v&quot;:0},{&quot;t&quot;:13.661,&quot;v&quot;:0.035},{&quot;t&quot;:27.873,&quot;v&quot;:0.035},{&quot;t&quot;:28.023,&quot;v&quot;:0.035},{&quot;t&quot;:45.501,&quot;v&quot;:0.035},{&quot;t&quot;:45.651,&quot;v&quot;:0.035},{&quot;t&quot;:56.438,&quot;v&quot;:0.035},{&quot;t&quot;:56.838,&quot;v&quot;:0.22},{&quot;t&quot;:58.938,&quot;v&quot;:0}]},{&quot;target&quot;:&quot;fx.n1.frequency&quot;,&quot;points&quot;:[{&quot;t&quot;:0,&quot;v&quot;:18000},{&quot;t&quot;:0.12,&quot;v&quot;:18000},{&quot;t&quot;:11.661,&quot;v&quot;:18000},{&quot;t&quot;:13.061,&quot;v&quot;:650},{&quot;t&quot;:13.211,&quot;v&quot;:650},{&quot;t&quot;:27.873,&quot;v&quot;:650},{&quot;t&quot;:28.023,&quot;v&quot;:650},{&quot;t&quot;:45.501,&quot;v&quot;:650},{&quot;t&quot;:45.651,&quot;v&quot;:650},{&quot;t&quot;:56.438,&quot;v&quot;:650},{&quot;t&quot;:56.838,&quot;v&quot;:18000}]}]}"></audio>
+
+      <!-- SFX -->
+      <audio
+        id="el-sfx-0"
+        src="assets/sfx/game-show-fanfare.mp3"
+        data-start="0"
+        data-duration="3"
+        data-track-index="20"
+        data-volume="0.22"
+      ></audio>
+      <audio
+        id="el-sfx-1"
+        src="assets/sfx/pop.mp3"
+        data-start="0.49"
+        data-duration="0.31"
+        data-track-index="21"
+        data-volume="0.3"
+      ></audio>
+      <audio
+        id="el-sfx-2"
+        src="assets/sfx/rubber-stamp.mp3"
+        data-start="5.96"
+        data-duration="0.9"
+        data-track-index="22"
+        data-volume="0.4"
+      ></audio>
+      <audio
+        id="el-sfx-3"
+        src="assets/sfx/barcode-scanner-beep.mp3"
+        data-start="8.96"
+        data-duration="0.6"
+        data-track-index="23"
+        data-volume="0.3"
+      ></audio>
+      <audio
+        id="el-sfx-4"
+        src="assets/sfx/sparkle-shimmer.mp3"
+        data-start="11.02"
+        data-duration="0.64"
+        data-track-index="24"
+        data-volume="0.3"
+      ></audio>
+      <audio
+        id="el-sfx-5"
+        src="assets/sfx/record-scratch.mp3"
+        data-start="11.661"
+        data-duration="1.4"
+        data-track-index="25"
+        data-volume="0.6"
+      ></audio>
+      <audio
+        id="el-sfx-6"
+        src="assets/sfx/marker-squeak.mp3"
+        data-start="14.711"
+        data-duration="0.6"
+        data-track-index="26"
+        data-volume="0.28"
+      ></audio>
+      <audio
+        id="el-sfx-7"
+        src="assets/sfx/marker-squeak.mp3"
+        data-start="15.731"
+        data-duration="0.5"
+        data-track-index="27"
+        data-volume="0.25"
+      ></audio>
+      <audio
+        id="el-sfx-8"
+        src="assets/sfx/marker-squeak.mp3"
+        data-start="24.251"
+        data-duration="0.6"
+        data-track-index="28"
+        data-volume="0.28"
+      ></audio>
+      <audio
+        id="el-sfx-9"
+        src="assets/sfx/pop.mp3"
+        data-start="25.281"
+        data-duration="0.31"
+        data-track-index="29"
+        data-volume="0.32"
+      ></audio>
+      <audio
+        id="el-sfx-10"
+        src="assets/sfx/pop.mp3"
+        data-start="26.181"
+        data-duration="0.31"
+        data-track-index="30"
+        data-volume="0.32"
+      ></audio>
+      <audio
+        id="el-sfx-11"
+        src="assets/sfx/pop.mp3"
+        data-start="27.131"
+        data-duration="0.31"
+        data-track-index="31"
+        data-volume="0.32"
+      ></audio>
+      <audio
+        id="el-sfx-12"
+        src="assets/sfx/rubber-stamp.mp3"
+        data-start="29.783"
+        data-duration="0.94"
+        data-track-index="32"
+        data-volume="0.45"
+      ></audio>
+      <audio
+        id="el-sfx-13"
+        src="assets/sfx/barcode-scanner-beep.mp3"
+        data-start="32.963"
+        data-duration="0.6"
+        data-track-index="33"
+        data-volume="0.3"
+      ></audio>
+      <audio
+        id="el-sfx-14"
+        src="assets/sfx/marker-squeak.mp3"
+        data-start="36.483"
+        data-duration="0.7"
+        data-track-index="34"
+        data-volume="0.28"
+      ></audio>
+      <audio
+        id="el-sfx-15"
+        src="assets/sfx/whoosh.mp3"
+        data-start="43.293"
+        data-duration="0.9"
+        data-track-index="35"
+        data-volume="0.28"
+      ></audio>
+      <audio
+        id="el-sfx-16"
+        src="assets/sfx/heavy-impact.mp3"
+        data-start="44.233"
+        data-duration="0.9"
+        data-track-index="36"
+        data-volume="0.3"
+      ></audio>
+      <audio
+        id="el-sfx-17"
+        src="assets/sfx/marker-squeak.mp3"
+        data-start="49.281"
+        data-duration="0.6"
+        data-track-index="37"
+        data-volume="0.3"
+      ></audio>
+      <audio
+        id="el-sfx-18"
+        src="assets/sfx/stamp-thud.mp3"
+        data-start="51.681"
+        data-duration="0.8"
+        data-track-index="38"
+        data-volume="0.42"
+      ></audio>
+      <audio
+        id="el-sfx-19"
+        src="assets/sfx/marker-squeak.mp3"
+        data-start="55.921"
+        data-duration="0.5"
+        data-track-index="39"
+        data-volume="0.3"
+      ></audio>
+      <audio
+        id="el-sfx-20"
+        src="assets/sfx/chime.mp3"
+        data-start="56.738"
+        data-duration="2"
+        data-track-index="40"
+        data-volume="0.35"
+      ></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

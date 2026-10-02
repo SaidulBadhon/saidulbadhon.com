@@ -1,0 +1,14 @@
+{
+  "HOST": {
+    "provider": "gemini",
+    "name": "Fenrir (Excitable, male)",
+    "voice_id": "Fenrir",
+    "style": "A Bangladeshi late-night TV infomercial host speaking everyday Bangladeshi Bangla: loud, grinning, fast and over the top, every sentence an exclamation, selling something that is obviously a mess as if it were amazing. Pronounce English names (AI, OpenAI, Big Tech) in English."
+  },
+  "CHECKER": {
+    "provider": "gemini",
+    "name": "Kore (Firm, female)",
+    "voice_id": "Kore",
+    "style": "A dry, deadpan, unimpressed fact-checker speaking everyday Bangladeshi Bangla: calm, unhurried, slightly sarcastic, clear pauses at the end of each sentence. Pronounce English names (OpenAI, Anthropic, DevDay, GPT-6.1 Sol, GPT-6.1 Astra, Pro, Hugging Face, RubyGems, Medicare, Mythos, open source) in English, and English quotes like \"checking that now\" in English."
+  }
+}

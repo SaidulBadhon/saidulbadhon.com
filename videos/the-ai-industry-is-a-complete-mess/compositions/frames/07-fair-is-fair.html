@@ -1,0 +1,636 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Permanent Marker"; src: url("assets/fonts/permanent-marker-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Noto Sans Bengali"; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "Atma"; src: url("assets/fonts/atma-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #000000;
+    }
+
+    /* ---------- layers (each a full-duration clip) ---------- */
+    #f07-ground,
+    #f07-chrome,
+    #f07-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      box-sizing: border-box;
+    }
+    #f07-ground *,
+    #f07-chrome *,
+    #f07-content * {
+      box-sizing: border-box;
+    }
+
+    /* ---------- paused-tape stage ---------- */
+    #f07-ground {
+      background-color: #1B1B1F;
+      overflow: hidden;
+    }
+    .f07-scanlines {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+    .f07-ghost {
+      position: absolute;
+      opacity: 0.08;
+    }
+    #f07-ghost-star {
+      left: 1560px;
+      top: 516px;
+      width: 360px;
+      height: 360px;
+      transform: rotate(12deg);
+      overflow: visible;
+    }
+    #f07-ghost-star polygon {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 6;
+      stroke-linejoin: miter;
+    }
+    #f07-ghost-stripe {
+      left: 1612px;
+      top: 742px;
+      width: 380px;
+      height: 112px;
+      transform: rotate(-9deg);
+      border: 0.3cqw solid #FFFFFF;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #FFFFFF 0px,
+        #FFFFFF 14px,
+        transparent 14px,
+        transparent 28px
+      );
+    }
+
+    /* ---------- static chrome: PAUSE OSD + FACT CHECK pill ---------- */
+    #f07-osd {
+      position: absolute;
+      left: 60px;
+      top: 50px;
+      display: flex;
+      align-items: center;
+      gap: 0.75cqw;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 1.7cqw;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-shadow: 3px 3px 0 #000000;
+    }
+    .f07-pause-icon {
+      display: flex;
+      gap: 0.3cqw;
+    }
+    .f07-pause-icon i {
+      display: block;
+      width: 0.45cqw;
+      height: 1.35cqw;
+      background-color: #FFFFFF;
+      box-shadow: 3px 3px 0 #000000;
+    }
+    .f07-osd-sp {
+      margin-left: 1.1cqw;
+      font-size: 1.05cqw;
+      letter-spacing: 0.1em;
+    }
+    #f07-factcheck {
+      position: absolute;
+      right: 60px;
+      top: 46px;
+      background-color: #FFFFFF;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      border-radius: 9999px;
+      padding: 0.4cqw 1.3cqw;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 1.2cqw;
+      line-height: 1.25;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #000000;
+    }
+
+    /* ---------- three white cards (frame 6 layout) — x 6-33 / 36-64 / 67-94%, y 24-78% ---------- */
+    .f07-card {
+      position: absolute;
+      top: 259px;
+      height: 583px;
+      background-color: #FFFFFF;
+      border: 0.4cqw solid #000000;
+      box-shadow: 0.8cqw 0.8cqw 0 #000000;
+      transform-origin: 50% 50%;
+    }
+    #f07-card1 { left: 115px; width: 518px; }
+    #f07-card2 { left: 691px; width: 538px; }
+    #f07-card3 { left: 1286px; width: 518px; }
+
+    .f07-icon {
+      position: absolute;
+      left: 27px;
+      right: 27px;
+      top: 24px;
+      height: 250px;
+      border: 0.3cqw solid #000000;
+      background-color: #FFFFFF;
+      overflow: hidden;
+    }
+    .f07-icon svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .f07-ctitle {
+      position: absolute;
+      left: 27px;
+      right: 27px;
+      top: 290px;
+      height: 56px;
+      text-align: center;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 44px;
+      line-height: 56px;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    /* graded-number slot (dashed until the number lands) */
+    .f07-slot {
+      position: absolute;
+      left: 27px;
+      right: 27px;
+      top: 356px;
+      height: 118px;
+      border: 3px dashed rgba(0, 0, 0, 0.3);
+    }
+    .f07-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+    }
+    .f07-wheel {
+      display: flex;
+      justify-content: center;
+      height: 112px;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 92px;
+      line-height: 112px;
+      letter-spacing: 0;
+      color: #000000;
+    }
+    .f07-col {
+      height: 112px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .f07-d {
+      height: 112px;
+      line-height: 112px;
+    }
+    .f07-ch {
+      height: 112px;
+      line-height: 112px;
+    }
+
+    .f07-label {
+      position: absolute;
+      left: 27px;
+      right: 27px;
+      top: 490px;
+      height: 46px;
+      text-align: center;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 46px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* focus-shift scrim (dims a card once graded) — sits under chips */
+    .f07-scrim {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #1B1B1F;
+      opacity: 0;
+    }
+
+    /* label-pill chips on the card's top edge */
+    .f07-chip {
+      position: absolute;
+      left: 26px;
+      top: -34px;
+      border: 0.3cqw solid #000000;
+      box-shadow: 0.4cqw 0.4cqw 0 #000000;
+      border-radius: 9999px;
+      padding: 0.4cqw 1.3cqw;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 1.2cqw;
+      line-height: 1.25;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transform-origin: 0% 50%;
+    }
+    #f07-chip1 { background-color: #F7CB46; }
+    #f07-chip2 { background-color: #C0F7FE; }
+
+    /* ---------- red marker ink (stroke only) ---------- */
+    #f07-ink {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: visible;
+    }
+    .f07-ink {
+      fill: none;
+      stroke: #E5322D;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .f07-ink--tick { stroke-width: 12; }
+    .f07-ink--q { stroke-width: 20; }
+    .f07-ink--dot { stroke-width: 34; }
+
+    .f07-tilt {
+      position: absolute;
+    }
+    #f07-tilt-true { left: 590px; top: 118px; transform: rotate(-5deg); }
+    #f07-tilt-story { left: 1318px; top: 112px; transform: rotate(-4deg); }
+    .f07-hand {
+      width: fit-content;
+      font-family: "Permanent Marker", "Atma", cursive;
+      font-weight: 600;
+      font-synthesis: none;
+      color: #E5322D;
+      line-height: 1.25;
+      letter-spacing: 0;
+      white-space: nowrap;
+      font-size: 3.5cqw;
+    }
+  </style>
+
+  <div id="root" data-composition-id="07-fair-is-fair" data-start="0" data-duration="18.23" data-width="1920" data-height="1080">
+    <!-- Track 0: paused-tape ground (freeze + scanlines + ghost echo of the infomercial) -->
+    <div id="f07-ground" class="clip" data-start="0" data-duration="18.23" data-track-index="0">
+      <div class="f07-scanlines"></div>
+      <svg id="f07-ghost-star" class="f07-ghost" data-layout-ignore viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="180,10 217.7,64 280,42.5 278.7,108.3 341.7,127.5 302,180 341.7,232.5 278.7,251.7 280,317.5 217.7,296 180,350 142.3,296 80,317.5 81.3,251.7 18.3,232.5 58,180 18.3,127.5 81.3,108.3 80,42.5 142.3,64" />
+      </svg>
+      <div id="f07-ghost-stripe" class="f07-ghost" data-layout-ignore></div>
+    </div>
+
+    <!-- Track 1: static stage chrome -->
+    <div id="f07-chrome" class="clip" data-start="0" data-duration="18.23" data-track-index="1">
+      <div id="f07-osd">
+        <span class="f07-pause-icon"><i></i><i></i></span>
+        <span>PAUSE</span>
+        <span class="f07-osd-sp">SP</span>
+      </div>
+      <div id="f07-factcheck">ফ্যাক্ট চেক</div>
+    </div>
+
+    <!-- Track 2: the three graded cards + red marker ink -->
+    <div id="f07-content" class="clip" data-start="0" data-duration="18.23" data-track-index="2">
+
+      <!-- ============ CARD 1 — bug-finding AI ============ -->
+      <div class="f07-card" id="f07-card1">
+        <div class="f07-icon" id="f07-icon1">
+          <!-- ICON 1 (self-contained, viewBox 460x424): black-outlined bug, six legs, viewfinder brackets -->
+          <svg viewBox="0 0 460 424" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g id="f07-bug">
+              <path d="M196 176 L132 132 L98 150" fill="none" stroke="#000000" stroke-width="12" stroke-linejoin="miter" />
+              <path d="M188 222 L110 222" fill="none" stroke="#000000" stroke-width="12" />
+              <path d="M196 268 L132 312 L98 294" fill="none" stroke="#000000" stroke-width="12" stroke-linejoin="miter" />
+              <path d="M264 176 L328 132 L362 150" fill="none" stroke="#000000" stroke-width="12" stroke-linejoin="miter" />
+              <path d="M272 222 L350 222" fill="none" stroke="#000000" stroke-width="12" />
+              <path d="M264 268 L328 312 L362 294" fill="none" stroke="#000000" stroke-width="12" stroke-linejoin="miter" />
+              <!-- antennae -->
+              <path d="M214 100 L190 60" fill="none" stroke="#000000" stroke-width="8" />
+              <path d="M246 100 L270 60" fill="none" stroke="#000000" stroke-width="8" />
+              <rect x="180" y="48" width="16" height="16" fill="#000000" />
+              <rect x="264" y="48" width="16" height="16" fill="#000000" />
+              <!-- body -->
+              <ellipse cx="230" cy="226" rx="64" ry="92" fill="#FFFFFF" stroke="#000000" stroke-width="8" />
+              <path d="M230 140 V316" fill="none" stroke="#000000" stroke-width="8" />
+              <rect x="194" y="190" width="20" height="20" fill="#000000" />
+              <rect x="246" y="190" width="20" height="20" fill="#000000" />
+              <rect x="198" y="250" width="20" height="20" fill="#000000" />
+              <rect x="242" y="250" width="20" height="20" fill="#000000" />
+              <!-- head -->
+              <ellipse cx="230" cy="128" rx="44" ry="36" fill="#000000" />
+              <rect x="205" y="116" width="12" height="12" fill="#FFFFFF" />
+              <rect x="243" y="116" width="12" height="12" fill="#FFFFFF" />
+            </g>
+            <g id="f07-brackets">
+              <path d="M64 108 V44 H128" fill="none" stroke="#000000" stroke-width="10" stroke-linejoin="miter" />
+              <path d="M332 44 H396 V108" fill="none" stroke="#000000" stroke-width="10" stroke-linejoin="miter" />
+              <path d="M64 320 V384 H128" fill="none" stroke="#000000" stroke-width="10" stroke-linejoin="miter" />
+              <path d="M332 384 H396 V320" fill="none" stroke="#000000" stroke-width="10" stroke-linejoin="miter" />
+            </g>
+          </svg>
+        </div>
+        <div class="f07-ctitle" id="f07-t1">বাগ খোঁজা AI</div>
+        <div class="f07-slot" id="f07-slot1">
+          <div class="f07-num" id="f07-num1">
+            <div class="f07-wheel" id="f07-wheel1">
+              <div class="f07-col" data-d="1" data-w="1"></div>
+              <div class="f07-col" data-d="0" data-w="1"></div>
+              <div class="f07-ch">,</div>
+              <div class="f07-col" data-d="0" data-w="1"></div>
+              <div class="f07-col" data-d="0" data-w="1"></div>
+              <div class="f07-col" data-d="0" data-w="1"></div>
+              <div class="f07-ch" id="f07-plus">+</div>
+            </div>
+          </div>
+        </div>
+        <div class="f07-label" id="f07-label1">সিরিয়াস বাগ · 1 মাসে</div>
+        <div class="f07-scrim" id="f07-scrim1"></div>
+        <div class="f07-chip" id="f07-chip1" data-layout-allow-overlap>Claude Mythos</div>
+      </div>
+
+      <!-- ============ CARD 2 — rocket revenue ============ -->
+      <div class="f07-card" id="f07-card2">
+        <div class="f07-icon" id="f07-icon2">
+          <!-- ICON 2 (self-contained, viewBox 460x424): steep black-outlined up-arrow with flame lines -->
+          <svg viewBox="0 0 460 424" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g transform="translate(222 190) rotate(16)">
+              <g id="f07-arrow">
+                <g id="f07-flame">
+                  <path d="M-34 90 L-34 138 L-22 124 L-14 170 L-2 132 L6 198 L16 136 L26 166 L34 128 L34 90 Z" fill="#FFFFFF" stroke="#000000" stroke-width="8" stroke-linejoin="miter" />
+                  <path d="M-62 120 V170" fill="none" stroke="#000000" stroke-width="8" />
+                  <path d="M62 112 V160" fill="none" stroke="#000000" stroke-width="8" />
+                  <path d="M-84 98 V132" fill="none" stroke="#000000" stroke-width="8" />
+                  <path d="M84 92 V124" fill="none" stroke="#000000" stroke-width="8" />
+                </g>
+                <polygon points="0,-150 88,-50 34,-50 34,90 -34,90 -34,-50 -88,-50" fill="#FFFFFF" stroke="#000000" stroke-width="10" stroke-linejoin="miter" />
+                <text x="0" y="44" text-anchor="middle" font-family="Inter" font-weight="900" font-size="56" fill="#000000">$</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="f07-ctitle" id="f07-t2">রকেট রেভিনিউ</div>
+        <div class="f07-slot" id="f07-slot2">
+          <div class="f07-num" id="f07-num2">
+            <div class="f07-wheel" id="f07-wheel2">
+              <div class="f07-ch">$</div>
+              <div class="f07-col" data-d="6" data-w="2"></div>
+              <div class="f07-col" data-d="5" data-w="2"></div>
+              <div class="f07-ch" id="f07-bee">B</div>
+            </div>
+          </div>
+        </div>
+        <div class="f07-label" id="f07-label2">রেভিনিউ রেট / বছর</div>
+        <div class="f07-scrim" id="f07-scrim2"></div>
+        <div class="f07-chip" id="f07-chip2" data-layout-allow-overlap>Anthropic</div>
+      </div>
+
+      <!-- ============ CARD 3 — the self-driving agent (focal, ungraded) ============ -->
+      <div class="f07-card" id="f07-card3">
+        <div class="f07-icon" id="f07-icon3">
+          <!-- ICON 3 (self-contained, viewBox 460x424): square robot head, antenna, two square eyes -->
+          <svg viewBox="0 0 460 424" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g id="f07-robot">
+              <rect x="88" y="200" width="22" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="8" />
+              <rect x="350" y="200" width="22" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="8" />
+              <rect x="170" y="340" width="120" height="28" fill="#000000" />
+              <rect x="110" y="130" width="240" height="210" fill="#FFFFFF" stroke="#000000" stroke-width="10" />
+            </g>
+            <g id="f07-antenna">
+              <path d="M230 130 V76" fill="none" stroke="#000000" stroke-width="10" />
+              <rect x="210" y="38" width="40" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="8" />
+            </g>
+            <g id="f07-eyeL">
+              <rect x="160" y="188" width="52" height="52" fill="#000000" />
+              <rect x="170" y="198" width="14" height="14" fill="#FFFFFF" />
+            </g>
+            <g id="f07-eyeR">
+              <rect x="248" y="188" width="52" height="52" fill="#000000" />
+              <rect x="258" y="198" width="14" height="14" fill="#FFFFFF" />
+            </g>
+            <g id="f07-mouth">
+              <rect x="160" y="278" width="140" height="34" fill="#FFFFFF" stroke="#000000" stroke-width="8" />
+              <path d="M195 278 V312 M230 278 V312 M265 278 V312" fill="none" stroke="#000000" stroke-width="6" />
+            </g>
+          </svg>
+        </div>
+        <div class="f07-ctitle" id="f07-t3">নিজে চলা এজেন্ট</div>
+        <div class="f07-slot" id="f07-slot3"></div>
+      </div>
+
+      <!-- handwritten notes (red marker voice) -->
+      <div class="f07-tilt" id="f07-tilt-true" data-layout-allow-overlap>
+        <div class="f07-hand" id="f07-note-true">সত্যি</div>
+      </div>
+      <div class="f07-tilt" id="f07-tilt-story" data-layout-allow-overlap>
+        <div class="f07-hand" id="f07-note-story">আসল গল্প</div>
+      </div>
+
+      <!-- red marker ink layer: bracket, ticks, big "?", circle, arrow (strokes only) -->
+      <svg id="f07-ink" data-layout-ignore viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+        <!-- bracket under cards 1-2 -->
+        <path id="f07-bracket" class="f07-ink" d="M 124 870 C 122 886, 136 887, 172 887 L 560 888 L 1178 886 C 1214 886, 1230 885, 1228 870" />
+        <!-- ticks on card corners -->
+        <path id="f07-tick1" class="f07-ink f07-ink--tick" d="M 548 284 C 558 294, 572 312, 586 336 C 606 296, 630 262, 662 238" />
+        <path id="f07-tick2" class="f07-ink f07-ink--tick" d="M 1144 284 C 1154 294, 1168 312, 1182 336 C 1202 296, 1226 262, 1258 238" />
+        <!-- big "?" across card 3 -->
+        <path id="f07-q" class="f07-ink f07-ink--q" d="M 1428 440 C 1418 360, 1470 318, 1545 318 C 1630 318, 1675 372, 1668 440 C 1662 510, 1590 530, 1560 580 C 1545 606, 1548 640, 1548 668" />
+        <path id="f07-q-dot" class="f07-ink f07-ink--dot" d="M 1548 750 L 1549 758" />
+        <!-- loop around card 3 -->
+        <path id="f07-circle" class="f07-ink" d="M 1700 232 C 1600 218, 1440 218, 1346 230 C 1290 238, 1258 275, 1258 340 L 1260 770 C 1262 838, 1292 874, 1352 880 C 1470 890, 1660 890, 1772 880 C 1830 874, 1855 838, 1853 770 L 1851 345 C 1849 280, 1815 238, 1752 228 C 1712 221, 1672 224, 1632 244" />
+        <!-- arrow after "আসল গল্প" -->
+        <path id="f07-arrow-shaft" class="f07-ink" d="M 1600 162 C 1650 140, 1730 150, 1752 204" />
+        <path id="f07-arrow-head" class="f07-ink" d="M 1721 185 L 1752 204 L 1759 169" />
+      </svg>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var COMP_ID = "07-fair-is-fair";
+      var DURATION = 17.73;
+      var ROW = 112;
+      var tl = gsap.timeline({ paused: true });
+      var byId = function (id) { return document.getElementById(id); };
+
+      // ---- build the digit strips (two 0-9 runs so every digit spins past at least once) ----
+      var cols = Array.prototype.slice.call(document.querySelectorAll("#f07-content .f07-col"));
+      var strips = cols.map(function (col) {
+        var strip = document.createElement("div");
+        strip.className = "f07-strip";
+        for (var i = 0; i < 20; i++) {
+          var d = document.createElement("div");
+          d.className = "f07-d";
+          d.textContent = String(i % 10);
+          strip.appendChild(d);
+        }
+        col.appendChild(strip);
+        return strip;
+      });
+
+      // svg-path-draw: measured length; gap > length so round caps never leak a dot at t=0.
+      function draw(id, at, dur, fallback, ease) {
+        var path = byId(id);
+        var len = 0;
+        try { len = path.getTotalLength(); } catch (e) { len = 0; }
+        if (!len || !isFinite(len)) len = fallback;
+        path.style.strokeDasharray = len + " " + (len + 24);
+        tl.fromTo(
+          path,
+          { strokeDashoffset: len + 12 },
+          { strokeDashoffset: 0, duration: dur, ease: ease || "power2.out" },
+          at
+        );
+      }
+
+      // marker handwriting / label wipe, left -> right
+      function write(id, at, dur) {
+        tl.fromTo(
+          byId(id),
+          { clipPath: "inset(-40% 106% -40% -6%)" },
+          { clipPath: "inset(-40% -6% -40% -6%)", duration: dur, ease: "power1.inOut" },
+          at
+        );
+      }
+
+      // number-wheel: each column rolls past to its digit, left -> right stagger
+      function roll(wheelCols, start, stagger, dur, ease, lastEnd) {
+        wheelCols.forEach(function (strip, i) {
+          var d = parseInt(strip.parentNode.getAttribute("data-d"), 10);
+          var t0 = start + i * stagger;
+          var len = lastEnd ? lastEnd - t0 : dur;
+          tl.fromTo(strip, { y: 0 }, { y: -(10 + d) * ROW, duration: len, ease: ease }, t0);
+        });
+      }
+
+      // chip pop (label-pill spring)
+      function chipPop(id, at) {
+        tl.fromTo(
+          byId(id),
+          { scale: 0, rotation: -14, opacity: 0 },
+          { scale: 1, rotation: -3, opacity: 1, duration: 0.45, ease: "back.out(1.8)" },
+          at
+        );
+      }
+
+      var card1 = byId("f07-card1");
+      var card2 = byId("f07-card2");
+      var card3 = byId("f07-card3");
+
+      // ---- Scene 1 (0.0-3.1): the three white cards fade-slide up together at 0.2s ----
+      tl.fromTo(card1, { y: 70, rotation: -1, opacity: 0 }, { y: 0, rotation: -1, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.2);
+      tl.fromTo(card2, { y: 70, rotation: 1, opacity: 0 }, { y: 0, rotation: 1, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.2);
+      tl.fromTo(card3, { y: 70, rotation: -1, opacity: 0 }, { y: 0, rotation: -1, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.2);
+
+      // "প্রথম" (1.00): red bracket under cards 1-2
+      draw("f07-bracket", 1.0, 0.6, 1200, "power2.out");
+      // "সত্যি" jotted above them
+      write("f07-note-true", 2.15, 0.45);
+
+      // ---- Scene 2 (3.1-8.2): card 1 — Mythos / 10,000+ / label / tick ----
+      // focus lift on card 1
+      tl.fromTo(card1, { scale: 1, y: 0 }, { scale: 1.02, y: -8, duration: 0.4, ease: "power3.out", immediateRender: false }, 4.0);
+      chipPop("f07-chip1", 4.12);
+
+      // "দশ" (5.13): "10,000+" rolls in under the icon
+      tl.to(byId("f07-slot1"), { borderColor: "rgba(0,0,0,0)", duration: 0.25, ease: "power1.out" }, 5.1);
+      tl.fromTo(byId("f07-wheel1"), { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 5.13);
+      roll(strips.slice(0, 5), 5.13, 0.07, 0.95, "power3.out");
+      tl.fromTo(byId("f07-plus"), { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out" }, 6.1);
+      tl.fromTo(byId("f07-num1"), { scale: 1.07 }, { scale: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 6.3);
+
+      // "সিরিয়াস" (6.31): label
+      write("f07-label1", 6.31, 0.45);
+      // "পেয়েছে।" (7.24): red tick on the card corner
+      draw("f07-tick1", 7.24, 0.34, 210, "power2.out");
+
+      // ---- Scene 3 (8.2-13.3): card 2 — Anthropic / $65B / label / tick ----
+      // focus moves: card 1 settles + dims a touch, card 2 lifts
+      tl.fromTo(card1, { scale: 1.02, y: -8 }, { scale: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, 8.2);
+      tl.fromTo(byId("f07-scrim1"), { opacity: 0 }, { opacity: 0.2, duration: 0.35, ease: "power1.out", immediateRender: false }, 8.2);
+      tl.fromTo(card2, { scale: 1, y: 0 }, { scale: 1.02, y: -8, duration: 0.4, ease: "power3.out", immediateRender: false }, 8.25);
+
+      // "রেভিনিউ" (9.32): chip
+      chipPop("f07-chip2", 9.32);
+
+      // "পঁয়ষট্টি" (10.65): "$65B" rolls in, landing on "ডলার।" (12.56)
+      tl.to(byId("f07-slot2"), { borderColor: "rgba(0,0,0,0)", duration: 0.25, ease: "power1.out" }, 10.62);
+      tl.fromTo(byId("f07-wheel2"), { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 10.65);
+      roll(strips.slice(5, 7), 10.65, 0.1, 0, "power2.out", 12.56);
+      tl.fromTo(byId("f07-bee"), { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 12.2);
+      tl.fromTo(byId("f07-num2"), { scale: 1.07 }, { scale: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 12.5);
+
+      // label + tick land on "ডলার।" (12.56)
+      write("f07-label2", 12.46, 0.45);
+      draw("f07-tick2", 12.56, 0.34, 210, "power2.out");
+
+      // ---- Scene 4 (13.3-17.73): the turn to card 3 ----
+      // concession over: cards 1-2 dim, card 3 lifts and its empty slot goes solid
+      tl.fromTo(byId("f07-scrim1"), { opacity: 0.2 }, { opacity: 0.55, duration: 0.5, ease: "power2.out", immediateRender: false }, 13.4);
+      tl.fromTo(byId("f07-scrim2"), { opacity: 0 }, { opacity: 0.55, duration: 0.5, ease: "power2.out", immediateRender: false }, 13.4);
+      tl.fromTo(card2, { scale: 1.02, y: -8 }, { scale: 1, y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, 13.4);
+      tl.fromTo(card3, { scale: 1, y: 0 }, { scale: 1.03, y: -8, duration: 0.5, ease: "power3.out", immediateRender: false }, 13.4);
+      tl.to(byId("f07-slot3"), { borderColor: "rgba(0,0,0,1)", duration: 0.4, ease: "power1.out" }, 14.3);
+
+      // "এজেন্ট?" (15.53): the red marker writes a big "?" across card 3
+      draw("f07-q", 15.53, 0.62, 760, "power1.inOut");
+      draw("f07-q-dot", 16.2, 0.1, 10, "power2.out");
+      // marker lands: card 3 takes one finite hit
+      tl.to(card3, { x: 6, duration: 0.05, ease: "power1.out" }, 16.3);
+      tl.to(card3, { x: -5, duration: 0.07, ease: "power1.inOut" }, 16.35);
+      tl.to(card3, { x: 0, duration: 0.12, ease: "power2.out" }, 16.42);
+
+      // "সমস্যা।" (17.07): circle card 3, write "আসল গল্প →" above it
+      draw("f07-circle", 17.07, 0.38, 2500, "power2.out");
+      write("f07-note-story", 17.2, 0.38);
+      draw("f07-arrow-shaft", 17.5, 0.14, 150, "power2.out");
+      draw("f07-arrow-head", 17.61, 0.09, 70, "power2.out");
+
+      // hold to the frame's fixed length
+      tl.set({}, {}, DURATION);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[COMP_ID] = tl;
+    })();
+  </script>
+</template>

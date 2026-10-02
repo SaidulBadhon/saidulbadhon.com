@@ -1,0 +1,183 @@
+<!--
+  Series end card, 1080×1920 (vertical Short), 2.5s, silent: the channel sign-off.
+  The closing plate holds the channel lockup (the circled-asterisk mark + "শর্ত প্রযোজ্য"),
+  the byline "Shorto Projojjo · by Saidul Badhon", the call to action pill and the URL.
+  To use it: copy to compositions/frames/NN-end-card.html, replace {{ID}} with the frame id
+  (e.g. 06-end-card) and {{PILL}} with the pill text ("পুরো ভিডিও চ্যানেলে ▶" in Bangla Shorts).
+  Needs assets/fonts/: inter-800/900, space-grotesk-700, noto-sans-bengali-700/900.
+-->
+<template>
+  <style>
+    @font-face { font-family: "Inter"; font-weight: 800; font-display: block; src: url("assets/fonts/inter-800.woff2") format("woff2"); }
+    @font-face { font-family: "Inter"; font-weight: 900; font-display: block; src: url("assets/fonts/inter-900.woff2") format("woff2"); }
+    @font-face { font-family: "Space Grotesk"; font-weight: 700; font-display: block; src: url("assets/fonts/space-grotesk-700.woff2") format("woff2"); }
+    @font-face { font-family: "Noto Sans Bengali"; font-weight: 700; font-display: block; src: url("assets/fonts/noto-sans-bengali-700.woff2") format("woff2"); }
+    @font-face { font-family: "Noto Sans Bengali"; font-weight: 900; font-display: block; src: url("assets/fonts/noto-sans-bengali-900.woff2") format("woff2"); }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Inter", "Noto Sans Bengali", sans-serif;
+      color: #ffffff;
+    }
+    #ec-bg { position: absolute; inset: 0; background: #000000; }
+    #ec-stage { position: absolute; inset: 0; }
+
+    /* close-frame inside the Shorts safe zone (x 60–900, y 220–1500) */
+    #ec-plate { position: absolute; left: 80px; top: 430px; width: 820px; height: 960px; }
+    #ec-shadow { position: absolute; inset: 0; background: #f7cb46; }
+    #ec-frame {
+      position: absolute;
+      inset: 0;
+      box-sizing: border-box;
+      background: #000000;
+      border: 5px solid #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    /* the lockup: mark above the wordmark card */
+    #ec-lockup { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+    #ec-mark { width: 220px; height: 220px; flex: none; }
+    #ec-mark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    #ec-word {
+      background: #ffffff;
+      color: #000000;
+      border: 6px solid #000000;
+      box-shadow: 10px 10px 0 #fe90e8;
+      padding: 2px 34px 14px;
+      font-family: "Noto Sans Bengali", sans-serif;
+      font-weight: 900;
+      font-size: 104px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      white-space: nowrap;
+      transform: rotate(-2deg);
+    }
+    #ec-by {
+      margin-top: 40px;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.82);
+      white-space: nowrap;
+    }
+    #ec-by b { color: #f7cb46; font-weight: 700; }
+    #ec-rule { margin: 40px 0 38px; width: 110px; height: 4px; background: #ffffff; transform-origin: 50% 50%; }
+    #ec-pill {
+      display: inline-block;
+      padding: 6px 30px 10px;
+      background: #ffffff;
+      color: #000000;
+      border: 4px solid #000000;
+      border-radius: 9999px;
+      box-shadow: 6px 6px 0 #f7cb46;
+      font-family: "Space Grotesk", "Noto Sans Bengali", sans-serif;
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.35;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    #ec-url {
+      margin-top: 30px;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 62px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: #f7cb46;
+      white-space: nowrap;
+    }
+  </style>
+
+  <div id="root" data-composition-id="{{ID}}" data-width="1080" data-height="1920">
+    <div id="ec-bg" class="clip" data-start="0" data-duration="2.5" data-track-index="0"></div>
+
+    <div id="ec-stage">
+      <div id="ec-plate">
+        <div id="ec-shadow"></div>
+        <div id="ec-frame">
+          <div id="ec-lockup">
+            <div id="ec-mark" aria-hidden="true">
+              <svg viewBox="200 200 400 400" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#000000">
+                  <rect x="369" y="260" width="82" height="300" transform="rotate(0 410 410)" />
+                  <rect x="369" y="260" width="82" height="300" transform="rotate(60 410 410)" />
+                  <rect x="369" y="260" width="82" height="300" transform="rotate(120 410 410)" />
+                </g>
+                <g fill="#ffffff" stroke="#000000" stroke-width="10">
+                  <rect x="359" y="250" width="82" height="300" transform="rotate(0 400 400)" />
+                  <rect x="359" y="250" width="82" height="300" transform="rotate(60 400 400)" />
+                  <rect x="359" y="250" width="82" height="300" transform="rotate(120 400 400)" />
+                </g>
+                <g fill="#ffffff">
+                  <rect x="369" y="260" width="62" height="280" transform="rotate(0 400 400)" />
+                  <rect x="369" y="260" width="62" height="280" transform="rotate(60 400 400)" />
+                  <rect x="369" y="260" width="62" height="280" transform="rotate(120 400 400)" />
+                </g>
+                <path
+                  id="ec-loop"
+                  pathLength="1"
+                  d="M 392 214 C 528 206 600 300 590 404 C 580 516 476 590 382 584 C 270 578 200 498 206 396 C 212 290 300 220 420 226 C 470 229 512 246 540 270"
+                  fill="none"
+                  stroke="#e5322d"
+                  stroke-width="26"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-dasharray="1"
+                  transform="rotate(-8 400 400)"
+                />
+              </svg>
+            </div>
+            <div id="ec-word">শর্ত প্রযোজ্য</div>
+          </div>
+          <div id="ec-by">Shorto Projojjo · by <b>Saidul Badhon</b></div>
+          <div id="ec-rule"></div>
+          <div id="ec-pill">{{PILL}}</div>
+          <div id="ec-url">saidulbadhon.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const END = 2.5;
+
+      // the closing plate springs in, its yellow shadow slides out from behind it
+      tl.fromTo("#ec-plate", { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "power1.out" }, 0);
+      tl.fromTo("#ec-plate", { scale: 0.92 }, { scale: 1, duration: 0.5, ease: "power3.out" }, 0);
+      tl.fromTo("#ec-shadow", { x: 0, y: 0 }, { x: 12, y: 12, duration: 0.4, ease: "power3.out" }, 0.12);
+
+      // the lockup: mark pops, wordmark slams, the red marker circles the asterisk
+      tl.fromTo("#ec-mark", { scale: 0.4, rotation: -30, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.45, ease: "expo.out" }, 0.12);
+      tl.fromTo("#ec-word", { scale: 1.35, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "power4.out" }, 0.16);
+      tl.fromTo("#ec-loop", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.35, ease: "power1.inOut" }, 0.36);
+
+      // byline, rule, call to action, URL
+      tl.fromTo("#ec-by", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 0.5);
+      tl.fromTo("#ec-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, 0.62);
+      tl.fromTo("#ec-pill", { scale: 0.6, opacity: 0, rotation: -6 }, { scale: 1, opacity: 1, rotation: -2, duration: 0.38, ease: "power3.out" }, 0.72);
+      tl.fromTo("#ec-url", { scale: 1.5, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.42, ease: "power4.out" }, 0.86);
+
+      // hold, then the final fade to black
+      tl.fromTo("#ec-stage", { opacity: 1 }, { opacity: 0, duration: 0.4, ease: "power1.inOut" }, END - 0.4);
+
+      window.__timelines["{{ID}}"] = tl;
+    })();
+  </script>
+</template>
