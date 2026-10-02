@@ -79,14 +79,14 @@ a one-line source note, and a 2–4 bar chart of the post's key number (with a `
 story is a change). Look at the result (Read the .webp) before using it. Set `cover:` in the
 frontmatter and add the `<figure>` at the top.
 
-## Verify before check-in ①
+## Verify before the check-in
 
 - `npm run typecheck` passes, and `npx eslint actions components content context lib src` has no errors (lint the source folders: a bare `npm run lint` also walks stray local worktrees under `.claude/worktrees/`).
 - `npm run dev` → open `/blogs/<slug>`: the post renders, every chart renders, the cover shows.
   (Drafts show in dev; `draft: false` for the shipped post.)
 - Every number in the post appears in a source you can name.
 
-## Check-in ①
+## Check-in
 
 Post a short summary: title, description, the thesis, the section list, the charts, the cover
 (show it), and anything unverified. Ask: "Approve, or what changes?" Revise until approved.
@@ -94,7 +94,7 @@ Post a short summary: title, description, the thesis, the section list, the char
 ## Shipping (after approval)
 
 - Branch from `main`: `git checkout -b <slug>`; commit the `.mdx`, the chart file, the cover (and
-  any `globals.css` colour) — never the `videos/` folder — with a message in the repo's style
+  any `globals.css` colour) with a message in the repo's style
   ("Add the post on <subject>"), body explaining the angle; end with the attribution lines the
   harness provides.
 - `git push -u origin <slug>` and open a PR into `main` (`gh pr create`), title = commit subject.

@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getCover, getPosts } from "@/content/blogs";
 import { fiverrProjects } from "@/content/fiverr";
 import { projects, toImage } from "@/content/projects";
+import { channel, episodes } from "@/content/shorto-projojjo";
 import { absoluteUrl } from "@/lib/site";
 
 // Every page on the site, with its images so they can show up in image search.
@@ -25,6 +26,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: absoluteUrl("/fiverr"),
       images: fiverrProjects.map((project) => absoluteUrl(project.images[0].image.src)),
+    },
+    {
+      url: absoluteUrl("/shortoprojojjo"),
+      images: [channel.cover, ...episodes.map((episode) => episode.thumbnail)].map((image) =>
+        absoluteUrl(image.src)
+      ),
     },
   ];
 }
