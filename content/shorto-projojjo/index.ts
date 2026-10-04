@@ -22,6 +22,15 @@ export const channel = {
   cover,
 };
 
+/** The app that uploads the episodes to the channel's YouTube channel and Facebook Page.
+ *  Its privacy policy is the URL given to Google and Meta when registering the app, so
+ *  keep the path stable, and move `updated` whenever the policy text changes. */
+export const publisher = {
+  name: "Shorto Projojjo Media",
+  privacyPolicy: "/shortoprojojjo/media/privacy-policy",
+  updated: "2026-10-04",
+};
+
 /** How every episode is built, with a still from a real one. */
 export const format: { title: string; body: string; image: StaticImageData; alt: string }[] = [
   {
