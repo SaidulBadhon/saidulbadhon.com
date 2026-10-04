@@ -29,6 +29,10 @@ const pad = (n: number) => String(n).padStart(2, "0");
 /** The channel's yellow and pink, as a Tailwind gradient. */
 const GRADIENT = "from-yellow-400 to-pink-500";
 
+/** The links to the upload app's privacy policy and terms, under the closing call to action. */
+const FINE_PRINT_LINK =
+  "font-medium text-gray-700 underline underline-offset-4 transition hover:text-gray-950 dark:text-slate-300 dark:hover:text-white";
+
 /** An episode, with the title and date of the post it was made from. */
 export type EpisodeCard = {
   post: string;
@@ -361,11 +365,12 @@ export default function ShortoProjojjoPage({
           <p className="mt-6 text-center text-sm text-gray-500 dark:text-slate-400">
             Episodes are uploaded to YouTube and Facebook by {publisher.name}, the channel&rsquo;s own
             publishing app.{" "}
-            <Link
-              href={publisher.privacyPolicy}
-              className="font-medium text-gray-700 underline underline-offset-4 transition hover:text-gray-950 dark:text-slate-300 dark:hover:text-white"
-            >
+            <Link href={publisher.privacyPolicy.path} className={FINE_PRINT_LINK}>
               Privacy policy
+            </Link>
+            {" · "}
+            <Link href={publisher.terms.path} className={FINE_PRINT_LINK}>
+              Terms of service
             </Link>
           </p>
         </section>
