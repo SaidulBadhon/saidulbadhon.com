@@ -6,8 +6,8 @@ import { channel, episodes, publisher } from "@/content/shorto-projojjo";
 import { absoluteUrl } from "@/lib/site";
 
 // Every page on the site, with its images so they can show up in image search.
-// Only blog posts and the privacy policy have a reliable last-modified date, so
-// only they get one.
+// Only blog posts and the upload app's legal pages have a reliable last-modified
+// date, so only they get one.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getPosts();
   const covers = await Promise.all(posts.map(getCover));
@@ -34,6 +34,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         absoluteUrl(image.src)
       ),
     },
-    { url: absoluteUrl(publisher.privacyPolicy), lastModified: publisher.updated },
+    ...[publisher.privacyPolicy, publisher.terms].map((page) => ({
+      url: absoluteUrl(page.path),
+      lastModified: page.updated,
+    })),
   ];
 }
