@@ -213,6 +213,8 @@
      once here, so they follow the dark-mode model colours too. */
   --viz-openai: var(--viz-gpt-6-sol);
   --viz-anthropic: var(--viz-opus-5-5);
+  /* Jutsu, when a chart is about our own product. */
+  --viz-jutsu: var(--viz-sonnet-5-5);
   /* The previous generation, and other models when one is the point. */
   --viz-previous: #b6bcc6;
   --viz-context: #4b5563;
