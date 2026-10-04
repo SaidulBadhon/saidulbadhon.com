@@ -4,7 +4,7 @@ import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { MotionConfig, motion, type HTMLMotionProps } from "motion/react";
 import { FiArrowRight, FiArrowUpRight, FiBookOpen, FiFacebook, FiPlay, FiYoutube } from "react-icons/fi";
-import { channel, format } from "@/content/shorto-projojjo";
+import { channel, format, publisher } from "@/content/shorto-projojjo";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -358,6 +358,16 @@ export default function ShortoProjojjoPage({
               </Link>
             </div>
           </motion.div>
+          <p className="mt-6 text-center text-sm text-gray-500 dark:text-slate-400">
+            Episodes are uploaded to YouTube and Facebook by {publisher.name}, the channel&rsquo;s own
+            publishing app.{" "}
+            <Link
+              href={publisher.privacyPolicy}
+              className="font-medium text-gray-700 underline underline-offset-4 transition hover:text-gray-950 dark:text-slate-300 dark:hover:text-white"
+            >
+              Privacy policy
+            </Link>
+          </p>
         </section>
       </main>
     </MotionConfig>
