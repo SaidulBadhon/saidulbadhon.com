@@ -209,6 +209,11 @@
   --viz-opus-5-5: #eb6834;
   --viz-gpt-6-sol: #1baf7a;
   --viz-gpt-6-astra: #eda100;
+  /* The small models. Haiku 5.5 shares the accent's magenta, and Luna borrows
+     Astra's amber, so neither pair should meet in one chart; checked against
+     Sonnet 5.5 and each other in both modes. */
+  --viz-haiku-5-5: #e87ba4;
+  --viz-gpt-6-luna: var(--viz-gpt-6-astra);
   /* The companies, when a chart compares plans rather than models. Defined
      once here, so they follow the dark-mode model colours too. */
   --viz-openai: var(--viz-gpt-6-sol);
@@ -247,6 +252,7 @@
   --viz-opus-5-5: #d95926;
   --viz-gpt-6-sol: #199e70;
   --viz-gpt-6-astra: #c98500;
+  --viz-haiku-5-5: #d55181;
   --viz-previous: #6b7280;
   --viz-context: #a3abb8;
 
