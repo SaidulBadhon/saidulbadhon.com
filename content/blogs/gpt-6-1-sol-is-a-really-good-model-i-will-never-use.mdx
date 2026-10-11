@@ -69,7 +69,7 @@ Here's what you get, from [OpenAI's model page](https://developers.openai.com/ap
 | Where                    | API, Codex, ChatGPT Work. Not regular ChatGPT yet         |
 | Knowledge cutoff         | April 30, 2026                                            |
 
-Two things on that table are worth a second look. Cached input at **$0.10** is half what GPT-6 Sol charged, and half what Anthropic charges for a cache read on Sonnet 5.5 or Opus 5.5. For agent work, where the model re-reads the same codebase every turn, that's the price that matters most. I spent a good chunk of [my Sonnet 5.5 review](/blogs/claude-sonnet-5-5-review) complaining that Anthropic didn't cut Sonnet's cache price. OpenAI went and did it.
+Two things on that table are worth a second look. Cached input at **$0.10** is half what GPT-6 Sol charged, and half what Anthropic charges for a cache read on Sonnet 5.5 or Opus 5.5. For agent work, where the model re-reads the same codebase every turn, that's the price that matters most. I spent a good chunk of [my Sonnet 5.5 review](/blogs/claude-sonnet-5-5-review) complaining that Anthropic didn't cut Sonnet's cache price. OpenAI went and did it. (Anthropic has since followed: on October 7 it [halved Sonnet 5.5's cache-read price to $0.10](/blogs/claude-haiku-5-5-review) as well.)
 
 The other is the asterisk on that 1M context window. Go over 272K input tokens and the _whole request_ bills at double input and 1.5x output. A 500K-token prompt with a 20K answer costs $2.30, not the $1.20 the headline price suggests. A million tokens of context, some assembly required.
 

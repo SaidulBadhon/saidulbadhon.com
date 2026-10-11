@@ -46,7 +46,7 @@ The upgrades over Haiku 4.5 are bigger than usual for a small model:
 
 - **A 1M-token context window**, up from 200K, and up to 128K tokens of output, up from 64K.
 - **Effort settings**, from low to max. It's the first Haiku to have them. Thinking is on by default, and the default effort is medium.
-- **Price:** $0.10 / $0.50 per million tokens for prompts up to 100K, the same as OpenAI's GPT-6 Luna.
+- **Price:** $0.10 / $0.50 per million tokens for prompts up to 100K, the same as OpenAI's GPT-6 Luna, the smallest model in the GPT-6 family I covered in [my GPT-6.1 Sol post](/blogs/gpt-6-1-sol-is-a-really-good-model-i-will-never-use).
 
 [Anthropic pitches it](https://www.anthropic.com/claude-haiku-5-5) as "the cheapest, fastest, and most capable small model we've ever released." It's aimed at high-volume work: summaries, classification, database queries, compacting long conversations, and acting as a sub-agent that Opus or Sonnet hands smaller jobs to. Anthropic also suggests it for live customer support and browser automation, because it's the fastest model it has at standard speed.
 
@@ -125,9 +125,9 @@ It's fast, too. Artificial Analysis measured about 240 output tokens per second 
 
 ## The other good news: Anthropic fixed my Sonnet complaint
 
-In my Sonnet 5.5 review, my biggest criticism was that Anthropic cut cache-read prices on Opus 5.5 but not on Sonnet. Sonnet is the model people run inside long agent loops, which spend most of their money re-reading cached context.
+In [my Sonnet 5.5 review](/blogs/claude-sonnet-5-5-review), my biggest criticism was that Anthropic cut cache-read prices on Opus 5.5 but not on Sonnet. Sonnet is the model people run inside long agent loops, which spend most of their money re-reading cached context.
 
-In the same Haiku announcement, Anthropic **halved Sonnet 5.5's cache-read price, from $0.20 to $0.10 per million tokens.** That's 5% of the input price, the same ratio as Opus 5.5. Anthropic says it makes most agentic work on Sonnet about 20% cheaper.
+In the same Haiku announcement, Anthropic **halved Sonnet 5.5's cache-read price, from $0.20 to $0.10 per million tokens.** That's 5% of the input price, the same ratio as Opus 5.5, and level with the $0.10 cached input I [pointed out on GPT-6.1 Sol](/blogs/gpt-6-1-sol-is-a-really-good-model-i-will-never-use). Anthropic says it makes most agentic work on Sonnet about 20% cheaper.
 
 The independent numbers agree. When I reviewed Sonnet 5.5, Artificial Analysis had it at $0.59 a task at medium effort. It's now [$0.48](https://artificialanalysis.ai/models/claude-sonnet-5-5-medium), with the same score.
 
@@ -139,7 +139,7 @@ Sonnet 5.5 is now exactly half the price of Opus 5.5 on this task, which is what
 
 That's also why the 100K line matters so much. A loop that reads 2M cached tokens is, for example, 20 turns that each re-read about 100K tokens. That's right on Haiku's line. Which side of it you land on decides whether the task costs about 3% of the Opus price or about 15%.
 
-The chart assumes every model needs the same number of tokens to finish, which won't always be true. A smaller model may need more turns, or get the job wrong. Still, the gap is so wide that Haiku has a lot of room for error.
+The chart assumes every model needs the same number of tokens to finish, which won't always be true. A smaller model may need more turns, or get the job wrong. That's the [junior engineer problem](/blogs/fable-5-is-back-sonnet-5-is-here-and-ai-agents-still-need-real-guardrails) I wrote about when Sonnet 5 launched. Still, the gap is so wide that Haiku has a lot of room for error.
 
 ## Where it falls short
 
@@ -159,17 +159,19 @@ It's a strong release, but it isn't perfect:
 - **Keep every request under 100K tokens.** Compact long conversations, start sub-agents fresh, and log `usage.input_tokens` (plus cache reads) so you can see when a route goes over the line.
 - **Re-count your tokens when moving from Haiku 4.5.** The new tokenizer means the same prompts will count as more tokens.
 - **For hard coding and design work**, use Sonnet 5.5 or Opus 5.5.
-- **If you're on Max or Team**, Anthropic is adding monthly API credits: $100 on Max 5x, $200 on Max 20x, and up to $500 for a team. At Haiku's prices, $100 buys a billion input tokens.
+- **If you're on Max or Team**, Anthropic is adding monthly API credits: $100 on Max 5x, $200 on Max 20x, and up to $500 for a team. At Haiku's prices, $100 buys a billion input tokens. OpenAI went the other way at DevDay and [halved the usage on its $200 Pro plan](/blogs/chatgpt-pro-200-is-back-with-half-the-usage).
 
-<Callout title="Read my Sonnet 5.5 review">
-  This post builds on my review of Claude Sonnet 5.5, where I first wrote about the cache-pricing gap this launch closes, and why Sonnet wasn't my first pick for hard coding.
+<Callout title="More from this round of models">
+  This post builds on my review of Claude Sonnet 5.5, where I first wrote about the cache-pricing gap this launch closes, and why Sonnet wasn't my first pick for hard coding. For OpenAI's side of the same price war, my GPT-6.1 Sol post covers the mid-tier model above Luna.
 
 [Claude Sonnet 5.5 Review: Same Price, Far Less Waste →](/blogs/claude-sonnet-5-5-review)
+
+[GPT-6.1 Sol Is a Really Good Model That I'll Never Use →](/blogs/gpt-6-1-sol-is-a-really-good-model-i-will-never-use)
 </Callout>
 
 ## The lineup is complete
 
-In 15 days, Anthropic shipped Opus 5.5, Sonnet 5.5 and Haiku 5.5. Every 5.5 model is cheaper than the model it replaces, or costs the same, and Haiku got by far the biggest cut.
+In 15 days, Anthropic shipped Opus 5.5, Sonnet 5.5 and Haiku 5.5. Every 5.5 model is cheaper than the model it replaces, or costs the same, and Haiku got by far the biggest cut. That's great for anyone paying the bills. It's also a bold move from a company that, as I wrote in [my post on the state of the AI industry](/blogs/the-ai-industry-is-a-complete-mess), lost more than it made last year. I hope these prices hold.
 
 | Model      | Status                 | Input / output per 1M tokens | Cache read |
 | ---------- | ---------------------- | ---------------------------- | ---------- |
@@ -178,7 +180,7 @@ In 15 days, Anthropic shipped Opus 5.5, Sonnet 5.5 and Haiku 5.5. Every 5.5 mode
 | Sonnet 5.5 | Released September 28  | $2 / $10                     | $0.10      |
 | Haiku 5.5  | Released October 7     | $0.10 / $0.50 (up to 100K)   | $0.01      |
 
-That leaves Fable, Anthropic's top model, on 5.1. People online have been guessing about a Fable 5.5 for a while. As of today, Anthropic hasn't announced one, and its pricing page still lists Fable 5.1 as its top model. I'm excited to see what it does next. Opus, Sonnet and Haiku all got cheaper and better in this round, and it would be great to see Fable get the same treatment.
+That leaves [Fable](/blogs/fable-5-is-back-sonnet-5-is-here-and-ai-agents-still-need-real-guardrails), Anthropic's top model, on 5.1. People online have been guessing about a Fable 5.5 for a while. As of today, Anthropic hasn't announced one, and its pricing page still lists Fable 5.1 as its top model. I'm excited to see what it does next. Opus, Sonnet and Haiku all got cheaper and better in this round, and it would be great to see Fable get the same treatment.
 
 ## The verdict
 
