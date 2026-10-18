@@ -1,0 +1,423 @@
+---
+title: "How to Set Up SOC 2 and ISO 27001 in Jutsu: A Step-by-Step Guide"
+description: A screenshot-by-screenshot guide to Jutsu's Compliance module, from a brand-new workspace to audit-ready. Setup, policies, evidence, daily checks on your systems, your readiness score and the audit itself.
+date: 2026-10-18
+tags: [Compliance, SOC 2, Guide, Jutsu]
+draft: false
+cover: cover.webp
+---
+
+import Image from "next/image";
+import cover from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/cover.webp";
+import shot01Welcome from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/01-welcome.webp";
+import shot02Plan from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/02-plan.webp";
+import shot03ComplianceEmpty from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/03-compliance-empty.webp";
+import shot04Q1Frameworks from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/04-q1-frameworks.webp";
+import shot05Q2Description from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/05-q2-description.webp";
+import shot06Q5WorkLocation from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/06-q5-work-location.webp";
+import shot07Q7Signatory from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/07-q7-signatory.webp";
+import shot08Q9Hosting from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/08-q9-hosting.webp";
+import shot09Q10Software from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/09-q10-software.webp";
+import shot10Confirm from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/10-confirm.webp";
+import shot11AssignAndStart from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/11-assign-and-start.webp";
+import shot12SetupDone from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/12-setup-done.webp";
+import shot13Soc2Page from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/13-soc2-page.webp";
+import shot14RequirementCc61 from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/14-requirement-cc6-1.webp";
+import shot15ControlRequirements from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/15-control-requirements.webp";
+import shot16PoliciesList from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/16-policies-list.webp";
+import shot17PolicyBlanks from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/17-policy-blanks.webp";
+import shot18SendForApproval from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/18-send-for-approval.webp";
+import shot19PolicyInForce from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/19-policy-in-force.webp";
+import shot20PortalSign from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/20-portal-sign.webp";
+import shot21EvidenceTask from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/21-evidence-task.webp";
+import shot22EvidenceDone from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/22-evidence-done.webp";
+import shot23AccessReview from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/23-access-review.webp";
+import shot24PeopleInvite from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/24-people-invite.webp";
+import shot25RisksSuggested from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/25-risks-suggested.webp";
+import shot26RiskAiPlan from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/26-risk-ai-plan.webp";
+import shot27VendorsSuggested from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/27-vendors-suggested.webp";
+import shot28VendorAiCheck from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/28-vendor-ai-check.webp";
+import shot29Integrations from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/29-integrations.webp";
+import shot36ExampleCloudCheck from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/36-example-cloud-check.webp";
+import shot30ScoreMeasured from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/30-score-measured.webp";
+import shot31StartTimeline from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/31-start-timeline.webp";
+import shot32TimelinePhases from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/32-timeline-phases.webp";
+import shot33Auditors from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/33-auditors.webp";
+import shot34TrustCenter from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/34-trust-center.webp";
+import shot35Questionnaires from "./how-to-set-up-soc-2-and-iso-27001-in-jutsu/35-questionnaires.webp";
+
+<figure>
+  <Image
+    src={cover}
+    alt="The words SOC 2 and ISO 27001 in Jutsu, step by step, beside a bar chart of what 13 setup answers built: 141 controls, 86 recurring evidence tasks, 32 policy drafts and 25 company records"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>What 13 setup answers built for one company, for SOC 2 and ISO 27001 together.</figcaption>
+</figure>
+
+A customer asks for your SOC 2 report, you don't have one, and you need to know where to start. This guide walks through the whole thing in [Jutsu](https://jutsu.ai), one screen at a time: creating your workspace, answering setup, publishing policies, doing the recurring evidence work, connecting your systems, tracking your score and getting ready for the auditor.
+
+Full disclosure: I'm the lead engineer at Jutsu and helped build this module. Every screenshot below is from a real workspace, Jutsu Inc., that I set up from scratch for this guide. The one exception is marked as example data. If you'd rather watch than read, the same journey is in an [11 minute walkthrough video](https://www.youtube.com/watch?v=306cqZcS9D4).
+
+## Before you start
+
+You need three things:
+
+- **A Jutsu workspace on a paid plan.** Compliance comes with every paid plan, and every paid plan includes all 13 frameworks. The Free plan doesn't include it.
+- **Admin access.** Only an admin can run compliance setup.
+- **Time for 13 short questions.** Answers save as you go, so you can stop and come back later on any device.
+
+It helps to have a few facts ready: who runs the company and their titles, who will sign for the company at the audit, how your team signs in to work apps, where your product runs, and the main software your team uses.
+
+## Step 1: Create your workspace
+
+Sign up at jutsu.ai. On the first onboarding screen, pick **Prepare for compliance**. This tells Jutsu what you're here for.
+
+<figure>
+  <Image src={shot01Welcome} alt="Onboarding screen titled 'What do you want to accomplish first?' with four option cards: Improve our security posture, Prepare for compliance (selected, with a blue check and the text 'SOC 2, ISO 27001 and more, with evidence collected as you go.'), Pass security reviews, and See everything in one place." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Step 1: pick 'Prepare for compliance' on the welcome screen.</figcaption>
+</figure>
+
+Next, tell Jutsu about your company: its name, its domain, what it does and how big it is. Then choose where your data should live and pick a plan. Every paid plan includes all frameworks.
+
+<figure>
+  <Image src={shot02Plan} alt="The 'Choose the plan you want to start on' screen with a Free card (3 members, 5 assets) and paid plans Startup (Recommended, $1,490 / yr), Business ($4,990 / yr) and Enterprise (From $42,990 / yr), each paid plan listing 'All frameworks', with a Monthly / Yearly toggle." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Step 2: choose a plan. The paid plans include all frameworks.</figcaption>
+</figure>
+
+## Step 2: Open Compliance and start setup
+
+Compliance sits in the console's left sidebar, next to your security work, because it reads the same data. The first time you open it, there's one thing to do. Click **Set up compliance**.
+
+<figure>
+  <Image src={shot03ComplianceEmpty} alt="The Compliance overview before setup: a card with the headline 'You have not set up compliance yet.', the line 'Pick the frameworks your customers ask for. We draft your policies and plan the work.' and a blue 'Set up compliance' button." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Step 3: the empty Compliance overview. Press 'Set up compliance'.</figcaption>
+</figure>
+
+## Step 3: Answer the 13 setup questions
+
+Setup asks 13 questions, one per screen. Every answer changes what Jutsu builds, so here is what each one does. (Your company name and website come from the workspace, which is why there are 13 and not 15.)
+
+### Question 1: Which frameworks do you need?
+
+Pick the frameworks your customers ask for. For most startups that's SOC 2, often with ISO 27001. Jutsu sets each framework up the moment you continue: its requirements, its controls, its policy drafts and its recurring tasks. Nothing is published yet.
+
+The panel on the right keeps track of the program you're building. For SOC 2 plus ISO 27001, setup prepared 32 policy drafts, 86 recurring tasks and 25 company records.
+
+<figure>
+  <Image src={shot04Q1Frameworks} alt="Setup question 1 of 13, 'Which frameworks do you need?', with six framework cards (SOC 2 and ISO 27001 selected, ISO 42001, HIPAA, GDPR and PCI DSS unselected), a 'Set up 2 frameworks' button, and a right-hand panel listing 'Your program: SOC 2, ISO 27001' above 'After the last question'." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Question 1: pick SOC 2 and ISO 27001. The right-hand panel keeps a running list of your program.</figcaption>
+</figure>
+
+Tip: if you need two frameworks, pick both now. Controls are shared between frameworks, so work you do once counts for both.
+
+### Questions 2 to 4: Your company
+
+Describe what your company does in two or three sentences, the way you'd explain it to a new customer. Jutsu tries to draft this from your website, and if it can't, you write it yourself. Jutsu AI uses this to tailor your policy drafts, so be specific.
+
+<figure>
+  <Image src={shot05Q2Description} alt="Setup question 2 of 13, 'What does Jutsu Inc. do?', with a note 'We could not read jutsu.ai. Write it yourself instead.' and a text box holding a typed two-sentence company description, counter 216 / 500, and Back and Continue buttons." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Question 2: describe the company in two or three sentences.</figcaption>
+</figure>
+
+Then pick your industry and enter roughly how many people work at the company. A rough number is fine.
+
+### Question 5: Where does your team work?
+
+One office, several offices, office and home, or fully remote. This decides which office and remote-work rules go into your policies.
+
+<figure>
+  <Image src={shot06Q5WorkLocation} alt="Setup question 5 of 13, 'Where does your team work?', with four option cards: In one office, In several offices, Office and home, and Fully remote (selected, 'There is no office; everyone works from home or on the road.'), plus Back and Continue." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Question 5: say where your team works. Here, Fully remote.</figcaption>
+</figure>
+
+### Questions 6 and 7: Who runs the company, and who signs at the audit
+
+List the people at the top with their titles. Your policies name them as the people responsible. Then choose who signs for the company at the audit, usually the chief executive. Your auditor asks this person to confirm what you've told them.
+
+<figure>
+  <Image src={shot07Q7Signatory} alt="Setup question 7 of 13, 'Who signs for the company at the audit?', with a chip 'Saidul Badhon CEO', Name 'Saidul Badhon', Title 'CEO', Work email 'saidulbadhon@jutsu.ai', and Back and Continue buttons." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Question 7: name the person who signs for the company at the audit.</figcaption>
+</figure>
+
+These people answers stay with you and your auditor. They're never sent to an AI model.
+
+### Questions 8 and 9: Sign-in and hosting
+
+Pick how your team signs in to work apps (Google Workspace, Microsoft 365, Okta and others), and your policies will name it. Then pick where your product runs. Each provider you pick becomes a vendor to check.
+
+<figure>
+  <Image src={shot08Q9Hosting} alt="Setup question 9 of 13, 'Where does your product run?', with hosting chips; Amazon Web Services and Google Cloud are ticked, and Microsoft Azure, Vercel, Cloudflare, DigitalOcean, Heroku, Fly.io, Railway, Hetzner and 'Our own servers' are not, plus an 'Another host' box." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Question 9: tick every place your product runs.</figcaption>
+</figure>
+
+### Question 10: What other software does your team use?
+
+Search a directory of 170 apps or type your own. Each one becomes a vendor for you to check. This is the only question you can skip and come back to later.
+
+<figure>
+  <Image src={shot09Q10Software} alt="Setup question 10 of 13, 'What other software does your team use?', with a search box 'Search 170 apps, or type a name', '4 picked' chips (Slack, GitHub, Notion, Linear), and Back, 'Skip for now' and Continue buttons." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Question 10: pick the apps your team uses, or skip it.</figcaption>
+</figure>
+
+### Questions 11 to 13: Devices, data and storage
+
+Pick the devices your team works on (this sets what the device rules in your policies cover), the kinds of data you handle, and where your data is stored. For storage, think of where your servers and backups are, not where your customers live.
+
+## Step 4: Check your answers and start setup
+
+The last screen shows every answer, grouped. Click any row to change it.
+
+<figure>
+  <Image src={shot10Confirm} alt="The last setup step, 'Ready to set up Jutsu Inc.?', with a 'Your company' card (Company name Jutsu Inc., Website https://jutsu.ai) and the start of a 'Your answers' list: Frameworks SOC 2 and ISO 27001, a description, Industry Software and online services, People 15 people, Where the team works Fully remote." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>The confirm screen: check your company details and answers.</figcaption>
+</figure>
+
+If you're the only admin, tick **Assign every recurring task to me**. Every task starts with you, and you hand them out later as the team grows. Then click **Start setting up**.
+
+<figure>
+  <Image src={shot11AssignAndStart} alt="The lower part of the confirm screen: answers for Systems (Sign-in Google Workspace, Hosting Google Cloud and Amazon Web Services, Software Slack, GitHub, Notion and Linear, Devices Mac computers) and Data, then a ticked card 'Assign every recurring task to me', a Back link and a blue 'Start setting up' button." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Tick 'Assign every recurring task to me' if you are the only admin, then press 'Start setting up'.</figcaption>
+</figure>
+
+## Step 5: Let Jutsu build your program
+
+Jutsu now builds the program in six steps:
+
+1. Drafts your policies, filling in your company facts and rewording the instructions to match how you work, without weakening any rule.
+2. Adds the vendors it found in your answers.
+3. Suggests risks.
+4. Links those risks and vendors to your recurring work.
+5. Drafts treatment plans where there's something to plan.
+6. Writes the company description your auditor reads first.
+
+For our example company this took under four minutes, and you can leave the page while it runs. When it's done, **Setup** shows what it built. If your company changes a lot later, come back and click **Run setup again**.
+
+<figure>
+  <Image src={shot12SetupDone} alt="A page headed 'Setup is done.' saying 'It built your SOC 2 and ISO 27001 program from 15 answers. Last run October 17 by Alex Morgan.', a card 'Run setup again after a big change' with a 'Run setup again' button, and a 'Past runs' card listing 'First setup'." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>When setup finishes, this page shows what ran and lets you run it again later.</figcaption>
+</figure>
+
+Nothing is published, assigned or accepted yet. Everything waits as a draft or a suggestion until a person acts on it.
+
+## Step 6: Understand frameworks, requirements and controls
+
+Before you start the work, it helps to know how the pieces fit together:
+
+- A **framework**, like SOC 2, is a list of **requirements**.
+- A requirement is met by **controls**.
+- A control is met by **work**: a policy, a recurring evidence task, or a company record.
+
+Open a framework from the sidebar to see how far along you are and what's left.
+
+<figure>
+  <Image src={shot13Soc2Page} alt="The SOC 2 framework page with a 0% ring and the headline 'You are 0% of the way to SOC 2.', '61 requirements left', '0 assigned to you', a 'Next up for SOC 2' card, and an 'Audit timeline' section with 'SOC 2 Type 1 audit' (about 25 weeks, 8 phases) and 'SOC 2 Type 2 audit' (about 38 weeks, 9 phases), each with a Start button." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>The SOC 2 page: requirements left, and the two audit timelines you can start.</figcaption>
+</figure>
+
+Open a requirement to see a plain-language summary of what it asks for, and the controls that meet it. Here, SOC 2 CC6.1 (logical access security) is met by 10 controls.
+
+<figure>
+  <Image src={shot14RequirementCc61} alt="A requirement page titled 'Logical access security' (Not started), 'CC6.1 Logical and physical access controls', a plain-language summary, and a 'Controls that meet it, 0 of 10 done' list starting with JC-001 Asset inventory maintained, JC-011 MFA enforced for all users and JC-012 MFA enforced for privileged access." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Open a requirement (here CC6.1) to see the controls that meet it.</figcaption>
+</figure>
+
+Open a control to see the work behind it and every requirement it meets, grouped by framework. "MFA enforced for all users" counts for SOC 2 CC6.1 and ISO 27001 A.8.5 at the same time, so finishing its work moves both frameworks.
+
+<figure>
+  <Image src={shot15ControlRequirements} alt="A card titled 'Requirements it meets' with two groups: SOC 2, CC6.1 Logical access security (Not started), and ISO 27001, A.8.5 Secure authentication (Not started)." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>One control counts toward requirements in both frameworks, so you do the work once.</figcaption>
+</figure>
+
+The rules are simple. A control is done when all of its work is done. A requirement is met when every control under it is done. A control with no work linked to it is flagged as a gap.
+
+## Step 7: Finish and publish your policies
+
+Go to **All work → Policies**. Setup has already drafted every policy your frameworks need, written around your answers.
+
+<figure>
+  <Image src={shot16PoliciesList} alt="The Policies page with the subtitle 'The rules your company follows, approved and signed.', an 'Add policies' button, a 0% ring with 'None of your 32 policies is in force yet.', and a table whose first rows are Acceptable Use Policy, Access Control Policy, AI Acceptable Use Policy and Asset Management Policy, all with status Draft." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Policies: setup drafted 32 policies, all waiting for you.</figcaption>
+</figure>
+
+Open a policy. Anything still missing is marked as a blank, and a policy can't go for approval until every blank is filled. Type the right words into the policy text in place of each blank, and the warning clears as you go.
+
+<figure>
+  <Image src={shot17PolicyBlanks} alt="The top of the Acceptable Use Policy page with a Draft badge, a 'Send for approval' button, and a warning card '4 blanks to fill before you can send it for approval' listing Security owner, Security contact, Review frequency and Approver as not filled in." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>A draft policy lists the blanks you must fill before sending it for approval.</figcaption>
+</figure>
+
+When the draft is ready, click **Send for approval**. The approver signs off on that exact text, and it can't be the person who edited it last, unless you're the only admin. In that case you approve it yourself and the record says so.
+
+<figure>
+  <Image src={shot18SendForApproval} alt="A 'Send for approval' dialog with a note that you are the only admin so you approve this yourself, a 'Note for the approver (optional)' box with typed text, and Cancel and 'Send to myself' buttons." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Send the policy for approval. With one admin, you approve it yourself and the record says so.</figcaption>
+</figure>
+
+Once it's approved, click **Publish**. Version 1 goes into force with its next review date set. Every policy shows which controls and frameworks it counts for, so each one you publish moves real requirements forward.
+
+<figure>
+  <Image src={shot19PolicyInForce} alt="The Acceptable Use Policy page with a green 'In force' badge, 'Version 1 has been in force since October 17, 2026. Next review on October 17, 2027.', a 'Version 1, in force' text panel, and a 'How it is run' card (Owner, Approver, For Everyone, Review Every year, Signing 0 of 0 signed, Template)." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>After approval and publishing, the policy shows as In force.</figcaption>
+</figure>
+
+Policies your team must sign appear in each person's own portal. They open the policy, read it, tick the box and sign. Jutsu records their name, the date and the version.
+
+<figure>
+  <Image src={shot20PortalSign} alt="The end of a policy in the employee portal, with the closing 'Exceptions' and 'Review' sections and a box with an unticked checkbox 'I have read this policy and will follow it.', the line 'Your name, the date and version 1 are recorded.' and a greyed Sign button." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>In the employee portal, each person reads the policy, ticks the box and presses Sign.</figcaption>
+</figure>
+
+## Step 8: Do the recurring evidence work
+
+Go to **All work → Evidence**. Evidence is a set of recurring tasks: some monthly, some quarterly, some yearly. Each period gets its own record.
+
+Open a task to see what this period needs, how to do it, who owns it, and which controls it proves. Finish it by clicking **Add evidence** (upload a file or write a note), then **Mark as done**.
+
+<figure>
+  <Image src={shot21EvidenceTask} alt="The evidence task 'Confirm multi-factor sign-in is enforced' with a To do badge, 'Add evidence' and 'Mark as done' buttons, a 'This period' card (Oct 17 to Nov 16, 2026, 31 days left, 'Nothing added yet'), and a 'How it is run' card (Who does it Alex Morgan, Approval is off, Repeats Every month, Team IT, Next period Nov 17, 2026)." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>An evidence task: add a file or a note, then mark it done.</figcaption>
+</figure>
+
+The period is now done, and the next one starts on its date. Closed periods never change. If a period ends before the work is done, it's marked missed and stays on the record.
+
+<figure>
+  <Image src={shot22EvidenceDone} alt="The same evidence task now with a green Done badge, 'Done by Alex Morgan for this month. The next period starts on November 17.', a note describing the check in the Google Workspace admin console, 'Done by Alex Morgan on October 17, 2026' and an 'Add a correction' link." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Done: the task keeps your note as a record for this period.</figcaption>
+</figure>
+
+## Step 9: Keep your company records current
+
+Go to **All work → Documents**. These are the records an audit asks for, like an access review. Some have a short form instead of a file upload. For an access review, you list the systems you reviewed, who reviewed them, how many accounts you checked and what you changed.
+
+<figure>
+  <Image src={shot23AccessReview} alt="The Access review form at step 2 of 4, 'Systems reviewed', with a steps list, and a table row filled in: reviewed by Alex Morgan, Accounts checked 2, Accounts to remove or reduce 0, Changes carried out 0, plus an 'Add a row' link and Back, Save draft and Next buttons." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>The access review wizard: list each system, who reviewed it and the counts.</figcaption>
+</figure>
+
+Send it for review. Once someone other than the author approves it, it counts for a set time (six months for an access review).
+
+## Step 10: Invite your team
+
+Go to **All work → People** and click **Invite people**. Each person gets an email and their own short list: the policies to sign and the training to finish. People you invite use their own portal and don't take a seat on your plan.
+
+<figure>
+  <Image src={shot24PeopleInvite} alt="An 'Invite people' dialog on the 'Type them in' tab with email video-walkthrough@jutsu.ai, name Alex Morgan, team 'No team', job title Security administrator, a Contractor checkbox, an 'Add another person' link, and Cancel and 'Send invitation' buttons." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Invite your people so each gets a portal with their own policies and training.</figcaption>
+</figure>
+
+## Step 11: Review risks and vendors
+
+Go to **All work → Risk register**. Setup suggests risks based on your answers. Nothing is added until you click **Add**, and you can dismiss the ones that don't apply.
+
+<figure>
+  <Image src={shot25RisksSuggested} alt="A 'Suggested for you' card with the note 'Nothing is added until you say so' and three risks, each rated High with Add and Dismiss buttons: A former employee keeps access, A stolen password lets someone into a company account, and Ransomware locks company systems and data, plus 'Show all 12' and 'Browse the library' links." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Setup suggests risks for you. Add the ones that apply and dismiss the rest.</figcaption>
+</figure>
+
+Open a risk to decide what you'll do about it. Jutsu AI can draft the treatment plan. Read it, then choose **Use this plan**, **Edit first** or **Discard**.
+
+<figure>
+  <Image src={shot26RiskAiPlan} alt="The 'What you do about it' card of a risk, with the Reduce tab selected, an empty 'The plan', and 'A draft from Jutsu AI' with four paragraphs about enforcing multi-factor sign-in, followed by 'Use this plan', 'Edit first' and 'Discard' buttons." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Jutsu AI drafts a plan for a risk. Nothing changes until you use it.</figcaption>
+</figure>
+
+Then go to **Vendors**. Setup found the vendors in your answers. Add the ones you rely on.
+
+<figure>
+  <Image src={shot27VendorsSuggested} alt="The Vendors page: 'Setup found 7 vendors you use. Add the ones you rely on.' and a list of Notion, GitHub, Google Workspace, Amazon Web Services, Google Cloud, Slack and Linear, each with Dismiss and Add buttons, and an 'Add all 7' button." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Vendors: add the suppliers you rely on, or add all seven.</figcaption>
+</figure>
+
+For each vendor, Jutsu AI reads the vendor's own security pages and drafts a check. It's what the vendor says about itself, not proof, so edit anything that's wrong and accept it. The next review is set a year out.
+
+<figure>
+  <Image src={shot28VendorAiCheck} alt="Part of a vendor page, 'Security check: first draft', with a banner reading 'Jutsu AI wrote this from github.com's own pages. It is what the vendor says about itself, not proof. Nothing changes until you accept it.' and the start of a 'What they do' section marked New." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Jutsu AI's vendor check is a first draft from the vendor's own pages, not proof.</figcaption>
+</figure>
+
+## Step 12: Connect your systems so Jutsu checks them every day
+
+Go to **All work → Integrations**. Each card shows how many of your evidence tasks that connection could keep up to date. For our example company, Amazon Web Services alone could keep 27 tasks current. Start with the system most of your work runs on. Each connection takes a few minutes, and Jutsu only reads.
+
+<figure>
+  <Image src={shot29Integrations} alt="The Integrations page: 'Connect the systems you use, and Jutsu checks them every day for your evidence tasks.' with Amazon Web Services (could keep 27 tasks up to date), Google Cloud (25 tasks) and GitHub (13 tasks), each with a Connect button, and a 'Show all 7' link." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Integrations show how many tasks each connection could keep up to date.</figcaption>
+</figure>
+
+Once connected, Jutsu checks your systems every day: AWS, Google Cloud, GitHub, Google Workspace, Cloudflare, Railway, Vercel and server hardening. Each check gives each resource a pass, a fail, or not applicable, and the results feed your evidence tasks. When something fails, **Cloud checks** shows why it matters, what the scan saw, and the steps to fix it, in the console or on the command line. Jutsu AI can prepare the fix, and a person approves it before anything changes.
+
+<figure>
+  <Image src={shot36ExampleCloudCheck} alt="An example cloud check page (sample data), 'Bucket open to the public', Critical, To fix, for S3 bucket jutsu-marketing-assets in account Production, region us-east-1, with a 'Fix with Jutsu AI' card, a 'Fix it yourself' section with four console steps, and 'Why it matters' and 'Counts toward' notes." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Example (sample data): a failing cloud check with Fix with Jutsu AI and manual steps. (Example data: a workspace a few months in.)</figcaption>
+</figure>
+
+## Step 13: Track your readiness score
+
+The **Overview** shows one number: how far along you are to the frameworks you picked. Click **How this is measured** to see exactly how it's counted. It's the average of four parts: policies, evidence, documents and people.
+
+<figure>
+  <Image src={shot30ScoreMeasured} alt="The Compliance overview with a 2% ring, 'You are 2% of the way to SOC 2 and ISO 27001.', '35 things need you', and the open 'How this is measured' panel: Policies 3% (1 of 32 published), Evidence 1% (1 of 86 tasks done), Documents 4% (1 of 25 records current), People 0% (0 of 1 finished)." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Your score is the average of policies, evidence, documents and people.</figcaption>
+</figure>
+
+The score counts work your team has finished, not audit results, and anything marked not relevant is left out. Our example company went from 0% to 2% on its first day after one published policy, one finished evidence task and one approved access review. Under the score, **Next up** lists what needs you next, with due dates.
+
+## Step 14: Prepare for the audit
+
+When you're getting close, start an audit timeline from the framework page or **Audit timelines**. Pick a start date, and Jutsu lays out the phases back to back.
+
+<figure>
+  <Image src={shot31StartTimeline} alt="A 'Start the SOC 2 Type 1 audit' dialog explaining the 8 phases, a 'Start on' date field set to 10/17/2026, the line 'About 25 weeks: it should finish around April 10, 2027.', and Cancel and Start buttons." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Start an audit timeline by picking the date.</figcaption>
+</figure>
+
+Each phase shows its dates and what "done" means. Many phases track themselves, such as how many policies are in force.
+
+<figure>
+  <Image src={shot32TimelinePhases} alt="The SOC 2 Type 1 audit timeline, 'phase 1 of 8, set the scope', expected to finish April 7, 2027, with Mark done and Pause buttons and phases 1 to 4: Set the scope, Publish the policies (1 of 32 policies in force), Put the controls in place (1 of 72 evidence tasks closed) and Bring everyone up to date (0 of 1 person up to date), each with its date range and a 'Done when' line." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>The timeline lays out each phase, its dates and what 'done' means.</figcaption>
+</figure>
+
+Then set up the rest of the audit:
+
+- **Auditors:** invite your auditor. They see only the frameworks you pick, until the date you set, and never your security tools. Auditors use no seat.
+
+<figure>
+  <Image src={shot33Auditors} alt="The Auditors page with the card 'No auditor can read your program.', text saying auditors use no seat and read only the frameworks you pick until the date you set, and an 'Invite an auditor' button." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Auditors: invite your auditor with read-only access, for the frameworks and dates you choose.</figcaption>
+</figure>
+
+- **Trust center:** a public page for your customers with your badges, where they can request your private documents and you approve who sees what. Four steps get it published.
+
+<figure>
+  <Image src={shot34TrustCenter} alt="The Trust center overview, 'Your trust page is not published yet.', 0 of 4 steps done, a Publish button, the four steps (Add your logo and colour, Show a badge or offer a document, Choose who hears about requests, Publish the page), and 'What visitors will see' showing 'No badges shown.' and 'No private documents offered yet.'" sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Trust center: four steps to publish your public trust page.</figcaption>
+</figure>
+
+- **Questionnaires:** upload a customer's security questionnaire, and Jutsu AI drafts each answer from your own policies and documents, citing its source. Nothing goes back until you approve it.
+
+<figure>
+  <Image src={shot35Questionnaires} alt="The Questionnaires page with 'No questionnaires yet.', text that Jutsu AI drafts each answer from your own policies and documents and nothing goes back until you approve it, an 'Upload a questionnaire' button, and notes on what you can upload (Excel, CSV, PDF or Word, up to 20 MB) and what happens to the file." sizes="(min-width: 768px) 768px, 100vw" placeholder="blur" />
+  <figcaption>Questionnaires: upload a customer's security questionnaire and review the drafted answers.</figcaption>
+</figure>
+
+## Quick checklist
+
+- Pick a paid plan and run setup (13 questions).
+- Pick every framework you need at the start, so shared work is done once.
+- Fill the blanks in your policies, then send them for approval and publish them.
+- Invite your team so they can sign policies and finish training.
+- Add the suggested risks and vendors that apply, and accept their checks.
+- Connect your cloud and code so daily checks collect evidence for you.
+- Close each evidence period on time.
+- Start your audit timeline, invite your auditor, and publish your trust center.
+
+## Where to go from here
+
+The first day gets you a program: drafts, tasks and records, all waiting for a person. Getting audit-ready is the work that follows, period after period, and the score only moves when that work is real. If you'd like to see it before you try it, the [walkthrough video](https://www.youtube.com/watch?v=306cqZcS9D4) shows every step above in 11 minutes.
+
+---
+
+_A note on sources: every screenshot is from the Jutsu Inc. workspace I set up on Jutsu's staging environment on October 17, 2026, except the cloud check, which uses Jutsu's example data for a workspace a few months in. Numbers like 32 policy drafts, 86 recurring tasks, the 2% score and "under four minutes" are what that workspace showed. Plans and pricing are on [Jutsu's pricing page](https://jutsu.ai/pricing)._
