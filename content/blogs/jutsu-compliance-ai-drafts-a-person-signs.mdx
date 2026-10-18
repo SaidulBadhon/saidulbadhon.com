@@ -1,0 +1,110 @@
+---
+title: "We Rebuilt Jutsu's Compliance Module. The AI Drafts, a Person Signs."
+description: Jutsu's new Compliance module turns 13 answers into a full SOC 2 and ISO 27001 program in under four minutes. The interesting part isn't the speed. It's the rules we wrote about what the AI is never allowed to do on its own.
+date: 2026-10-18
+tags: [Compliance, AI, Product, Jutsu]
+draft: false
+cover: jutsu-compliance.webp
+---
+
+import Image from "next/image";
+import cover from "./jutsu-compliance-ai-drafts-a-person-signs/jutsu-compliance.webp";
+import {
+  AtAGlance,
+  FrameworksChart,
+  ScoreTiles,
+  SetupChart,
+} from "@/content/charts/jutsu-compliance-ai-drafts-a-person-signs";
+
+<figure>
+  <Image
+    src={cover}
+    alt="The words The AI drafts. A person signs. beside a bar chart of what 13 setup answers built in Jutsu: 141 controls, 86 recurring evidence tasks, 32 policy drafts and 25 company records"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>What 13 setup answers built for one company, for SOC 2 and ISO 27001 together.</figcaption>
+</figure>
+
+Every startup meets compliance the same way. A big customer asks for your SOC 2 report. You don't have one. Nobody on the team has been through an audit, and the auditor wants screenshots of your screenshots.
+
+Full disclosure: I'm the lead engineer at [Jutsu](https://jutsu.ai), and this post is about my own team's work, so weigh it accordingly. We just rebuilt Jutsu's Compliance module from the ground up. Setup asks 13 questions. Jutsu then builds the whole program: requirements, controls, policy drafts written around your answers, and the recurring work that proves your controls run.
+
+To test it honestly, I set up a fresh company, Jutsu Inc., and recorded every step. The build took **under four minutes** and produced **32 policy drafts, 86 recurring evidence tasks and 25 company records**. You can [watch the whole 11 minute walkthrough on YouTube](https://www.youtube.com/watch?v=306cqZcS9D4).
+
+But speed isn't what I want to write about. Any tool with a language model can produce 32 policies in four minutes. **The hard part was deciding what the AI is never allowed to do on its own.** That's where most of the design time went, and I think it's the part that matters if you're trusting software with your audit.
+
+<AtAGlance />
+
+## Thirteen questions, because every answer has to earn its place
+
+The first version of the module asked a long list of questions before it showed you anything. We cut it to 13, one per screen, and gave ourselves one rule: if an answer doesn't change what gets built, the question goes.
+
+So each one does something. Pick your frameworks, and Jutsu sets up their requirements, controls and tasks the moment you continue. Say where your team works (one office, several, hybrid or fully remote) and that decides which office and remote-work rules your policies include. Name your sign-in provider and your policies name it too. Pick where your product runs, and each provider becomes a vendor to check. The company name and website come from the workspace you already set up, which is why it's 13 and not 15.
+
+Answers save as you go. You can close the tab halfway and pick it up on another device.
+
+## What 13 answers turn into
+
+Once you press Start setting up, Jutsu runs six steps: it drafts your policies, adds the vendors it found in your answers, suggests risks, links those risks and vendors to your recurring work, drafts treatment plans where there's something to plan, and writes the company description your auditor reads first.
+
+<SetupChart />
+
+For Jutsu Inc., picking SOC 2 and ISO 27001 together meant 61 plus 118 requirements, met by 141 controls. That gap between requirements and controls is the bit I'm proudest of. A control is written once and counts for every framework that needs it. "MFA enforced for all users" meets CC6.1 in SOC 2 and A.8.5 in ISO 27001 at the same time, so the work behind it gets done once.
+
+## The rules we gave the AI
+
+Here's the list I'd want to see from any vendor before I let their AI near my compliance program. These are all enforced in code, not just written in a policy doc.
+
+- **Nothing goes live without a person.** Setup produces drafts and suggestions. No policy is published, no task is assigned to someone who didn't ask, and no risk or vendor enters your register until a human accepts it.
+- **Personnel data never reaches a model.** Who runs the company, who signs at the audit, who owns security: those answers stay with you and your auditor. The prompt builder works from an allowlist of facts, and people aren't on it.
+- **The AI can reword, never weaken.** When Jutsu tailors a policy to your company, it fills in your facts and rewords the instructions to match how you work. It doesn't get to soften a rule.
+- **Approval binds to exact text.** An approver signs off on the words as they are. Change one word after approval and it needs approving again. The approver can't be the person who edited it last, unless you're the only admin, and then the record says so.
+- **Vendor checks are claims, not proof.** Jutsu AI reads a vendor's own security pages and drafts an assessment, and the screen says plainly that it's what the vendor says about itself. A person edits and accepts it. If the vendor's pages changed after the AI read them, the draft can't be accepted as it is. I hit that one myself while filming, on GitHub, and I was glad it stopped me.
+- **Questionnaire answers have to cite something real.** When a customer sends a security questionnaire, Jutsu AI drafts answers only from your own published policies, company facts and documents, and every citation is checked against the passage it came from. Nothing goes back to the customer until a person approves it.
+- **Fixes wait for a yes.** When a daily cloud check fails, Jutsu AI can prepare the fix, but a person approves it before anything changes in your account.
+
+None of this makes the product faster. Some of it makes it slower. I think that's the right trade for something that ends up in front of an auditor.
+
+## A score that only moves when work is done
+
+Most compliance dashboards I've used show a big percentage early, and nobody can tell you what it counts. We went the other way. The Overview shows one number, and right under it, exactly how it's built: the average of four parts.
+
+<ScoreTiles />
+
+Jutsu Inc. went from 0% to 2% on its first day, after I published one policy, finished one evidence task and approved one access review. Two percent looks bad in a demo. It's also true. The score counts work your team has finished, not audit results, and anything you mark as not relevant is left out.
+
+The same thinking runs through the rest of the evidence side. Each recurring task gets its own record per period, and closed periods never change. If a period ends before the work is done, it's marked missed and stays on the record. If a daily scan is stale or incomplete, Jutsu waits rather than guessing, and only a complete run counts. A control with no work behind it gets flagged as a gap, so nothing can quietly look finished.
+
+## Thirteen frameworks, and why that's less work than it sounds
+
+The catalog behind the module covers 13 frameworks and 724 requirements, met by 184 controls. Every paid plan gets all of them.
+
+<FrameworksChart />
+
+That sounds like a lot of surface area, and it was a lot to build. But because controls are shared, adding a second framework mostly means linking requirements to controls you already have, not writing new ones. That's the whole reason the model is framework → requirement → control → work, rather than one checklist per framework.
+
+## What it doesn't do
+
+I'd rather say this myself than have someone find it:
+
+- **It doesn't replace your auditor.** An independent auditor still does the audit and writes the report. Jutsu gives them a read-only view of the frameworks and dates you choose, and tracks their findings to closure.
+- **A fast setup isn't being audit-ready.** Four minutes gets you the program. Getting ready still means publishing policies, collecting evidence period after period, and closing the gaps the daily checks find.
+- **Cloud checks cover AWS and Google Cloud today**, along with GitHub, Google Workspace, Cloudflare, Railway, Vercel and server hardening, 186 automated checks in total. Azure checks aren't built yet.
+
+## What I'd do if a customer just asked for your SOC 2
+
+- Pick the frameworks your customers actually ask for. Usually that's SOC 2, sometimes ISO 27001 as well. If you need both, pick both at setup, so the shared work is done once.
+- Connect your cloud and code first. Daily checks then collect evidence for you instead of you taking screenshots.
+- Publish a handful of policies in the first week and invite the team, so the score starts moving on real work.
+- Start the audit timeline early. Many of its phases track themselves, so you can see how far you are from fieldwork.
+
+## The verdict
+
+We could have shipped an AI that writes a compliance program and calls it done. It would demo beautifully and fail its first audit. What we built instead drafts everything and decides nothing, and I'm comfortable with that line.
+
+The AI drafts. A person signs. The score only moves when the work is real.
+
+---
+
+_A note on sources: the Jutsu Inc. numbers (setup results, the 2% score and its four parts, the CC6.1 and A.8.5 control example) come from a real workspace I set up on Jutsu's staging environment on October 17, 2026, the one recorded in the [walkthrough video](https://www.youtube.com/watch?v=306cqZcS9D4). The catalog counts (13 frameworks, 724 requirements, 184 controls, 186 automated checks) and the rules about personnel data, citations and plans were checked against Jutsu's code on October 18, 2026, and will change as the catalog grows. Plans and pricing are on [Jutsu's pricing page](https://jutsu.ai/pricing). Everything written as "I think" or "I'd" is my opinion._
