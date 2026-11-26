@@ -1,0 +1,154 @@
+---
+title: "You Don't Need a SOC to Watch an AWS Account. You Need Someone to Answer."
+description: Leaked AWS keys get used in about five minutes, and CloudTrail takes about five minutes to tell you. Here is what I'd switch on in an afternoon, the five commands that show where your account stands, and the part no AWS service does for you.
+date: 2026-11-26
+tags: [Security, AWS, Jutsu]
+draft: false
+cover: aws-eight-minutes.webp
+---
+
+import Image from "next/image";
+import cover from "./how-to-monitor-aws-without-a-soc-team/aws-eight-minutes.webp";
+import eventHistory from "./how-to-monitor-aws-without-a-soc-team/cloudtrail-event-history.webp";
+import jutsuAlert from "./how-to-monitor-aws-without-a-soc-team/jutsu-alert.webp";
+import { AtAGlance, AttackClockChart, SeatCostChart } from "@/content/charts/how-to-monitor-aws-without-a-soc-team";
+
+<figure>
+  <Image
+    src={cover}
+    alt="The words They need 8 minutes. beside a bar chart of minutes after an AWS credential leaks: AWS quarantines the key in 10 seconds, the key is used at 5 minutes, and attacker code is running at 8 minutes"
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>Minutes after an AWS credential leaks. Sources: Unit 42 and Sysdig.</figcaption>
+</figure>
+
+In September I wrote about [the `.env` file that sat on my public GitHub for three years](/blogs/env-file-on-github-for-three-years). One of the things in it was an AWS access key. I still can't tell you whether anyone used it, and that's the part that stayed with me. Nothing I had would have told me.
+
+So I went and read what actually happens to a leaked AWS key, and what it takes to notice. The numbers are worse than I expected, and the fix is cheaper than I expected.
+
+**On AWS, detection is close to free. Attention is what costs money, and a small team has to decide who pays it.**
+
+<AtAGlance />
+
+## The attacker gets the same five minutes you do
+
+Unit 42 leaked AWS keys to public GitHub on purpose and watched. [Attackers used them within five minutes](https://unit42.paloaltonetworks.com/malicious-operations-of-exposed-iam-keys-cryptojacking/). Clutch Security [ran it again in 2024](https://www.clutch.security/blog/shattering-the-rotation-illusion-part-1-code-hosting-and-version-control-platforms): 6.6 minutes on average, one minute at the fastest.
+
+AWS deserves credit here. When a key lands on public GitHub, AWS attaches a quarantine policy to that user, and in [a Unit 42 test last December](https://unit42.paloaltonetworks.com/detecting-exposed-aws-iam-credentials/) it took 10 seconds. But the quarantine blocks a list of actions. It doesn't switch the key off. [Truffle Security found 929 quarantined keys](https://trufflesecurity.com/blog/aws-key-quarantine-is-not-revocation) that still worked, and points out that launching an EC2 instance is blocked while reading a secret or deleting a database is not. And if the key leaks somewhere AWS isn't looking, nothing happens at all. In Clutch's GitLab tests, AWS sent no alert.
+
+Now the uncomfortable part. CloudTrail is the log every alert is built on, and AWS says it [delivers within about five minutes of the API call, on average, not guaranteed](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/how-cloudtrail-works.html). So the first moment you could know is roughly the moment the attacker starts.
+
+<AttackClockChart />
+
+The last bar is a real incident. On November 28, 2025, Sysdig [watched an attacker](https://sysdig.com/blog/ai-assisted-cloud-intrusion-achieves-admin-access-in-8-minutes/) go from test credentials in a public S3 bucket to their own code running in the victim's Lambda function in eight minutes, and to an admin account in under ten.
+
+I used to think of monitoring as something you check. It isn't. If the response isn't measured in minutes, it's a history lesson.
+
+## Five commands that tell you where you stand
+
+Before switching anything on, look at what you have. All five of these are read-only.
+
+```bash
+# 1. Is root locked down? You want RootMFA 1 and RootAccessKeys 0.
+aws iam get-account-summary \
+  --query 'SummaryMap.{RootMFA:AccountMFAEnabled,RootAccessKeys:AccountAccessKeysPresent}'
+
+# 2. Is there a trail, is it multi-Region, are the log files validated?
+aws cloudtrail describe-trails \
+  --query 'trailList[].{Name:Name,MultiRegion:IsMultiRegionTrail,Validated:LogFileValidationEnabled}'
+
+# 3. Is GuardDuty on in every Region? 1 is on, 0 is off.
+for r in $(aws ec2 describe-regions --query 'Regions[].RegionName' --output text); do
+  echo "$r $(aws guardduty list-detectors --region "$r" --query 'length(DetectorIds)' --output text)"
+done
+
+# 4. Is there an Access Analyzer in this Region?
+aws accessanalyzer list-analyzers --query 'analyzers[].{Name:name,Type:type,Status:status}'
+
+# 5. Is public S3 access blocked for the whole account?
+aws s3control get-public-access-block \
+  --account-id "$(aws sts get-caller-identity --query Account --output text)"
+```
+
+Two of them answer in a way that looks like a failure and isn't. An empty result from number 4 means no analyzer exists in that Region. A `NoSuchPublicAccessBlockConfiguration` error from number 5 means the account-level block was never set. Both are the finding.
+
+Number 3 is the one people get wrong. GuardDuty is switched on per Region, and the Regions you never deploy to are exactly where someone else will.
+
+## What I'd switch on in an afternoon
+
+- **One multi-Region CloudTrail trail.** The event history AWS gives you by default keeps 90 days and can't alert. [The first copy of management events to a trail is free](https://aws.amazon.com/cloudtrail/pricing/); you pay for the S3 storage.
+- **GuardDuty in every Region.** It reads CloudTrail, VPC flow logs and DNS logs on its own, with no rules to write. [Free for 30 days, then $4.00 per million CloudTrail management events](https://aws.amazon.com/guardduty/pricing/) in US East. Check the Usage page before the trial ends.
+- **IAM Access Analyzer.** [External access findings are free](https://aws.amazon.com/iam/access-analyzer/pricing/). It lists what the outside world can reach.
+- **Cost Anomaly Detection and a budget alarm.** A stolen key usually shows up on the bill first. In the AI-model-abuse cases DoiT reviewed this year, [the median bill was about $72,000](https://www.doit.com/blog/llmjacking-when-attackers-run-claude-on-your-aws-bill), and only two were first caught by the customer's own monitoring or a DoiT alert.
+- **One EventBridge rule to an email address a team reads.** Start with the events that are almost never innocent: `StopLogging`, `DeleteTrail`, `DeleteDetector`, `CreateAccessKey`, `CreateLoginProfile`, a root `ConsoleLogin`.
+
+This is CloudTrail's free 90-day history on a real account, filtered to console sign-ins, with the names changed.
+
+<figure>
+  <Image
+    src={eventHistory}
+    alt="The CloudTrail Event history page filtered to the event name ConsoleLogin, listing 21 console sign-ins from the last 90 days with their time, user name and event source. Two of the rows are sign-ins by the root user."
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>CloudTrail event history, filtered to console sign-ins. Account details and names are changed.</figcaption>
+</figure>
+
+Two of those rows are the root user. The record is all there. Nothing on this page tells anyone.
+
+One trap that will waste your afternoon: the obvious rule for "console sign-in without MFA" pages you on every single sign-on login. AWS [only sets `MFAUsed` for IAM users and root](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-aws-console-sign-in-events.html), so for SSO it always says `No`. Filter on `userIdentity.type` being `IAMUser`.
+
+I wrote up the full list of 20 events, the tested event patterns and the costs [on the Jutsu blog](https://jutsu.ai/blog/how-to-monitor-aws-security-without-a-soc-team).
+
+## The part AWS won't sell you for $4
+
+Everything above gets you an email. It's JSON, it arrives at 3 a.m., and it doesn't say whether that was your deploy pipeline or a stranger.
+
+Reading it is the actual job, and it's the expensive one. A week has 168 hours and a full-time analyst works 40, so one chair staffed around the clock takes 4.2 people. At the [US median wage of $129,180](https://www.bls.gov/ooh/computer-and-information-technology/information-security-analysts.htm), that's $542,556 a year. My arithmetic, wages only.
+
+<SeatCostChart />
+
+No startup I know is hiring that. So in practice there are three ways to cover the 3 a.m. email:
+
+1. **Let AWS triage it.** [AWS Security Incident Response](https://docs.aws.amazon.com/security-ir/latest/userguide/what-is.html) reads your GuardDuty findings and only contacts you when something is real. [The first 10,000 findings a month are free](https://aws.amazon.com/security-incident-response/pricing/). It only covers AWS, and it only triages findings another service produced.
+2. **Pay a managed service.** Real people, real money, usually priced by quote.
+3. **Use software that does the first twenty minutes.** This is the one I work on, so weigh it accordingly.
+
+Full disclosure: I'm the lead engineer at [Jutsu](/projects/jutsu-ai). This is what one of those 3 a.m. emails looks like there instead.
+
+<figure>
+  <Image
+    src={jutsuAlert}
+    alt="A Jutsu alert titled CloudTrail logging disabled. The summary says the user dana.whitfield switched off the trail from an address never seen for this user, that three reputation feeds have nothing on it, and that the same user made an S3 bucket public 59 seconds earlier. Jutsu asks: Was this intended? The Response panel shows the address was blocked at the AWS subnet for 24 hours."
+    sizes="(min-width: 768px) 768px, 100vw"
+    placeholder="blur"
+  />
+  <figcaption>The same event as an investigated alert. This is the demo sandbox, so every name and address on screen is made up.</figcaption>
+</figure>
+
+The useful line is the second paragraph: 59 seconds before the logging was switched off, the same user made a bucket public. No single CloudTrail event tells you that. Someone, or something, has to go and look.
+
+Jutsu connects to an AWS account with one CloudFormation stack and a cross-account role, so no access key gets copied anywhere. It ships 27 rules for AWS, groups related alerts into one incident, and can deactivate a user's keys or block an address once you approve it.
+
+What it won't do: it connects one account at a time, it doesn't read S3 object access unless your own trail logs data events, and it isn't a person. If you have a real breach you still want an incident response firm on the phone.
+
+## What I'd do this week
+
+- Run the five commands. It takes two minutes and you'll know more than most teams do.
+- Create the trail and turn on GuardDuty everywhere. That part is an afternoon.
+- Write the one EventBridge rule, and send it to a shared address, not your own inbox.
+- **Decide who answers.** You, AWS, a service or software. Any of them beats nobody.
+- Go and look for old keys. Datadog's 2026 report says [30% of AWS IAM users have an access key more than three years old](https://www.datadoghq.com/state-of-cloud-security/). Mine was one of them.
+
+## The verdict
+
+AWS gives a small team almost everything a SOC has except the people. The logging is free, the detection is a few dollars, and the alerting is one rule. What you can't buy from AWS is someone awake.
+
+I think most teams skip that decision because it doesn't feel like engineering. It's the only part that matters at minute eight.
+
+A log nobody reads isn't monitoring. It's evidence.
+
+---
+
+_A note on sources: leak timings are from [Unit 42](https://unit42.paloaltonetworks.com/malicious-operations-of-exposed-iam-keys-cryptojacking/) (October 2023), [Clutch Security](https://www.clutch.security/blog/shattering-the-rotation-illusion-part-1-code-hosting-and-version-control-platforms) (December 2024) and [Unit 42's quarantine test](https://unit42.paloaltonetworks.com/detecting-exposed-aws-iam-credentials/) (September 2026, a single test). The eight-minute incident is [Sysdig's](https://sysdig.com/blog/ai-assisted-cloud-intrusion-achieves-admin-access-in-8-minutes/). Quarantine limits are from [Truffle Security](https://trufflesecurity.com/blog/aws-key-quarantine-is-not-revocation). AWS prices and behaviour are from AWS's own pricing pages and user guides, read on November 26, 2026, for US East (N. Virginia). The wage is from the [US Bureau of Labor Statistics](https://www.bls.gov/ooh/computer-and-information-technology/information-security-analysts.htm). The 4.2 analysts and the $542,556 are my arithmetic. Jutsu's numbers are from its code and [pricing page](https://jutsu.ai/pricing) as of the same day. Everything written as "I think" is my opinion._
